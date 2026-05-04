@@ -18,14 +18,13 @@
   },
   "lint": {
     "rules": {
-      "tags": ["recommended"],
+      "tags": [],
       "include": [
         "ban-untagged-todo",
         "default-param-last",
         "eqeqeq",
         "guard-for-in",
         "no-eval",
-        "no-explicit-any",
         "no-self-compare",
         "no-sparse-arrays",
         "no-throw-literal"

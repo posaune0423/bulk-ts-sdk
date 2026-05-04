@@ -18,7 +18,7 @@ Deno.test('Integration: BulkClient - Market API (GET)', async () => {
 
   try {
     const info = await client.market.exchangeInfo()
-    
+
     assertEquals(info, [{ symbol: 'BTC-USD' }])
     assertEquals(fetchStub.calls.length, 1)
     assertEquals(fetchStub.calls[0].args[0].toString(), 'https://api.example.com/exchangeInfo')
@@ -51,13 +51,13 @@ Deno.test('Integration: BulkClient - Trade API (POST with Signature)', async () 
 
     assertEquals(response.status, 'ok')
     assertEquals(fetchStub.calls.length, 1)
-    
+
     const requestUrl = fetchStub.calls[0].args[0].toString()
     const requestInit = fetchStub.calls[0].args[1] as any
-    
+
     assertEquals(requestUrl, 'https://api.example.com/order')
     assertEquals(requestInit?.method, 'POST')
-    
+
     const body = JSON.parse(requestInit?.body as string)
     // Verify that the body has the expected structure from normalizeSignedTransaction
     assertEquals(Array.isArray(body.actions), true)
