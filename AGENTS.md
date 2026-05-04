@@ -2,7 +2,8 @@
 
 ## Core Principles
 
-- **Simplicity First**: Make every change as simple as possible. Impact minimal code. YAGNI, KISS, DRY. No backward-compat shims or fallback paths unless they come free without adding cyclomatic complexity.
+- **Simplicity First**: Make every change as simple as possible. Impact minimal code. YAGNI, KISS, DRY. No
+  backward-compat shims or fallback paths unless they come free without adding cyclomatic complexity.
 - **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
 - **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
 

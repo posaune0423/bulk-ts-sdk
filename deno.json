@@ -1,8 +1,38 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "check": "deno check src/mod.ts",
+    "fmt": "deno fmt",
+    "lint": "deno lint",
+    "test": "deno test --allow-net --allow-env --allow-read",
+    "test:e2e": "deno test --allow-net --allow-env --allow-read --allow-ffi tests/e2e",
+    "generate:types": "deno run --allow-read --allow-write --allow-net scripts/generate_openapi_types.ts"
   },
   "imports": {
-    "@std/assert": "jsr:@std/assert@1"
-  }
+    "@std/assert": "jsr:@std/assert@1",
+    "valibot": "npm:valibot@^0.42.1",
+    "bulk-keychain": "./vendor/bulk-keychain/index.js",
+    "openapi-typescript": "npm:openapi-typescript@^7.4.1"
+  },
+  "lint": {
+    "rules": {
+      "tags": ["recommended"],
+      "include": [
+        "ban-untagged-todo",
+        "default-param-last",
+        "eqeqeq",
+        "guard-for-in",
+        "no-eval",
+        "no-explicit-any",
+        "no-self-compare",
+        "no-sparse-arrays",
+        "no-throw-literal"
+      ]
+    }
+  },
+  "fmt": {
+    "semiColons": false,
+    "singleQuote": true,
+    "lineWidth": 120
+  },
+  "nodeModulesDir": "auto"
 }
