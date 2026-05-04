@@ -6,7 +6,8 @@ bulk-ts-sdkはbulk tradeのapiをTypescriptで安全に扱うためのUnofficial
 
 ## Tips
 
-`POST /order` などのsignが必要なtxには専用のlibrary: [bulk-keychain](https://github.com/Bulk-trade/bulk-keychain)を使用します。
+`POST /order` などのsignが必要なtxには専用のlibrary:
+[bulk-keychain](https://github.com/Bulk-trade/bulk-keychain)を使用します。
 
 e.g.
 
