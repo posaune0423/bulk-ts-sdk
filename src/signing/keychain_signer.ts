@@ -3,7 +3,7 @@ import { normalizeSignedTransaction } from './normalize_signed_transaction.ts'
 import type { KeychainOrderInput, SignedTransaction } from '../types/trade.ts'
 
 export class KeychainSigner {
-  private constructor(private readonly nativeSigner: NativeSigner) {}
+  private constructor(private readonly nativeSigner: any) {}
 
   static fromPrivateKey(privateKey: string): KeychainSigner {
     const keypair = NativeKeypair.fromBase58(privateKey)

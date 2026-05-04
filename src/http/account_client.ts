@@ -22,10 +22,10 @@ export class AccountClient {
       user,
     })
     const row = rows.find((r) => 'fullAccount' in r)
-    if (!row?.fullAccount) {
+    if (!(row as any)?.fullAccount) {
       throw new BulkDecodeError('fullAccount response is empty')
     }
-    return row.fullAccount
+    return (row as any).fullAccount
   }
 
   async openOrders(user: string): Promise<OrderState[]> {
@@ -70,10 +70,10 @@ export class AccountClient {
       ...params,
     })
     const row = rows.find((r) => 'feeTier' in r)
-    if (!row?.feeTier) {
+    if (!(row as any)?.feeTier) {
       throw new BulkDecodeError('feeTier response is empty')
     }
-    return row.feeTier as FeeState
+    return (row as any).feeTier as FeeState
   }
 
   async feeState(): Promise<FeeState> {
@@ -81,10 +81,10 @@ export class AccountClient {
       type: 'feeState',
     })
     const row = rows.find((r) => 'feeState' in r)
-    if (!row?.feeState) {
+    if (!(row as any)?.feeState) {
       throw new BulkDecodeError('feeState response is empty')
     }
-    return row.feeState
+    return (row as any).feeState
   }
 
   async multisigProposals(pubkey: string): Promise<MultisigProposalsSnapshot> {
@@ -93,10 +93,10 @@ export class AccountClient {
       pubkey,
     })
     const row = rows.find((r) => 'multisigProposals' in r)
-    if (!row?.multisigProposals) {
+    if (!(row as any)?.multisigProposals) {
       throw new BulkDecodeError('multisigProposals response is empty')
     }
-    return row.multisigProposals
+    return (row as any).multisigProposals
   }
 
   private async queryAccount<T extends any[]>(
