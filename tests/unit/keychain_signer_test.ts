@@ -86,6 +86,27 @@ Deno.test("KeychainSigner - signs market order as API market action", () => {
   ]);
 });
 
+Deno.test("KeychainSigner - native keychain rejects legacy market order shape without price", () => {
+  const signer = KeychainSigner.fromPrivateKey(DUMMY_PRIVATE_KEY);
+  const legacyMarketOrder = {
+    type: "order",
+    symbol: "BTC-USD",
+    isBuy: false,
+    size: 0.1,
+    reduceOnly: true,
+    iso: false,
+    orderType: {
+      type: "market",
+    },
+  } as unknown as KeychainOrderInput;
+
+  assertThrows(
+    () => signer.sign(legacyMarketOrder),
+    Error,
+    "order.price is required",
+  );
+});
+
 Deno.test("KeychainSigner - rejects agent wallet signing when native binding lacks support", () => {
   const signer = newSignerForNativeFixture({
     pubkey: "account",
