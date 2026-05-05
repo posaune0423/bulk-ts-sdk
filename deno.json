@@ -41,6 +41,5 @@
     "semiColons": false,
     "singleQuote": true,
     "lineWidth": 120
-  },
-  "nodeModulesDir": "auto"
+  }
 }

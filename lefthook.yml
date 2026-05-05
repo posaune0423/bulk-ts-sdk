@@ -11,3 +11,12 @@ pre-commit:
       run: deno lint {staged_files}
     test:
       run: deno task test
+
+pre-push:
+  commands:
+    lint:
+      run: deno task lint
+    check:
+      run: deno task check
+    test:
+      run: deno task test

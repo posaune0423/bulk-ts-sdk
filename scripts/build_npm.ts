@@ -31,7 +31,8 @@ await build({
   package: {
     name: 'bulk-ts-sdk',
     version,
-    description: 'Official TypeScript SDK for Bulk Exchange, providing high-performance, type-safe access to market data and trading operations.',
+    description:
+      'Official TypeScript SDK for Bulk Exchange, providing high-performance, type-safe access to market data and trading operations.',
     author: 'posaune0423',
     license: 'MIT',
     sideEffects: false,

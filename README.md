@@ -2,14 +2,14 @@
   <h1>📦 bulk-ts-sdk (Unofficial)</h1>
   <p><strong>A high-performance, type-safe, community-supported TypeScript SDK for Bulk Exchange.</strong></p>
 
-  <p>
+<p>
     <a href="https://github.com/posaune0423/bulk-ts-sdk/actions/workflows/ci.yml"><img src="https://github.com/posaune0423/bulk-ts-sdk/actions/workflows/ci.yml/badge.svg" alt="CI Status" /></a>
     <a href="https://jsr.io/@posaune0423/bulk-ts-sdk"><img src="https://jsr.io/badges/@posaune0423/bulk-ts-sdk" alt="JSR" /></a>
     <a href="https://www.npmjs.com/package/bulk-ts-sdk"><img src="https://img.shields.io/npm/v/bulk-ts-sdk.svg" alt="NPM Version" /></a>
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a>
   </p>
 
-  <p>
+<p>
     <a href="#-links">Links</a> •
     <a href="#-features">Features</a> •
     <a href="#-installation">Installation</a> •
@@ -41,11 +41,13 @@
 ## 📦 Installation
 
 ### Deno (via JSR)
+
 ```bash
 deno add jsr:@posaune0423/bulk-ts-sdk
 ```
 
 ### Node.js / Bun / pnpm
+
 ```bash
 # Using bun
 bun add bulk-ts-sdk
@@ -64,22 +66,22 @@ pnpm add bulk-ts-sdk
 ### Initialize the Client
 
 ```typescript
-import { BulkClient } from "bulk-ts-sdk";
+import { BulkClient } from 'bulk-ts-sdk'
 
 const client = new BulkClient({
-  privateKey: "0x...", // Required for trading
-});
+  privateKey: '0x...', // Required for trading
+})
 ```
 
 ### Fetch Market Data
 
 ```typescript
 // Get current ticker for a symbol
-const ticker = await client.market.ticker("BTC-USD");
-console.log(`Current Price: ${ticker.last}`);
+const ticker = await client.market.ticker('BTC-USD')
+console.log(`Current Price: ${ticker.last}`)
 
 // Get exchange information
-const info = await client.market.exchangeInfo();
+const info = await client.market.exchangeInfo()
 ```
 
 ### Trading Operations
@@ -87,21 +89,21 @@ const info = await client.market.exchangeInfo();
 ```typescript
 // Place a limit order
 const order = await client.trade.placeLimitOrder({
-  symbol: "BTC-USD",
-  side: "buy",
+  symbol: 'BTC-USD',
+  side: 'buy',
   price: 50000,
   size: 0.1,
-});
+})
 
-console.log(`Order ID: ${order.response.data.oid}`);
+console.log(`Order ID: ${order.response.data.oid}`)
 ```
 
 ### Real-time Subscriptions (WebSocket)
 
 ```typescript
-client.ws.subscribe({ type: "ticker", symbol: "BTC-USD" }, (data) => {
-  console.log("Real-time Update:", data);
-});
+client.ws.subscribe({ type: 'ticker', symbol: 'BTC-USD' }, (data) => {
+  console.log('Real-time Update:', data)
+})
 ```
 
 ---
@@ -110,12 +112,12 @@ client.ws.subscribe({ type: "ticker", symbol: "BTC-USD" }, (data) => {
 
 The `BulkClient` is organized into focused sub-clients:
 
-| Sub-Client | Description |
-| :--- | :--- |
-| `market` | Public data like tickers, candles (klines), and order books. |
-| `account` | Private data like balances, open orders, and trade history. |
-| `trade` | Execution operations (limit/market orders, cancels, batch). |
-| `ws` | WebSocket management and real-time subscriptions. |
+| Sub-Client | Description                                                  |
+| :--------- | :----------------------------------------------------------- |
+| `market`   | Public data like tickers, candles (klines), and order books. |
+| `account`  | Private data like balances, open orders, and trade history.  |
+| `trade`    | Execution operations (limit/market orders, cancels, batch).  |
+| `ws`       | WebSocket management and real-time subscriptions.            |
 
 ---
 
