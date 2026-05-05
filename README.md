@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>📦 bulk-ts-sdk (Unofficial)</h1>
+  <h1>💪🏻 bulk-ts-sdk (Unofficial)</h1>
   <p><strong>A high-performance, type-safe, community-supported TypeScript SDK for Bulk Exchange.</strong></p>
 
 <p>
@@ -22,9 +22,9 @@
 
 ## 🔗 Links
 
-- **Official Website**: [bulktrade.exchange](https://bulktrade.exchange)
-- **API Documentation**: [docs.bulktrade.exchange](https://docs.bulktrade.exchange)
-- **Official X (Twitter)**: [@BULK_Exchange](https://twitter.com/BULK_Exchange)
+- **Official Website**: [bulktrade.exchange](https://bulk.trade)
+- **API Documentation**: [docs.bulktrade.exchange](https://docs.bulk.trade)
+- **Official X (Twitter)**: [@bulktrade](https://x.com/bulktrade)
 
 ---
 
