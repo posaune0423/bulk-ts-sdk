@@ -6,21 +6,42 @@ import { WsClient } from './ws/ws_client.ts'
 import { KeychainSigner } from './signing/keychain_signer.ts'
 import { BULK_DEFAULT_HTTP_URL, BULK_DEFAULT_WS_URL, DEFAULT_TIMEOUT_MS } from './constants.ts'
 
+/**
+ * Configuration options for the BulkClient.
+ */
 export type BulkClientConfig = {
+  /** The base URL for HTTP API requests. Defaults to production URL. */
   httpUrl?: string
+  /** The URL for WebSocket connections. Defaults to production URL. */
   wsUrl?: string
+  /** Optional private key for signing trades. If omitted, trade operations will fail. */
   privateKey?: string
+  /** Request timeout in milliseconds. Defaults to 10 seconds. */
   timeoutMs?: number
+  /** Whether to perform runtime validation on API responses. */
   validateResponses?: boolean
 }
 
+/**
+ * The main client for interacting with the Bulk Exchange (Unofficial).
+ * Provides access to market data, account management, trading, and real-time updates.
+ */
 export class BulkClient {
+  /** Client for public market data (tickers, order books, etc.). */
   readonly market: MarketClient
+  /** Client for private account data (balances, orders, trade history). */
   readonly account: AccountClient
+  /** Client for trading operations (placing/canceling orders). */
   readonly trade: TradeClient
+  /** Client for WebSocket-based real-time subscriptions. */
   readonly ws: WsClient
+  /** The account ID (address) derived from the provided private key, if any. */
   readonly accountId?: string
 
+  /**
+   * Initializes a new BulkClient instance.
+   * @param config Optional configuration for the client.
+   */
   constructor(config: BulkClientConfig = {}) {
     const http = new HttpTransport({
       baseUrl: config.httpUrl ?? BULK_DEFAULT_HTTP_URL,

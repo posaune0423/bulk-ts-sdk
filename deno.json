@@ -1,4 +1,9 @@
 {
+  "name": "@posaune0423/bulk-ts-sdk",
+  "version": "0.0.1",
+  "exports": "./src/mod.ts",
+  "description": "Official TypeScript SDK for Bulk Exchange.",
+  "license": "MIT",
   "tasks": {
     "check": "deno check src/mod.ts",
     "fmt": "deno fmt",
