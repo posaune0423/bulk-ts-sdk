@@ -3,6 +3,15 @@
 This document is optimized for coding agents. It summarizes the public SDK surface, the internal composition, and the
 signing/submission pipeline. Keep this file aligned with source code, not only with README examples.
 
+## Official Resources
+
+- **Official API Documentation**: https://docs.bulk.trade
+- **API Reference**: https://docs.bulk.trade/api-reference
+- **Manage Agent Wallet API**: https://docs.bulk.trade/api-reference/manageAgentWallet
+- **Main Website**: https://bulk.trade
+
+---
+
 ## Entry points
 
 - Public export surface: `src/mod.ts`
