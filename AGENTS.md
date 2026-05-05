@@ -28,9 +28,8 @@ deno task hook:install
 ## Code coverage (Git only — not npm / JSR)
 
 Deno has no built-in `deno.json` field that `deno test` reads for the coverage output directory. This repo uses
-**`coverageDirectory`** in `deno.json` as the single source of truth; `deno task test` runs
-`scripts/run_unit_integration_tests.ts`, which spawns `deno test --coverage=<coverageDirectory>` (and matching
-`--allow-write`).
+**`coverageDirectory`** in `deno.json` as the single source of truth; `deno task test` runs `deno test` directly with
+coverage enabled, then generates LCOV and HTML reports with `deno coverage`.
 
 **Directory (default in config):** `docs/coverage/` (`coverageDirectory` in `deno.json`)
 
@@ -82,7 +81,6 @@ bulk-ts-sdk/
   scripts/
     fetch_openapi.ts
     generate_openapi_types.ts
-    run_unit_integration_tests.ts
   src/
     mod.ts
     client.ts

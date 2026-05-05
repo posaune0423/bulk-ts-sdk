@@ -1,6 +1,7 @@
 import { assertEquals, assertExists, assertRejects } from "@std/assert";
 import { stub } from "@std/testing/mock";
 import { BulkClient } from "../../src/client.ts";
+import { BulkDecodeError, BulkTransactionRejectedError } from "../../src/errors.ts";
 
 const DUMMY_PRIVATE_KEY = "J1vPZ1J1vPZ1J1vPZ1J1vPZ1J1vPZ1J1vPZ1J1vPZ1J1";
 const TARGET_ACCOUNT_PUBLIC_KEY = "synthetic-target-account-public-key";
@@ -195,6 +196,85 @@ Deno.test("Integration: BulkClient - Market API (riskSurfaces)", async () => {
   }
 });
 
+Deno.test("Integration: BulkClient - Market API (l2Book)", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+  });
+
+  const mockResponse = new Response(JSON.stringify({ updateType: "snapshot", symbol: "BTC-USD", levels: [] }), {
+    status: 200,
+    headers: { "content-type": "application/json" },
+  });
+
+  const fetchStub = stub(globalThis, "fetch", () => Promise.resolve(mockResponse));
+
+  try {
+    const book = await client.market.l2Book({
+      symbol: "BTC-USD",
+      nlevels: 5,
+      aggregation: 1,
+    });
+
+    assertEquals(book.levels, []);
+    assertEquals(
+      fetchStub.calls[0].args[0].toString(),
+      "https://api.example.com/l2book?type=l2book&coin=BTC-USD&nlevels=5&aggregation=1",
+    );
+    const requestInit = fetchStub.calls[0].args[1] as RequestInit;
+    assertEquals(requestInit?.method, "GET");
+  } finally {
+    fetchStub.restore();
+  }
+});
+
+Deno.test("Integration: BulkClient - Market API (stats without symbol)", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+  });
+
+  const mockResponse = new Response(JSON.stringify({ markets: [] }), {
+    status: 200,
+    headers: { "content-type": "application/json" },
+  });
+
+  const fetchStub = stub(globalThis, "fetch", () => Promise.resolve(mockResponse));
+
+  try {
+    const stats = await client.market.stats();
+
+    assertEquals(stats.markets, []);
+    assertEquals(fetchStub.calls[0].args[0].toString(), "https://api.example.com/stats");
+    const requestInit = fetchStub.calls[0].args[1] as RequestInit;
+    assertEquals(requestInit?.method, "GET");
+  } finally {
+    fetchStub.restore();
+  }
+});
+
+Deno.test("Integration: BulkClient - Market API (stats with symbol)", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+  });
+
+  const mockResponse = new Response(JSON.stringify({ markets: [{ symbol: "BTC-USD" }] }), {
+    status: 200,
+    headers: { "content-type": "application/json" },
+  });
+
+  const fetchStub = stub(globalThis, "fetch", () => Promise.resolve(mockResponse));
+
+  try {
+    const stats = await client.market.stats({ symbol: "BTC-USD" });
+
+    assertEquals(stats.markets?.[0].symbol, "BTC-USD");
+    assertEquals(fetchStub.calls[0].args[0].toString(), "https://api.example.com/stats?coin=BTC-USD");
+    const requestInit = fetchStub.calls[0].args[1] as RequestInit;
+    assertEquals(requestInit?.method, "GET");
+  } finally {
+    fetchStub.restore();
+  }
+});
+
 Deno.test("Integration: BulkClient - Trade API (cancelOrder)", async () => {
   const client = new BulkClient({
     httpUrl: "https://api.example.com",
@@ -254,6 +334,41 @@ Deno.test("Integration: BulkClient - Account API (fills)", async () => {
   }
 });
 
+Deno.test("Integration: BulkClient - Account API (positions, funding, order history)", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+  });
+
+  const responses = [
+    [{ positions: { symbol: "BTC-USD", szi: "0.1" } }],
+    [{ fundingPayment: { symbol: "BTC-USD", usdc: "1.23" } }],
+    [{ orderHistory: { symbol: "BTC-USD", side: "buy" } }],
+  ];
+  const fetchStub = stub(globalThis, "fetch", () => {
+    const response = responses.shift();
+    return Promise.resolve(
+      new Response(JSON.stringify(response), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      }),
+    );
+  });
+
+  try {
+    const positions = await client.account.positions("0x123");
+    const funding = await client.account.fundingHistory("0x123");
+    const orderHistory = await client.account.orderHistory("0x123");
+
+    assertEquals(positions[0].symbol, "BTC-USD");
+    assertEquals(funding[0].symbol, "BTC-USD");
+    assertEquals(orderHistory[0].symbol, "BTC-USD");
+    const requestTypes = fetchStub.calls.map((call) => JSON.parse((call.args[1] as RequestInit).body as string).type);
+    assertEquals(requestTypes, ["positions", "fundingHistory", "orderHistory"]);
+  } finally {
+    fetchStub.restore();
+  }
+});
+
 Deno.test("Integration: BulkClient - Account API (feeTier)", async () => {
   const client = new BulkClient({
     httpUrl: "https://api.example.com",
@@ -276,6 +391,35 @@ Deno.test("Integration: BulkClient - Account API (feeTier)", async () => {
   try {
     const fee = await client.account.feeTier("0x123");
     assertEquals(fee.globalPolicyActive, true);
+  } finally {
+    fetchStub.restore();
+  }
+});
+
+Deno.test("Integration: BulkClient - Account API rejects missing decoded account payloads", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+  });
+
+  const fetchStub = stub(globalThis, "fetch", () =>
+    Promise.resolve(
+      new Response(JSON.stringify([{}]), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      }),
+    ));
+
+  try {
+    await assertRejects(
+      () => client.account.fullAccount("0x123"),
+      BulkDecodeError,
+      "fullAccount response is empty",
+    );
+    await assertRejects(
+      () => client.account.feeTier("0x123"),
+      BulkDecodeError,
+      "feeTier response is empty",
+    );
   } finally {
     fetchStub.restore();
   }
@@ -420,6 +564,154 @@ Deno.test("Integration: BulkClient - signing nonce is monotonic within same mill
     nowStub.restore();
     fetchStub.restore();
   }
+});
+
+Deno.test("Integration: BulkClient - Trade API batches signed actions", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+    privateKey: DUMMY_PRIVATE_KEY,
+  });
+
+  const fetchStub = stub(globalThis, "fetch", () =>
+    Promise.resolve(
+      new Response(JSON.stringify({ status: "ok", response: { type: "order", data: { statuses: [] } } }), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      }),
+    ));
+
+  try {
+    const response = await client.trade.batch([
+      {
+        type: "order",
+        symbol: "BTC-USD",
+        isBuy: true,
+        price: 100000,
+        size: 0.1,
+        reduceOnly: false,
+        iso: false,
+        orderType: { type: "limit", tif: "GTC" },
+      },
+      { type: "cancelAll", symbols: ["BTC-USD"] },
+    ]);
+
+    assertEquals(response.status, "ok");
+    const requestInit = fetchStub.calls[0].args[1] as { body?: string };
+    assertExists(requestInit.body);
+    const body = JSON.parse(requestInit.body);
+    assertEquals(body.actions.length, 2);
+    assertEquals(body.actions[1], { cxa: { c: ["BTC-USD"] } });
+  } finally {
+    fetchStub.restore();
+  }
+});
+
+Deno.test("Integration: BulkClient - Trade API rejects error order responses by default", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+  });
+
+  const fetchStub = stub(globalThis, "fetch", () =>
+    Promise.resolve(
+      new Response(JSON.stringify({ status: "error", response: "insufficient margin" }), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      }),
+    ));
+
+  try {
+    await assertRejects(
+      () =>
+        client.trade.submit({
+          actions: [],
+          nonce: 1,
+          account: "account",
+          signer: "signer",
+          signature: "signature",
+        }),
+      BulkTransactionRejectedError,
+      "insufficient margin",
+    );
+  } finally {
+    fetchStub.restore();
+  }
+});
+
+Deno.test("Integration: BulkClient - Trade API can resolve rejected order responses when requested", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+  });
+
+  const fetchStub = stub(globalThis, "fetch", () =>
+    Promise.resolve(
+      new Response(JSON.stringify({ status: "error", response: "post only would cross" }), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      }),
+    ));
+
+  try {
+    const response = await client.trade.submit(
+      {
+        actions: [],
+        nonce: 1,
+        account: "account",
+        signer: "signer",
+        signature: "signature",
+      },
+      { throwOnReject: false },
+    );
+
+    assertEquals(response.status, "error");
+  } finally {
+    fetchStub.restore();
+  }
+});
+
+Deno.test("Integration: BulkClient - Trade API submits signed transactions over WebSocket", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+  });
+  const wsPostStub = stub(
+    client.ws,
+    "post",
+    () => Promise.resolve({ status: "ok", response: { type: "order", data: { statuses: [] } } }),
+  );
+
+  try {
+    const response = await client.trade.submit(
+      {
+        actions: [{ type: "order" }],
+        nonce: 1,
+        account: "account",
+        signer: "signer",
+        signature: "signature",
+      },
+      { via: "ws", timeoutMs: 123 },
+    );
+
+    assertEquals(response.status, "ok");
+    assertEquals(wsPostStub.calls.length, 1);
+    assertEquals(wsPostStub.calls[0].args[0].actions, [{ type: "order" }]);
+    assertEquals(wsPostStub.calls[0].args[1], { timeoutMs: 123 });
+  } finally {
+    wsPostStub.restore();
+  }
+});
+
+Deno.test("Integration: BulkClient - Trade API requires a signer for generated trading actions", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+  });
+
+  await assertRejects(
+    () =>
+      client.trade.cancelAll({
+        symbols: ["BTC-USD"],
+      }),
+    Error,
+    "Signer is required",
+  );
 });
 
 Deno.test("Integration: BulkClient - Error Handling", async () => {
