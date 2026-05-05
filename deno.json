@@ -1,6 +1,6 @@
 {
   "name": "@posaune0423/bulk-ts-sdk",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "exports": "./src/mod.ts",
   "description": "Unofficial TypeScript SDK for Bulk Trade.",
   "license": "MIT",

@@ -5,10 +5,10 @@
     "": {
       "name": "bulk-ts-sdk-simple-use",
       "dependencies": {
-        "bulk-ts-sdk": "^0.0.2",
+        "bulk-ts-sdk": "^0.0.4",
       },
       "devDependencies": {
-        "@types/bun": "^1.3.2",
+        "@types/bun": "^1.3.13",
         "typescript": "^5.9.3",
       },
     },
@@ -18,7 +18,7 @@
 
     "@types/node": ["@types/node@25.6.0", "", { "dependencies": { "undici-types": "~7.19.0" } }, "sha512-+qIYRKdNYJwY3vRCZMdJbPLJAtGjQBudzZzdzwQYkEPQd+PJGixUL5QfvCLDaULoLv+RhT3LDkwEfKaAkgSmNQ=="],
 
-    "bulk-ts-sdk": ["bulk-ts-sdk@0.0.2", "", { "dependencies": { "undici": "^6.0.0" } }, "sha512-Z4DXxAF2dLvBTsIMfPZynITDtYGTPpev7Mwgy+2wIlDTVjU6ZrHdqIwEkHu2kcV0WHcWgiZnd5+Yyy2MMsDPIw=="],
+    "bulk-ts-sdk": ["bulk-ts-sdk@0.0.4", "", { "dependencies": { "undici": "^6.0.0" } }, "sha512-lgsbuXc9K2jnaq/9nzSUHIbHIQ5VRddpg6aVBtqNMWP7OwrFTy93FL/Wc2agjHb7wm1TlC/WdqBblYr6iX7ikQ=="],
 
     "bun-types": ["bun-types@1.3.13", "", { "dependencies": { "@types/node": "*" } }, "sha512-QXKeHLlOLqQX9LgYaHJfzdBaV21T63HhFJnvuRCcjZiaUDpbs5ED1MgxbMra71CsryN/1dAoXuJJJwIv/2drVA=="],
 

@@ -55,7 +55,7 @@ export class BulkClient {
 
   /**
    * Initializes a new BulkClient instance.
-   * @param config Optional configuration for the client.
+   * @param config Optional HTTP/WebSocket URLs, signer keys, timeouts, and validation flags.
    */
   constructor(config: BulkClientConfig = {}) {
     const http = new HttpTransport({
