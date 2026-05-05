@@ -75,6 +75,59 @@ Deno.test("Integration: BulkClient - Trade API (POST with Signature)", async () 
   }
 });
 
+Deno.test("Integration: BulkClient - Trade API posts signed market order action", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+    privateKey: DUMMY_PRIVATE_KEY,
+  });
+
+  const fetchStub = stub(
+    globalThis,
+    "fetch",
+    () =>
+      Promise.resolve(
+        new Response(JSON.stringify({ status: "ok", response: { type: "order", status: "filled" } }), {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        }),
+      ),
+  );
+
+  try {
+    const response = await client.trade.placeMarketOrder({
+      symbol: "BTC-USD",
+      side: "sell",
+      size: 0.1,
+      reduceOnly: true,
+      isolated: true,
+    });
+
+    assertEquals(response.status, "ok");
+    assertEquals(fetchStub.calls.length, 1);
+
+    const requestUrl = fetchStub.calls[0].args[0].toString();
+    const requestInit = fetchStub.calls[0].args[1] as RequestInit;
+    const body = JSON.parse(requestInit?.body as string);
+
+    assertEquals(requestUrl, "https://api.example.com/order");
+    assertEquals(requestInit?.method, "POST");
+    assertEquals(body.actions, [
+      {
+        m: {
+          c: "BTC-USD",
+          b: false,
+          sz: 0.1,
+          r: true,
+          i: true,
+        },
+      },
+    ]);
+    assertEquals(typeof body.signature, "string");
+  } finally {
+    fetchStub.restore();
+  }
+});
+
 Deno.test("Integration: BulkClient - Account API", async () => {
   const client = new BulkClient({
     httpUrl: "https://api.example.com",

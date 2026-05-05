@@ -1,5 +1,5 @@
 import { assertEquals, assertThrows } from "@std/assert";
-import { toKeychainCancelAll, toKeychainLimitOrder } from "../../src/builders/orders.ts";
+import { toKeychainCancelAll, toKeychainLimitOrder, toKeychainMarketOrder } from "../../src/builders/orders.ts";
 import { KeychainSigner } from "../../src/signing/keychain_signer.ts";
 import { normalizeSignedTransaction } from "../../src/signing/normalize_signed_transaction.ts";
 import type { KeychainOrderInput, SignedTransaction } from "../../src/types/trade.ts";
@@ -60,6 +60,51 @@ Deno.test("KeychainSigner - signs each action separately", () => {
   assertEquals(signed.length, 2);
   assertEquals(signed.every((tx) => Array.isArray(tx.actions)), true);
   assertEquals(signed.map((tx) => tx.actions.length), [1, 1]);
+});
+
+Deno.test("KeychainSigner - signs market order as API market action", () => {
+  const signer = KeychainSigner.fromPrivateKey(DUMMY_PRIVATE_KEY);
+  const order = toKeychainMarketOrder({
+    symbol: "BTC-USD",
+    side: "sell",
+    size: 0.1,
+    reduceOnly: true,
+  });
+
+  const signed = signer.sign(order);
+
+  assertEquals(signed.actions, [
+    {
+      m: {
+        c: "BTC-USD",
+        b: false,
+        sz: 0.1,
+        r: true,
+        i: false,
+      },
+    },
+  ]);
+});
+
+Deno.test("KeychainSigner - native keychain rejects legacy market order shape without price", () => {
+  const signer = KeychainSigner.fromPrivateKey(DUMMY_PRIVATE_KEY);
+  const legacyMarketOrder = {
+    type: "order",
+    symbol: "BTC-USD",
+    isBuy: false,
+    size: 0.1,
+    reduceOnly: true,
+    iso: false,
+    orderType: {
+      type: "market",
+    },
+  } as unknown as KeychainOrderInput;
+
+  assertThrows(
+    () => signer.sign(legacyMarketOrder),
+    Error,
+    "order.price is required",
+  );
 });
 
 Deno.test("KeychainSigner - rejects agent wallet signing when native binding lacks support", () => {
