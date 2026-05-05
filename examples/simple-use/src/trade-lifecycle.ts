@@ -8,12 +8,12 @@ function restingOrderId(order: OrderResponse): string | undefined {
   return first.resting.oid;
 }
 
-const privateKey = requireEnv("BULK_PRIVATE_KEY");
+const privateKey = requireEnv("PRIVATE_KEY");
 const client = createClient({ privateKey });
 const symbol = readSymbol();
 
 if (!client.accountId) {
-  throw new Error("Unable to derive account id from BULK_PRIVATE_KEY.");
+  throw new Error("Unable to derive account id from PRIVATE_KEY.");
 }
 
 console.log("--- Trade Lifecycle Example ---");
