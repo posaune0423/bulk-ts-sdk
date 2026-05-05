@@ -24,7 +24,7 @@
 
 - **Official Website**: [bulk.trade](https://bulk.trade)
 - **API Documentation**: [docs.bulk.trade](https://docs.bulk.trade)
-- **Github**: [https://github.com/Bulk-trade](https://github.com/Bulk-trade)
+- **Github**: [@Bulk-trade](https://github.com/Bulk-trade)
 - **Official X (Twitter)**: [@bulktrade](https://x.com/bulktrade)
 
 ---
