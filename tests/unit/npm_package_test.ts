@@ -54,8 +54,8 @@ Deno.test("npm package copies native keychain bindings beside generated runtime 
     "bulk-keychain.win32-x64-msvc.node",
   ];
 
-  const nativePaths = ["esm", "script"].flatMap((runtimeDir) =>
-    nativeFiles.map((nativeFile) => path.join(npmDir, runtimeDir, "vendor", "bulk-keychain", nativeFile))
+  const nativePaths = ["vendor", "esm/vendor", "script/vendor"].flatMap((vendorDir) =>
+    nativeFiles.map((nativeFile) => path.join(npmDir, vendorDir, "bulk-keychain", nativeFile))
   );
   const results = await Promise.all(
     nativePaths.map(async (nativePath) => ({
