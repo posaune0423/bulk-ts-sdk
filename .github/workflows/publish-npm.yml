@@ -5,17 +5,18 @@ on:
     tags:
       - "v*"
 
+# Required for npm Trusted Publishers (OIDC). See https://gh.io/npm-docs-trusted-publishers
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: read
-      id-token: write
-
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Deno
         uses: denoland/setup-deno@v2
@@ -65,14 +66,22 @@ jobs:
         if: steps.npm_version.outputs.should_publish == 'true'
         run: deno task build:npm ${{ steps.version.outputs.value }}
 
+      - name: Verify npm build output
+        if: steps.npm_version.outputs.should_publish == 'true'
+        run: test -f npm/package.json
+
+      # Trusted publishing needs npm ≥ 11.5.1; Node 24 satisfies this by default.
+      # See https://github.com/actions/setup-node/blob/main/docs/advanced-usage.md#publishing-to-npm-with-trusted-publisher-oidc
       - name: Setup Node.js
         if: steps.npm_version.outputs.should_publish == 'true'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: "22.x"
+          node-version: "24"
           registry-url: "https://registry.npmjs.org"
+          package-manager-cache: false
 
       - name: Publish to npm
         if: steps.npm_version.outputs.should_publish == 'true'
         working-directory: npm
-        run: npm publish --provenance --access public
+        # setup-node may export a placeholder NODE_AUTH_TOKEN that blocks OIDC (actions/setup-node#1440).
+        run: NODE_AUTH_TOKEN="" npm publish --access public
