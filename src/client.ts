@@ -76,7 +76,7 @@ export class BulkClient {
     this.account = new AccountClient({ http });
     this.ws = ws;
     this.trade = new TradeClient({ http, ws, signer });
-    this.accountPublicKey = signer?.accountPublicKey;
+    this.accountPublicKey = config.accountPublicKey ?? signer?.accountPublicKey;
     this.accountId = this.accountPublicKey;
   }
 }

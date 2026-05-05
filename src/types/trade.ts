@@ -67,6 +67,12 @@ export type KeychainSignedTransaction = {
   orderIds?: string[];
 };
 
+export type AgentWalletKeychainInput = {
+  type: "agentWalletCreation";
+  agent: string;
+  remove: boolean;
+};
+
 /** Shape passed to bulk-keychain signing for order flows (matches `builders/orders.ts`). */
 export type KeychainOrderInput =
   | {
@@ -96,9 +102,6 @@ export type KeychainOrderInput =
   | {
     type: "cancelAll";
     symbols: string[];
-  }
-  | {
-    type: "agentWalletCreation";
-    agent: string;
-    remove: boolean;
   };
+
+export type KeychainSignInput = KeychainOrderInput | AgentWalletKeychainInput;

@@ -80,7 +80,7 @@ await build({
     // Copy vendor directory into every runtime location generated code imports from.
     const vendorDir = "./src/vendor";
     const vendorTargets = ["./npm/vendor", "./npm/esm/vendor", "./npm/script/vendor"];
-    const bulkKeychainEntries = [];
+    const bulkKeychainEntries: string[] = [];
 
     for await (const entry of Deno.readDir(path.join(vendorDir, "bulk-keychain"))) {
       if (entry.isFile) {

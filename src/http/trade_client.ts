@@ -11,6 +11,7 @@ import type { HttpTransport } from "./http_transport.ts";
 import type { WsClient } from "../ws/ws_client.ts";
 import type { KeychainSigner } from "../signing/keychain_signer.ts";
 import type {
+  AgentWalletKeychainInput,
   AgentWalletParams,
   CancelAllParams,
   CancelOrderParams,
@@ -107,7 +108,7 @@ export class TradeClient {
   }
 
   private async submitSignedAction(
-    input: KeychainOrderInput,
+    input: KeychainOrderInput | AgentWalletKeychainInput,
     options: TradeOptions,
   ): Promise<OrderResponse> {
     const signer = this.ensureSigner();

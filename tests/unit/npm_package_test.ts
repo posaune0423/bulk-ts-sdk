@@ -45,8 +45,7 @@ Deno.test("npm package exposes Bun-compatible module metadata", async () => {
 });
 
 Deno.test("npm package copies native keychain bindings beside generated runtime imports", async () => {
-  const packageJson = await readNpmPackageJson();
-  if (packageJson === undefined) return;
+  if ((await readNpmPackageJson()) === undefined) return;
 
   const nativeFiles = [
     "bulk-keychain.darwin-arm64.node",
@@ -58,9 +57,14 @@ Deno.test("npm package copies native keychain bindings beside generated runtime 
   const nativePaths = ["esm", "script"].flatMap((runtimeDir) =>
     nativeFiles.map((nativeFile) => path.join(npmDir, runtimeDir, "vendor", "bulk-keychain", nativeFile))
   );
-  const stats = await Promise.all(nativePaths.map((nativePath) => Deno.stat(nativePath)));
+  const results = await Promise.all(
+    nativePaths.map(async (nativePath) => ({
+      nativePath,
+      stat: await Deno.stat(nativePath).catch(() => undefined),
+    })),
+  );
 
-  for (const stat of stats) {
-    assert(stat.isFile);
+  for (const result of results) {
+    assert(result.stat?.isFile, `Expected native binding to exist: ${result.nativePath}`);
   }
 });

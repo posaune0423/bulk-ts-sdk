@@ -280,9 +280,9 @@ Implementation: `src/signing/keychain_signer.ts`.
 
 - `KeychainSigner.fromPrivateKey(privateKey, targetAccountPublicKey?)`
 - `accountPublicKey` getter returns `targetAccountPublicKey ?? nativeSigner.pubkey`
-- `sign(input)` special-cases `agentWalletCreation` and otherwise signs one action
-- `signGroup(inputs)` signs multiple actions as one transaction
-- `signAll(inputs)` signs multiple transactions
+- `sign(input)` accepts `KeychainOrderInput | AgentWalletKeychainInput`
+- `signGroup(inputs)` and `signAll(inputs)` accept order/cancel inputs only
+- `nextNonce()` is monotonic so rapid signing cannot reuse a nonce
 
 Do not mutate signed transactions after native signing to force a different target account; that produces invalid
 signatures.
@@ -363,4 +363,5 @@ When adding or changing endpoints:
 - Put signing/submission flows in `TradeClient`.
 - Put realtime subscriptions and WS submit behavior in `WsClient`.
 - Add or update E2E coverage for the public SDK method.
-- Keep builders, `KeychainOrderInput`, signer behavior, and normalization aligned for trade changes.
+- Keep builders, `KeychainOrderInput`, `AgentWalletKeychainInput`, signer behavior, and normalization aligned for trade
+  changes.

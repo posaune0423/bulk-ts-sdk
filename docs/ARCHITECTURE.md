@@ -803,7 +803,7 @@ export function assertOrderResponseOk(response: OrderResponse): void {
 export class KeychainSigner {
   readonly accountPublicKey: string;
   static fromPrivateKey(privateKey: string, targetAccountPublicKey?: string): KeychainSigner;
-  sign(input: KeychainOrderInput): SignedTransaction;
+  sign(input: KeychainSignInput): SignedTransaction;
   signGroup(inputs: KeychainOrderInput[]): SignedTransaction;
   signAll(inputs: KeychainOrderInput[]): SignedTransaction[];
 }
@@ -826,7 +826,10 @@ export class KeychainSigner {
   get accountPublicKey(): string {
     return this.targetAccountPublicKey ?? this.nativeSigner.pubkey;
   }
-  sign(input: KeychainOrderInput): SignedTransaction {
+  sign(input: KeychainSignInput): SignedTransaction {
+    if (input.type === "agentWalletCreation") {
+      return this.signAgentWallet(input);
+    }
     return this.signActions([input]);
   }
   signGroup(inputs: KeychainOrderInput[]): SignedTransaction {
@@ -838,7 +841,7 @@ export class KeychainSigner {
   private signActions(inputs: KeychainOrderInput[]): SignedTransaction {
     this.assertCanSignTargetAccount();
     return normalizeSignedTransaction(
-      this.nativeSigner.signOrder(inputs, Date.now() * 1000),
+      this.nativeSigner.signOrder(inputs, this.nextNonce()),
     );
   }
   private assertCanSignTargetAccount(): void {

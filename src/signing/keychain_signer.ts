@@ -1,6 +1,6 @@
 import { NativeKeypair, NativeSigner } from "bulk-keychain";
 import { normalizeSignedTransaction } from "./normalize_signed_transaction.ts";
-import type { KeychainOrderInput, SignedTransaction } from "../types/trade.ts";
+import type { KeychainOrderInput, KeychainSignInput, SignedTransaction } from "../types/trade.ts";
 
 interface INativeSigner {
   pubkey: string;
@@ -17,7 +17,13 @@ type NativeSignerWithAgentWallet = INativeSigner & {
   signAgentWallet(agent: string, remove: boolean): SignedTransaction;
 };
 
+function supportsAgentWalletSigning(signer: INativeSigner): signer is NativeSignerWithAgentWallet {
+  return "signAgentWallet" in signer && typeof signer.signAgentWallet === "function";
+}
+
 export class KeychainSigner {
+  private lastNonce = 0;
+
   private constructor(
     private readonly nativeSigner: INativeSigner,
     private readonly targetAccountPublicKey?: string,
@@ -33,9 +39,12 @@ export class KeychainSigner {
     return this.targetAccountPublicKey ?? this.nativeSigner.pubkey;
   }
 
-  sign(input: KeychainOrderInput): SignedTransaction {
+  sign(input: KeychainSignInput): SignedTransaction {
     if (input.type === "agentWalletCreation") {
-      const signed = (this.nativeSigner as NativeSignerWithAgentWallet).signAgentWallet(input.agent, input.remove);
+      if (!supportsAgentWalletSigning(this.nativeSigner)) {
+        throw new Error("Native bulk-keychain signer does not support agent wallet signing.");
+      }
+      const signed = this.nativeSigner.signAgentWallet(input.agent, input.remove);
       return normalizeSignedTransaction(signed);
     }
 
@@ -61,7 +70,9 @@ export class KeychainSigner {
   }
 
   private nextNonce(): number {
-    return Date.now() * 1000;
+    const nonce = Date.now() * 1000;
+    this.lastNonce = nonce <= this.lastNonce ? this.lastNonce + 1 : nonce;
+    return this.lastNonce;
   }
 
   private assertCanSignTargetAccount(): void {

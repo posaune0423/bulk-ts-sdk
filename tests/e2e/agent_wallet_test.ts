@@ -71,47 +71,49 @@ Deno.test({
     });
     assertEquals(regRes.status, "ok");
     console.log("Agent registered.");
-    const registeredAgents = await waitForAgentPresence(mainClient, mainAccountPublicKey, agentPubkey, true);
-    assert(
-      registeredAgents.includes(agentPubkey),
-      "Agent should be visible in account state after registration",
-    );
 
-    // 3. Setup Agent Client (acting for Main Account)
-    const agentClient = new BulkClient({
-      httpUrl: env.BULK_HTTP_URL,
-      wsUrl: env.BULK_WS_URL,
-      privateKey: env.AGENT_WALLET_PRIVATE_KEY,
-      accountPublicKey: mainAccountPublicKey,
-    });
+    try {
+      const registeredAgents = await waitForAgentPresence(mainClient, mainAccountPublicKey, agentPubkey, true);
+      assert(
+        registeredAgents.includes(agentPubkey),
+        "Agent should be visible in account state after registration",
+      );
 
-    // 4. Verify unsupported target-account signing fails before submit.
-    console.log("Verifying target-account order signing guard...");
-    await assertRejects(
-      () =>
-        agentClient.trade.placeLimitOrder({
-          symbol: "BTC-USD",
-          side: "buy",
-          price: 80000.5,
-          size: 0.0001,
-          tif: "GTC",
-        }),
-      Error,
-      "target-account signing support",
-    );
+      // 3. Setup Agent Client (acting for Main Account)
+      const agentClient = new BulkClient({
+        httpUrl: env.BULK_HTTP_URL,
+        wsUrl: env.BULK_WS_URL,
+        privateKey: env.AGENT_WALLET_PRIVATE_KEY,
+        accountPublicKey: mainAccountPublicKey,
+      });
 
-    // 5. Remove Agent Wallet
-    console.log("Removing Agent Wallet...");
-    const remRes = await mainClient.trade.manageAgentWallet({
-      agent: agentPubkey,
-      remove: true,
-    });
-    assertEquals(remRes.status, "ok");
-    console.log("Agent removal submitted. Waiting for account state propagation...");
+      // 4. Verify unsupported target-account signing fails before submit.
+      console.log("Verifying target-account order signing guard...");
+      await assertRejects(
+        () =>
+          agentClient.trade.placeLimitOrder({
+            symbol: "BTC-USD",
+            side: "buy",
+            price: 80000.5,
+            size: 0.0001,
+            tif: "GTC",
+          }),
+        Error,
+        "target-account signing support",
+      );
+    } finally {
+      // 5. Remove Agent Wallet
+      console.log("Removing Agent Wallet...");
+      const remRes = await mainClient.trade.manageAgentWallet({
+        agent: agentPubkey,
+        remove: true,
+      });
+      assertEquals(remRes.status, "ok");
+      console.log("Agent removal submitted. Waiting for account state propagation...");
 
-    // Verify agent is gone from account state
-    const agents = await waitForAgentPresence(mainClient, mainAccountPublicKey, agentPubkey, false);
-    console.log("Registered Agents after removal:", agents);
-    assert(!agents.includes(agentPubkey), "Agent should be removed from account state");
+      const agents = await waitForAgentPresence(mainClient, mainAccountPublicKey, agentPubkey, false);
+      console.log("Registered Agents after removal:", agents);
+      assert(!agents.includes(agentPubkey), "Agent should be removed from account state");
+    }
   },
 });
