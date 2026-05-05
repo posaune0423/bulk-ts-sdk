@@ -13,10 +13,10 @@
     "ws": "bun src/ws-market-data.ts"
   },
   "dependencies": {
-    "bulk-ts-sdk": "^0.0.3"
+    "bulk-ts-sdk": "^0.0.2"
   },
   "devDependencies": {
-    "@types/bun": "^1.3.2",
+    "@types/bun": "^1.3.13",
     "typescript": "^5.9.3"
   },
   "engines": {

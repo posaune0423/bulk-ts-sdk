@@ -300,10 +300,10 @@ deno task test:e2e
 
 ---
 
+## 🤖 For Agent
+
+Read [llm.txt](./llm.txt)
+
 ## 📄 License
 
-Distributed under the MIT License. See `LICENSE` for more information.
-
-<div align="center">
-  <sub>Built with ❤️ by the Bulk Exchange community</sub>
-</div>
+Distributed under the MIT License. See [LICENSE](./LICENSE) for more information.
