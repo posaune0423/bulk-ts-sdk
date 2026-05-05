@@ -2,7 +2,7 @@
   "name": "@posaune0423/bulk-ts-sdk",
   "version": "0.0.3",
   "exports": "./src/mod.ts",
-  "description": "Unofficial TypeScript SDK for Bulk Exchange.",
+  "description": "Unofficial TypeScript SDK for Bulk Trade.",
   "license": "MIT",
   "coverageDirectory": "docs/coverage",
   "publish": {

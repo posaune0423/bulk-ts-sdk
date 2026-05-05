@@ -1,6 +1,6 @@
 <div align="center">
   <h1>💪🏻 bulk-ts-sdk (Unofficial)</h1>
-  <p><strong>A high-performance, type-safe, community-supported TypeScript SDK for Bulk Exchange.</strong></p>
+  <p><strong>A high-performance, type-safe, community-supported TypeScript SDK for Bulk Trade.</strong></p>
 
 <p>
     <a href="https://github.com/posaune0423/bulk-ts-sdk/actions/workflows/ci.yml"><img src="https://github.com/posaune0423/bulk-ts-sdk/actions/workflows/ci.yml/badge.svg" alt="CI Status" /></a>
