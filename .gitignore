@@ -2,5 +2,6 @@
 node_modules/
 npm
 /coverage/
-# Deno raw coverage profiles (lcov.info + html/ are committed under docs/coverage)
+# Deno coverage under docs/: commit lcov.info only. Raw profiles + HTML (many files) stay local.
 docs/coverage/*.json
+docs/coverage/html/

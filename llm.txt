@@ -61,6 +61,8 @@ account into the signature. Current behavior:
 - The error message contains: `target-account signing support`.
 - `manageAgentWallet` uses native `signAgentWallet(agent, remove)` and is not blocked by that guard.
 
+Reference: https://docs.bulk.trade/api-reference/manageAgentWallet
+
 ## Core composition
 
 `src/client.ts` creates:

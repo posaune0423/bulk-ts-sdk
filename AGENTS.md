@@ -25,11 +25,28 @@ deno task build:npm
 deno task hook:install
 ```
 
-`test:coverage` runs unit and integration tests and writes coverage under `docs/coverage/` (`lcov.info` and `html/`).
-Raw profile `*.json` files there are gitignored. See `docs/TEST.md`.
+## Code coverage (Git only — not npm / JSR)
 
-`update:docs` downloads the latest OpenAPI spec from Bulk docs into `docs/references/openapi.yml` (then run
-`generate:types` if you regenerate SDK types).
+Deno has no built-in `deno.json` field that `deno test` reads for the coverage output directory. This repo uses
+**`coverageDirectory`** in `deno.json` as the single source of truth; `deno task test` runs
+`scripts/run_unit_integration_tests.ts`, which spawns `deno test --coverage=<coverageDirectory>` (and matching
+`--allow-write`).
+
+**Directory (default in config):** `docs/coverage/` (`coverageDirectory` in `deno.json`)
+
+| Path                      | Role                                                                                                                                       |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `docs/coverage/lcov.info` | Machine-readable summary (LCOV). **Commit this** as the in-repo coverage SSOT.                                                             |
+| `docs/coverage/html/`     | HTML report (many files). **Gitignored** — generated locally when you run `deno task test`; open `html/index.html` in a browser to browse. |
+| `docs/coverage/*.json`    | Deno raw profiles — **gitignored**, do not commit.                                                                                         |
+
+**Refresh:** `deno task test` or `deno task test:coverage` (same: unit + integration). Both write under
+`coverageDirectory`.
+
+**Git:** Commit **`docs/coverage/lcov.info`** when coverage changes meaningfully. Do **not** commit `html/` or `*.json`.
+Coverage is **not** listed in `deno.json` → `publish.include` — npm / JSR packages contain the SDK only.
+
+More context: `docs/TEST.md`.
 
 ## Test policy (minimum)
 
@@ -59,11 +76,13 @@ bulk-ts-sdk/
     TECH.md
     TEST.md
     coverage/
+      lcov.info
   	references/
       openapi.yml
   scripts/
     fetch_openapi.ts
     generate_openapi_types.ts
+    run_unit_integration_tests.ts
   src/
     mod.ts
     client.ts

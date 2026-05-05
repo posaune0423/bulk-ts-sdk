@@ -4,8 +4,10 @@ testは`tests`以下に実装します。
 
 ## Coverage（unit + integration）
 
-`deno task test:coverage` で `docs/coverage/` を更新する。機械可読の SSOT は `lcov.info`、ブラウザ用レポートは
-`html/index.html`。Deno が吐く生プロファイル（`*.json`）は `.gitignore` し、上記だけコミットする想定。
+`deno task test`（または同等の `deno task test:coverage`）で `docs/coverage/` を更新する。出力先は **`deno.json` の
+`coverageDirectory`**（デフォルト相当は `docs/coverage`）。**Git に乗せるのは `lcov.info` のみ**（SSOT）。ブラウザ用の
+`html/` はファイル数が多いので **`.gitignore`** し、ローカルでテスト実行後に `html/index.html` を開いて確認する。生の
+`*.json` プロファイルも無視する。
 
 ```bash
 tests/

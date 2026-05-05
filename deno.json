@@ -4,6 +4,7 @@
   "exports": "./src/mod.ts",
   "description": "Unofficial TypeScript SDK for Bulk Exchange.",
   "license": "MIT",
+  "coverageDirectory": "docs/coverage",
   "publish": {
     "include": [
       "LICENSE",
@@ -17,8 +18,8 @@
     "check": "deno check src/mod.ts",
     "fmt": "deno fmt",
     "lint": "deno lint",
-    "test": "deno test --allow-net --allow-env --allow-read --allow-ffi tests/unit tests/integration",
-    "test:coverage": "deno test --coverage=docs/coverage --allow-net --allow-env --allow-read --allow-ffi tests/unit tests/integration",
+    "test": "deno run --allow-read=deno.json --allow-run=deno scripts/run_unit_integration_tests.ts",
+    "test:coverage": "deno task test",
     "test:integration": "deno test --allow-net --allow-env --allow-read --allow-ffi tests/integration",
     "test:e2e": "deno test --env-file=.env --allow-net --allow-env --allow-read --allow-ffi tests/e2e",
     "build:npm": "deno run -A scripts/build_npm.ts",
