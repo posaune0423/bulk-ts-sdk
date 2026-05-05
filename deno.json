@@ -2,7 +2,7 @@
   "name": "@posaune0423/bulk-ts-sdk",
   "version": "0.0.1",
   "exports": "./src/mod.ts",
-  "description": "Official TypeScript SDK for Bulk Exchange.",
+  "description": "Unofficial TypeScript SDK for Bulk Exchange.",
   "license": "MIT",
   "tasks": {
     "check": "deno check src/mod.ts",
@@ -18,13 +18,22 @@
   "imports": {
     "@std/assert": "jsr:@std/assert@1",
     "@std/testing": "jsr:@std/testing@1",
+    "@std/async": "jsr:@std/async@1",
     "valibot": "npm:valibot@^0.42.1",
     "bulk-keychain": "./src/vendor/bulk-keychain/index.js",
     "openapi-typescript": "npm:openapi-typescript@^7.4.1"
   },
   "lint": {
+    "include": [
+      "src/"
+    ],
+    "exclude": [
+      "src/generated/openapi.ts"
+    ],
     "rules": {
-      "tags": [],
+      "tags": [
+        "recommended"
+      ],
       "include": [
         "ban-untagged-todo",
         "default-param-last",
@@ -33,13 +42,21 @@
         "no-eval",
         "no-self-compare",
         "no-sparse-arrays",
-        "no-throw-literal"
+        "no-throw-literal",
+        "no-explicit-any",
+        "no-non-null-assertion",
+        "explicit-function-return-type",
+        "explicit-module-boundary-types",
+        "no-await-in-loop",
+        "no-sync-fn-in-async-context",
+        "prefer-ascii"
       ]
     }
   },
   "fmt": {
-    "semiColons": false,
-    "singleQuote": true,
+    "semiColons": true,
+    "singleQuote": false,
+    "useTabs": false,
     "lineWidth": 120
   }
 }

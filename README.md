@@ -66,22 +66,22 @@ pnpm add bulk-ts-sdk
 ### Initialize the Client
 
 ```typescript
-import { BulkClient } from 'bulk-ts-sdk'
+import { BulkClient } from "bulk-ts-sdk";
 
 const client = new BulkClient({
-  privateKey: '0x...', // Required for trading
-})
+  privateKey: "0x...", // Required for trading
+});
 ```
 
 ### Fetch Market Data
 
 ```typescript
 // Get current ticker for a symbol
-const ticker = await client.market.ticker('BTC-USD')
-console.log(`Current Price: ${ticker.last}`)
+const ticker = await client.market.ticker("BTC-USD");
+console.log(`Current Price: ${ticker.last}`);
 
 // Get exchange information
-const info = await client.market.exchangeInfo()
+const info = await client.market.exchangeInfo();
 ```
 
 ### Trading Operations
@@ -89,21 +89,21 @@ const info = await client.market.exchangeInfo()
 ```typescript
 // Place a limit order
 const order = await client.trade.placeLimitOrder({
-  symbol: 'BTC-USD',
-  side: 'buy',
+  symbol: "BTC-USD",
+  side: "buy",
   price: 50000,
   size: 0.1,
-})
+});
 
-console.log(`Order ID: ${order.response.data.oid}`)
+console.log(`Order ID: ${order.response.data.oid}`);
 ```
 
 ### Real-time Subscriptions (WebSocket)
 
 ```typescript
-client.ws.subscribe({ type: 'ticker', symbol: 'BTC-USD' }, (data) => {
-  console.log('Real-time Update:', data)
-})
+client.ws.subscribe({ type: "ticker", symbol: "BTC-USD" }, (data) => {
+  console.log("Real-time Update:", data);
+});
 ```
 
 ---
@@ -138,5 +138,5 @@ deno task test:e2e
 Distributed under the MIT License. See `LICENSE` for more information.
 
 <div align="center">
-  <sub>Built with ❤️ by the Bulk Exchange Team</sub>
+  <sub>Built with ❤️ by the Bulk Exchange community</sub>
 </div>
