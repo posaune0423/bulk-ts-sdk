@@ -191,7 +191,62 @@ Deno.test("Integration: BulkClient - Trade API (cancelOrder)", async () => {
   }
 });
 
-Deno.test("Integration: BulkClient - Error Handling", async () => {
+Deno.test('Integration: BulkClient - Account API (fills)', async () => {
+  const client = new BulkClient({
+    httpUrl: 'https://api.example.com',
+  })
+
+  const mockResponse = new Response(
+    JSON.stringify([
+      {
+        fills: { symbol: 'BTC-USD', amount: 0.1 },
+      },
+    ]),
+    {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+    },
+  )
+
+  const fetchStub = stub(globalThis, 'fetch', () => Promise.resolve(mockResponse))
+
+  try {
+    const fills = await client.account.fills('0x123')
+    assertEquals(fills.length, 1)
+    assertEquals(fills[0].symbol, 'BTC-USD')
+  } finally {
+    fetchStub.restore()
+  }
+})
+
+Deno.test('Integration: BulkClient - Account API (feeTier)', async () => {
+  const client = new BulkClient({
+    httpUrl: 'https://api.example.com',
+  })
+
+  const mockResponse = new Response(
+    JSON.stringify([
+      {
+        feeTier: { symbol: 'global', makerBps: 10 },
+      },
+    ]),
+    {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+    },
+  )
+
+  const fetchStub = stub(globalThis, 'fetch', () => Promise.resolve(mockResponse))
+
+  try {
+    const fee = await client.account.feeTier('0x123')
+    assertEquals(fee.globalPolicyActive, true)
+  } finally {
+    fetchStub.restore()
+  }
+})
+
+Deno.test('Integration: BulkClient - Error Handling', async () => {
   const client = new BulkClient({
     httpUrl: "https://api.example.com",
   });

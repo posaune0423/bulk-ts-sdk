@@ -33,10 +33,6 @@ export class WsClient {
     return new Promise((resolve, reject) => {
       try {
         this.ws = new WebSocket(this.config.url)
-        if (this.ws.readyState === WebSocket.OPEN) {
-          resolve()
-          return
-        }
         this.ws.onopen = () => resolve()
         this.ws.onerror = (event) => {
           const message = (event as ErrorEvent).message || "Unknown error";
