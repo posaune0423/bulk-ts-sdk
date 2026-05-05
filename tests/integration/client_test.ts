@@ -227,12 +227,12 @@ Deno.test('Integration: BulkClient - Account API (feeTier)', async () => {
   const mockResponse = new Response(
     JSON.stringify([
       {
-        feeTier: { symbol: 'global', makerBps: 10 },
+        feeTier: { symbol: "global", makerBps: 10, globalPolicyActive: true },
       },
     ]),
     {
       status: 200,
-      headers: { 'content-type': 'application/json' },
+      headers: { "content-type": "application/json" },
     },
   )
 
