@@ -154,10 +154,16 @@ export type KeychainOrderInput =
     reduceOnly: boolean;
     /** True when isolated margin should be used for this order when supported. */
     iso: boolean;
-    /** Market order subtype (no limit price). */
+    /** Price field required by bulk-keychain; market orders use 0. */
+    price: 0;
+    /** Market order subtype. */
     orderType: {
       /** Discriminator for market branch. */
       type: "market";
+      /** Native keychain market trigger flag. */
+      isMarket: true;
+      /** Native keychain market trigger price. */
+      triggerPx: 0;
     };
   }
   | {

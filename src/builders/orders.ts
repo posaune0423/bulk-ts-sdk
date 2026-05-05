@@ -37,11 +37,14 @@ export function toKeychainMarketOrder(params: MarketOrderParams): KeychainOrderI
     type: "order",
     symbol: params.symbol,
     isBuy: params.side === "buy",
+    price: 0,
     size: params.size,
     reduceOnly: params.reduceOnly ?? false,
     iso: params.isolated ?? false,
     orderType: {
       type: "market",
+      isMarket: true,
+      triggerPx: 0,
     },
   };
 }
