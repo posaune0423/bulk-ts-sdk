@@ -1,7 +1,6 @@
 # bulk-ts-sdk simple npm use
 
-This example is a separate npm project that consumes the published `bulk-ts-sdk`
-package from npm.
+This example is a separate npm project that consumes the published `bulk-ts-sdk` package from npm.
 
 ```bash
 bun install
