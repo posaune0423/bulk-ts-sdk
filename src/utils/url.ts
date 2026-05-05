@@ -6,13 +6,15 @@ export function buildUrl(
   path: string,
   query?: Record<string, string | number | boolean | undefined>,
 ): string {
-  const url = new URL(path.startsWith('http') ? path : baseUrl + path)
+  const base = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
+  const p = path.startsWith("/") ? path : "/" + path;
+  const url = new URL(path.startsWith("http") ? path : base + p);
   if (query) {
     for (const [key, value] of Object.entries(query)) {
       if (value !== undefined) {
-        url.searchParams.append(key, String(value))
+        url.searchParams.append(key, String(value));
       }
     }
   }
-  return url.toString()
+  return url.toString();
 }

@@ -4,13 +4,13 @@
  */
 
 export interface paths {
-  '/metrics': {
+  "/metrics": {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get runtime metrics snapshot
      * @description Returns current runtime metrics as JSON.
@@ -23,125 +23,125 @@ export interface paths {
      *     - `tx_auth_bad_signature`
      *     - `tx_auth_unauthorized_signer`
      */
-    get: operations['getMetrics']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/verify': {
+    get: operations["getMetrics"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/verify": {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Verify ledger and committed metrics consistency
      * @description Returns ledger verification values (`tx_count`, `tx_xor`, `latest_round`)
      *     and compares them with committed metrics values when available.
      */
-    get: operations['getVerify']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/exchangeInfo': {
+    get: operations["getVerify"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/exchangeInfo": {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get exchange info
      * @description Returns information about all available markets.
      */
-    get: operations['getExchangeInfo']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/ticker/{symbol}': {
+    get: operations["getExchangeInfo"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/ticker/{symbol}": {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get market statistics
      * @description Returns 24-hour statistics for a specific symbol.
      */
-    get: operations['getTicker']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/klines': {
+    get: operations["getTicker"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/klines": {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get candle history (OHLCV)
      * @description Returns historical candlestick data for charting.
      *
      *     **Supported intervals**: 10s, 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M
      */
-    get: operations['getKlines']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/l2book': {
+    get: operations["getKlines"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/l2book": {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get L2 order book
      * @description Returns current order book snapshot with optional filtering.
      */
-    get: operations['getL2Book']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/stats': {
+    get: operations["getL2Book"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/stats": {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get exchange statistics
      * @description Returns exchange statistics with optional symbol filtering.
@@ -158,45 +158,45 @@ export interface paths {
      *       - `3m` -> `90d`
      *       - `365d` -> `1y`
      */
-    get: operations['getExchangeStats']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/riskSurfaces': {
+    get: operations["getExchangeStats"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/riskSurfaces": {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get all regime risk surfaces for a market
      * @description Returns the complete risk configuration surface set for one market across all regimes.
      *     This is a read-only snapshot endpoint and does not mutate state.
      */
-    get: operations['getRiskSurfaces']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/account': {
+    get: operations["getRiskSurfaces"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/account": {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Query account (unsigned)
      * @description Query account information. **No signature required** - read-only operation.
@@ -212,41 +212,41 @@ export interface paths {
      *     - `orderHistory`: Terminal order history (last 5000 orders)
      *     - `feeTier`: Account fee-tier quote + fee policy snapshot (`symbol` optional)
      */
-    post: operations['getAccount']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/feeState': {
+    post: operations["getAccount"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/feeState": {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Query protocol fee state (unsigned)
      * @description Returns active fee policy/schedule state for protocol/global scopes.
      *     This endpoint is read-only and unsigned.
      */
-    get: operations['getProtocolFeeState']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/multisig/{pubkey}/proposals': {
+    get: operations["getProtocolFeeState"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/multisig/{pubkey}/proposals": {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get multisig proposals snapshot (unsigned)
      * @description Returns the full proposal list for a multisig account, including pending,
@@ -255,24 +255,24 @@ export interface paths {
      *     `failed`, `expired`, `cancelled`, `rejected`).
      *     Returns `404` when `pubkey` is not a multisig account.
      */
-    get: operations['getMultisigProposals']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/order': {
+    get: operations["getMultisigProposals"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/order": {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Submit transaction (signed)
      * @description Unified endpoint for all state-mutating operations. **Requires Ed25519 signature**.
@@ -311,203 +311,203 @@ export interface paths {
      *
      *     **Signing**: See [Transaction Signing](/api-reference/signing) for complete wincode serialization and signing details.
      */
-    post: operations['submitTransaction']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    post: operations["submitTransaction"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
-export type webhooks = Record<string, never>
+export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
     /** @description Market configuration and trading rules */
     MarketInfo: {
       /** @example BTC-USD */
-      symbol?: string
+      symbol?: string;
       /**
        * @description Base currency
        * @example BTC
        */
-      baseAsset?: string
+      baseAsset?: string;
       /**
        * @description Quote currency
        * @example USDC
        */
-      quoteAsset?: string
+      quoteAsset?: string;
       /** @enum {string} */
-      status?: 'TRADING' | 'SUSPENDED' | 'CLOSED'
+      status?: "TRADING" | "SUSPENDED" | "CLOSED";
       /** @description Decimal places for price */
-      pricePrecision?: number
+      pricePrecision?: number;
       /** @description Decimal places for size */
-      sizePrecision?: number
+      sizePrecision?: number;
       /** @description Minimum price increment */
-      tickSize?: number
+      tickSize?: number;
       /** @description Minimum order size */
-      lotSize?: number
+      lotSize?: number;
       /** @description Minimum order value (price Ã— size) */
-      minNotional?: number
+      minNotional?: number;
       /** @description Maximum allowed leverage */
-      maxLeverage?: number
+      maxLeverage?: number;
       /** @description Supported order types for this market. */
-      orderTypes?: ('LIMIT' | 'MARKET' | 'STOP' | 'STOP_LIMIT' | 'TAKE_PROFIT' | 'RANGE' | 'TRIGGER' | 'TRAILING')[]
-      timeInForces?: string[]
-    }
+      orderTypes?: ("LIMIT" | "MARKET" | "STOP" | "STOP_LIMIT" | "TAKE_PROFIT" | "RANGE" | "TRIGGER" | "TRAILING")[];
+      timeInForces?: string[];
+    };
     /** @description 24-hour market statistics */
     MarketStats: {
-      symbol?: string
+      symbol?: string;
       /** @description Absolute price change (24h) */
-      priceChange?: number
+      priceChange?: number;
       /** @description Percentage price change (24h) */
-      priceChangePercent?: number
+      priceChangePercent?: number;
       /** @description Last traded price */
-      lastPrice?: number
+      lastPrice?: number;
       /** @description 24h high */
-      highPrice?: number
+      highPrice?: number;
       /** @description 24h low */
-      lowPrice?: number
+      lowPrice?: number;
       /** @description 24h volume (base currency) */
-      volume?: number
+      volume?: number;
       /** @description 24h volume (quote currency) */
-      quoteVolume?: number
+      quoteVolume?: number;
       /** @description Fair value price (for margin calculations) */
-      markPrice?: number
+      markPrice?: number;
       /** @description External reference price */
-      oraclePrice?: number
+      oraclePrice?: number;
       /** @description Total open positions (base currency) */
-      openInterest?: number
+      openInterest?: number;
       /** @description Current funding rate */
-      fundingRate?: number
+      fundingRate?: number;
       /** @description Market regime indicator (-1, 0, 1) */
-      regime?: number
+      regime?: number;
       /** @description Regime duration in 10s intervals */
-      regimeDt?: number
+      regimeDt?: number;
       /** @description Regime-adjusted volatility */
-      regimeVol?: number
+      regimeVol?: number;
       /** @description Regime mean value */
-      regimeMv?: number
+      regimeMv?: number;
       /** @description Fair price derived from order book */
-      fairBookPx?: number
+      fairBookPx?: number;
       /** @description Fair volatility estimate */
-      fairVol?: number
+      fairVol?: number;
       /** @description Fair price bias */
-      fairBias?: number
+      fairBias?: number;
       /**
        * Format: int64
        * @description Timestamp (nanoseconds)
        */
-      timestamp?: number
-    }
+      timestamp?: number;
+    };
     /** @description Risk point at a specific notional/leverage grid coordinate */
     RiskPoint: {
       /** @description Start-of-regime maintenance margin ratio */
-      mmrO?: number
+      mmrO?: number;
       /** @description End-of-regime maintenance margin ratio */
-      mmrE?: number
+      mmrE?: number;
       /** @description Probability of remaining in regime */
-      p?: number
-    }
+      p?: number;
+    };
     /** @description Risk surface for one regime */
     RiskSurface: {
       /** @description Regime index */
-      regime?: number
+      regime?: number;
       /** @description Leverage knot points */
-      leverage?: number[]
+      leverage?: number[];
       /** @description Notional knot points */
-      notionals?: number[]
+      notionals?: number[];
       /** @description 2D buy-side grid [notional_idx][leverage_idx] */
-      buy?: components['schemas']['RiskPoint'][][]
+      buy?: components["schemas"]["RiskPoint"][][];
       /** @description 2D sell-side grid [notional_idx][leverage_idx] */
-      sell?: components['schemas']['RiskPoint'][][]
-    }
+      sell?: components["schemas"]["RiskPoint"][][];
+    };
     /** @description Complete risk surfaces for a market across all regimes */
     RiskSurfaces: {
       /**
        * @description Market symbol
        * @example BTC-USD
        */
-      symbol?: string
+      symbol?: string;
       /** @description Currently active regime index */
-      liveRegime?: number
+      liveRegime?: number;
       /** @description Regime surfaces sorted by regime ascending */
-      surfaces?: components['schemas']['RiskSurface'][]
+      surfaces?: components["schemas"]["RiskSurface"][];
       /** @description Correlation tuples [pair, rho] */
-      corrs?: (string | number)[][]
-    }
+      corrs?: (string | number)[][];
+    };
     /** @description Aggregate exchange statistics */
     ExchangeStats: {
       /**
        * Format: int64
        * @description Server timestamp (milliseconds)
        */
-      timestamp?: number
+      timestamp?: number;
       /**
        * @description Requested period
        * @example 1d
        */
-      period?: string
+      period?: string;
       volume?: {
         /** @description Total volume in USD */
-        totalUsd?: number
-      }
+        totalUsd?: number;
+      };
       openInterest?: {
         /** @description Sum of per-market open interest converted to USD using mark prices */
-        totalUsd?: number
-      }
+        totalUsd?: number;
+      };
       funding?: {
         /** @description Funding rates by market symbol */
         rates?: {
           [key: string]: {
             /** @description Current 8-hour funding rate */
-            current?: number
+            current?: number;
             /** @description Annualized funding rate */
-            annualized?: number
-          }
-        }
-      }
+            annualized?: number;
+          };
+        };
+      };
       /** @description Per-market breakdown (sorted by quoteVolume desc) */
       markets?: {
-        symbol?: string
+        symbol?: string;
         /** @description 24h volume in base currency */
-        volume?: number
+        volume?: number;
         /** @description 24h volume in USD */
-        quoteVolume?: number
+        quoteVolume?: number;
         /** @description Open interest in native market units (base/contracts) */
-        openInterest?: number
+        openInterest?: number;
         /** @description Current 8-hour funding rate */
-        fundingRate?: number
+        fundingRate?: number;
         /** @description Annualized funding rate */
-        fundingRateAnnualized?: number
-        lastPrice?: number
-        markPrice?: number
-      }[]
-    }
+        fundingRateAnnualized?: number;
+        lastPrice?: number;
+        markPrice?: number;
+      }[];
+    };
     /** @description OHLCV candlestick data */
     Candle: {
       /**
        * Format: int64
        * @description Open timestamp (ms)
        */
-      t: number
+      t: number;
       /**
        * Format: int64
        * @description Close timestamp (ms)
        */
-      T: number
+      T: number;
       /** @description Open price */
-      o: number
+      o: number;
       /** @description High price */
-      h: number
+      h: number;
       /** @description Low price */
-      l: number
+      l: number;
       /** @description Close price */
-      c: number
+      c: number;
       /** @description Volume */
-      v: number
+      v: number;
       /** @description Number of trades */
-      n: number
-    }
+      n: number;
+    };
     /** @description Order book snapshot or delta */
     BookUpdate: {
       /**
@@ -515,480 +515,480 @@ export interface components {
        *     - `delta`: Incremental update (only one side has levels, other is empty array)
        * @enum {string}
        */
-      updateType?: 'snapshot' | 'delta'
+      updateType?: "snapshot" | "delta";
       /** @description Market symbol */
-      symbol?: string
+      symbol?: string;
       /**
        * @description Array with exactly 2 elements: `[bids, asks]`
        *     - Index 0: Bid levels (highest to lowest price)
        *     - Index 1: Ask levels (lowest to highest price)
        *     - For deltas: Only one side will have levels, the other will be an empty array `[]`
        */
-      levels?: components['schemas']['Level'][][]
+      levels?: components["schemas"]["Level"][][];
       /**
        * Format: int64
        * @description Timestamp in milliseconds
        */
-      timestamp?: number
-    }
+      timestamp?: number;
+    };
     /** @description Price level in order book */
     Level: {
       /** @description Price level */
-      px?: number
+      px?: number;
       /** @description Total size at this price level */
-      sz?: number
+      sz?: number;
       /**
        * @description Number of orders at this price level.
        *     - For snapshots: Actual count of orders
        *     - For deltas: Always `0` (order count not tracked in deltas)
        */
-      n?: number
-    }
+      n?: number;
+    };
     /** @description Account query parameters (no signature needed) */
     AccountQuery: {
       /**
        * @description Type of account data to retrieve
        * @enum {string}
        */
-      type: 'fullAccount' | 'openOrders' | 'fills' | 'positions' | 'fundingHistory' | 'orderHistory' | 'feeTier'
+      type: "fullAccount" | "openOrders" | "fills" | "positions" | "fundingHistory" | "orderHistory" | "feeTier";
       /**
        * @description User public key (base58)
        * @example FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7
        */
-      user: string
+      user: string;
       /**
        * @description Optional market symbol for scope-specific requests (used by `feeTier`)
        * @example BTC-USD
        */
-      symbol?: string
-    }
+      symbol?: string;
+    };
     AccountData: {
-      fullAccount?: components['schemas']['FullAccount']
+      fullAccount?: components["schemas"]["FullAccount"];
     } | {
-      openOrder?: components['schemas']['OrderState']
+      openOrder?: components["schemas"]["OrderState"];
     } | {
-      fills?: components['schemas']['Fill']
+      fills?: components["schemas"]["Fill"];
     } | {
-      positions?: components['schemas']['ClosedPosition']
+      positions?: components["schemas"]["ClosedPosition"];
     } | {
-      fundingPayment?: components['schemas']['FundingPayment']
+      fundingPayment?: components["schemas"]["FundingPayment"];
     } | {
-      orderHistory?: components['schemas']['OrderHistoryEntry']
+      orderHistory?: components["schemas"]["OrderHistoryEntry"];
     } | {
-      feeTier?: components['schemas']['FeeState']
-    }
+      feeTier?: components["schemas"]["FeeState"];
+    };
     /** @description Complete account state with account tree, margin, positions, orders, and leverage settings */
     FullAccount: {
       /**
        * @description Account kind
        * @enum {string}
        */
-      kind?: 'MasterEOA' | 'SubAccount' | 'IsoAccount' | 'Multisig'
+      kind?: "MasterEOA" | "SubAccount" | "IsoAccount" | "Multisig";
       /** @description Parent account pubkey (present for sub/iso accounts, otherwise `null`) */
-      parent?: string | null
+      parent?: string | null;
       /** @description Child sub-accounts owned by this master (empty for non-master kinds) */
       subAccounts?: {
         /** @description Sub-account pubkey (base58) */
-        pubkey?: string
+        pubkey?: string;
         /** @description Display name */
-        name?: string | null
-      }[]
+        name?: string | null;
+      }[];
       /** @description Multisig accounts where this account is the multisig address or a signer member */
-      multisigAccounts?: string[]
+      multisigAccounts?: string[];
       /**
        * @description Agent wallets registered on this account that may sign on its behalf.
        *     Agents registered on a master are also authorized to sign for any of the master's sub-accounts. Sub-accounts can additionally register their own agents independently.
        */
-      authorizedAgentWallets?: string[]
-      margin?: components['schemas']['Margin']
+      authorizedAgentWallets?: string[];
+      margin?: components["schemas"]["Margin"];
       /** @description Open positions with full risk metrics. For master/sub accounts, includes per-instrument isolated-account rows (`iso=true`). */
-      positions?: components['schemas']['Position'][]
+      positions?: components["schemas"]["Position"][];
       /** @description Resting live orders, including conditional orders parked in conditional books. For master/sub accounts, includes per-instrument isolated-account rows (`iso=true`). */
-      openOrders?: components['schemas']['OrderState'][]
+      openOrders?: components["schemas"]["OrderState"][];
       /** @description Registered on-fill plans waiting for parent order fill */
-      pendingOnFill?: components['schemas']['PendingOnFillPlan'][]
+      pendingOnFill?: components["schemas"]["PendingOnFillPlan"][];
       /** @description Effective fee tier snapshot rows for global and instrument scopes */
-      feeTiers?: components['schemas']['FeeTierQuote'][]
+      feeTiers?: components["schemas"]["FeeTierQuote"][];
       /** @description Per-symbol leverage settings */
-      leverageSettings?: components['schemas']['LeverageEntry'][]
-    }
+      leverageSettings?: components["schemas"]["LeverageEntry"][];
+    };
     PendingOnFillPlan: {
       /** @description Parent resting order ID that activates these actions on first fill */
-      parentOrderId?: string
+      parentOrderId?: string;
       /** @description Consequent actions executed when parent order first fills */
-      actions?: Record<string, never>[]
-    }
+      actions?: Record<string, never>[];
+    };
     FeeTierQuote: {
       /** @description Scope symbol (`global` or market symbol) */
-      symbol?: string
-      rollingVolume?: number
+      symbol?: string;
+      rollingVolume?: number;
       /** Format: int32 */
-      tierIndex?: number
-      tierThreshold?: number
-      makerBps?: number
-      takerBps?: number
+      tierIndex?: number;
+      tierThreshold?: number;
+      makerBps?: number;
+      takerBps?: number;
       /** Format: int32 */
-      windowDays?: number
-    }
+      windowDays?: number;
+    };
     FeeState: {
       /** Format: int64 */
-      stamp?: number
+      stamp?: number;
       /** Format: int64 */
-      slot?: number
-      globalPolicyActive?: boolean
+      slot?: number;
+      globalPolicyActive?: boolean;
       /** Format: int32 */
-      instrumentOverridesActive?: number
+      instrumentOverridesActive?: number;
       /** Format: int32 */
-      scheduledGlobalDepth?: number
+      scheduledGlobalDepth?: number;
       /** Format: int32 */
-      scheduledTotalDepth?: number
+      scheduledTotalDepth?: number;
       /** Format: int64 */
-      nextActivationSlot?: number | null
+      nextActivationSlot?: number | null;
       /** Format: int64 */
-      settledFills?: number
-      totalMakerFees?: number
-      totalTakerFees?: number
-      totalProtocolSettlement?: number
-      scopes?: Record<string, never>[]
-      accountQuote?: Record<string, never> | null
-    }
+      settledFills?: number;
+      totalMakerFees?: number;
+      totalTakerFees?: number;
+      totalProtocolSettlement?: number;
+      scopes?: Record<string, never>[];
+      accountQuote?: Record<string, never> | null;
+    };
     /** @description Account-level margin and PnL */
     Margin: {
       /** @description Total account equity */
-      totalBalance?: number
+      totalBalance?: number;
       /** @description Available for new orders (totalBalance - marginUsed) */
-      availableBalance?: number
+      availableBalance?: number;
       /** @description Total maintenance margin requirement */
-      marginUsed?: number
+      marginUsed?: number;
       /** @description Total position notional value */
-      notional?: number
+      notional?: number;
       /** @description Total realized profit/loss */
-      realizedPnl?: number
+      realizedPnl?: number;
       /** @description Total unrealized profit/loss */
-      unrealizedPnl?: number
+      unrealizedPnl?: number;
       /** @description Total fees paid */
-      fees?: number
+      fees?: number;
       /** @description Total funding payments */
-      funding?: number
-    }
+      funding?: number;
+    };
     Position: {
       /** @description Market symbol */
-      symbol?: string
+      symbol?: string;
       /** @description Position size (negative=short, positive=long) */
-      size?: number
+      size?: number;
       /** @description Volume-weighted average entry price */
-      price?: number
+      price?: number;
       /** @description Current fair/mark price */
-      fairPrice?: number
+      fairPrice?: number;
       /** @description Position notional value */
-      notional?: number
+      notional?: number;
       /** @description Realized profit/loss */
-      realizedPnl?: number
+      realizedPnl?: number;
       /** @description Unrealized profit/loss at current fair price */
-      unrealizedPnl?: number
+      unrealizedPnl?: number;
       /** @description Effective leverage */
-      leverage?: number
+      leverage?: number;
       /** @description Estimated liquidation price */
-      liquidationPrice?: number
+      liquidationPrice?: number;
       /** @description Fees paid on this position */
-      fees?: number
+      fees?: number;
       /** @description Funding payments for this position */
-      funding?: number
+      funding?: number;
       /** @description Maintenance margin requirement */
-      maintenanceMargin?: number
+      maintenanceMargin?: number;
       /** @description Risk lambda parameter */
-      lambda?: number
+      lambda?: number;
       /** @description Fraction of portfolio risk allocated */
-      riskAllocation?: number
+      riskAllocation?: number;
       /** @description `true` if this row belongs to a per-instrument isolated account, otherwise `false` */
-      iso?: boolean
+      iso?: boolean;
       /** @description Present only when `iso=true`; base58 pubkey of the per-instrument isolated account. Use **only** as `to` in an internal `transfer` action to top up isolated-account margin. Isolated-account pubkeys are not valid as `account` on transactions and are not valid `user` values for `POST /account`. */
-      isoPubkey?: string | null
+      isoPubkey?: string | null;
       /** @description Optional attached reduce-only protective orders for this symbol */
-      protection?: components['schemas']['PositionProtection'] | null
-    }
+      protection?: components["schemas"]["PositionProtection"] | null;
+    };
     PositionProtection: {
       /** @description Protective order references attached to this position */
-      orders?: components['schemas']['ProtectionOrderRef'][]
-    }
+      orders?: components["schemas"]["ProtectionOrderRef"][];
+    };
     ProtectionOrderRef: {
       /** @description Protective order ID (base58) */
-      orderId?: string
+      orderId?: string;
       /**
        * @description Conditional root order type
        * @enum {string}
        */
-      orderType?: 'stop' | 'takeProfit' | 'range' | 'trigger' | 'trailing'
+      orderType?: "stop" | "takeProfit" | "range" | "trigger" | "trailing";
       /** @description Conditional trigger metadata for this protective order */
-      trigger?: components['schemas']['TriggerSpec'] | null
-    }
+      trigger?: components["schemas"]["TriggerSpec"] | null;
+    };
     TriggerSpec: {
       /** @description Trigger direction when encoded */
-      isAbove?: boolean | null
+      isAbove?: boolean | null;
       /** @description Trigger threshold price */
-      px?: number
+      px?: number;
       /** @description Optional post-trigger limit price (`null` means market) */
-      lim?: number | null
+      lim?: number | null;
       /** @description Optional linked OCO sibling order ID */
-      oco?: string | null
+      oco?: string | null;
       /** @description Optional upper trigger threshold for range/OCO */
-      pxHi?: number | null
+      pxHi?: number | null;
       /** @description Optional upper post-trigger limit for range/OCO */
-      limHi?: number | null
+      limHi?: number | null;
       /**
        * Format: uint32
        * @description Trailing distance in bps (trailing orders only)
        */
-      trb?: number | null
+      trb?: number | null;
       /**
        * Format: uint32
        * @description Favorable reset step in bps (trailing orders only)
        */
-      stb?: number | null
-    }
+      stb?: number | null;
+    };
     LeverageEntry: {
       /** @description Market symbol */
-      symbol?: string
+      symbol?: string;
       /** @description Maximum leverage (1.0 to 50.0) */
-      leverage?: number
-    }
+      leverage?: number;
+    };
     /** @description Order status and details */
     OrderState: {
       /** @description Market symbol */
-      symbol?: string
+      symbol?: string;
       /** @description Order ID (base58) - use for cancellation */
-      orderId?: string
+      orderId?: string;
       /** @description Order price (for conditional roots this is projected from trigger threshold when direct price is not set) */
-      price?: number
+      price?: number;
       /** @description Original order size (signed; negative values indicate sell-side intent) */
-      originalSize?: number
+      originalSize?: number;
       /** @description Remaining size (signed; negative values indicate sell-side intent; `trigger` baskets use `0` because they are action containers, not direct sized orders) */
-      size?: number
+      size?: number;
       /** @description Filled size */
-      filledSize?: number
+      filledSize?: number;
       /** @description Volume-weighted average fill price (0 if no fills) */
-      vwap?: number
+      vwap?: number;
       /** @description true if order is maker (resting on book) */
-      maker?: boolean
+      maker?: boolean;
       /** @description true if reduce-only order */
-      reduceOnly?: boolean
+      reduceOnly?: boolean;
       /**
        * @description Inferred order type for snapshots/open-orders
        * @enum {string}
        */
-      orderType?: 'limit' | 'market' | 'stop' | 'takeProfit' | 'range' | 'trigger' | 'trailing'
+      orderType?: "limit" | "market" | "stop" | "takeProfit" | "range" | "trigger" | "trailing";
       /** @description Trigger metadata for conditional/trigger orders, otherwise `null` */
-      trigger?: components['schemas']['TriggerSpec'] | null
+      trigger?: components["schemas"]["TriggerSpec"] | null;
       /**
        * @description Time in force
        * @enum {string}
        */
-      tif?: 'gtc' | 'ioc' | 'postOnly'
+      tif?: "gtc" | "ioc" | "postOnly";
       /**
        * @description Order status
        * @enum {string}
        */
       status?:
-        | 'pending'
-        | 'placed'
-        | 'resting'
-        | 'working'
-        | 'modified'
-        | 'filled'
-        | 'partiallyFilled'
-        | 'cancelled'
-        | 'cancelledRiskLimit'
-        | 'cancelledSelfCrossing'
-        | 'cancelledReduceOnly'
-        | 'cancelledIoc'
-        | 'rejectedInvalid'
-        | 'rejectedRiskLimit'
-        | 'rejectedCrossing'
-        | 'rejectedDuplicate'
-        | 'triggered'
-        | 'siblingCancelled'
-        | 'triggerFailed'
+        | "pending"
+        | "placed"
+        | "resting"
+        | "working"
+        | "modified"
+        | "filled"
+        | "partiallyFilled"
+        | "cancelled"
+        | "cancelledRiskLimit"
+        | "cancelledSelfCrossing"
+        | "cancelledReduceOnly"
+        | "cancelledIoc"
+        | "rejectedInvalid"
+        | "rejectedRiskLimit"
+        | "rejectedCrossing"
+        | "rejectedDuplicate"
+        | "triggered"
+        | "siblingCancelled"
+        | "triggerFailed";
       /**
        * Format: int64
        * @description Order placement time (nanoseconds)
        */
-      timestamp?: number
+      timestamp?: number;
       /** @description `true` if this row belongs to a per-instrument isolated account, otherwise `false` */
-      iso?: boolean
-    }
+      iso?: boolean;
+    };
     /** @description Trade execution (fill) */
     Fill: {
       /** @description Maker public key (base58) */
-      maker?: string
+      maker?: string;
       /** @description Taker public key (base58) */
-      taker?: string
+      taker?: string;
       /** @description Maker order ID (base58) */
-      orderIdMaker?: string
+      orderIdMaker?: string;
       /** @description Taker order ID (base58) */
-      orderIdTaker?: string
+      orderIdTaker?: string;
       /** @description Taker side (true=bought, false=sold) */
-      isBuy?: boolean
-      symbol?: string
+      isBuy?: boolean;
+      symbol?: string;
       /** @description Trade size */
-      amount?: number
+      amount?: number;
       /** @description Execution price */
-      price?: number
+      price?: number;
       /** @description Maker fee (negative means rebate) */
-      makerFee?: number
+      makerFee?: number;
       /** @description Taker fee (negative means rebate) */
-      takerFee?: number
+      takerFee?: number;
       /** @description Effective fee for queried row (`makerFee` for maker row, `takerFee` for taker row) */
-      fee?: number
+      fee?: number;
       /**
        * @description Fill reason (normal, liquidation, or adl)
        * @enum {string}
        */
-      reason?: 'normal' | 'liquidation' | 'adl'
+      reason?: "normal" | "liquidation" | "adl";
       /**
        * Format: int64
        * @description Slot number
        */
-      slot?: number
+      slot?: number;
       /**
        * Format: int64
        * @description Execution time (nanoseconds)
        */
-      timestamp?: number
+      timestamp?: number;
       /** @description `true` if this row belongs to a per-instrument isolated account, otherwise `false` */
-      iso?: boolean
-    }
+      iso?: boolean;
+    };
     /**
      * @description Reason for position closure
      * @enum {string}
      */
-    CloseReason: 'normal' | 'liquidation' | 'adl'
+    CloseReason: "normal" | "liquidation" | "adl";
     /** @description Closed position history record */
     ClosedPosition: {
       /** @description Owner public key (base58) */
-      owner?: string
+      owner?: string;
       /** @description Market symbol */
-      symbol?: string
+      symbol?: string;
       /** @description Closed position size (signed; long=positive, short=negative) */
-      quantity?: number
+      quantity?: number;
       /** @description Legacy alias of quantity (kept for backward compatibility) */
-      maxQuantity?: number
+      maxQuantity?: number;
       /** @description Total traded volume over position lifetime */
-      totalVolume?: number
+      totalVolume?: number;
       /** @description Volume-weighted average entry price */
-      avgOpenPrice?: number
+      avgOpenPrice?: number;
       /** @description Volume-weighted average exit price */
-      avgClosePrice?: number
+      avgClosePrice?: number;
       /** @description Total realized profit/loss */
-      realizedPnl?: number
+      realizedPnl?: number;
       /** @description Total fees paid */
-      fees?: number
+      fees?: number;
       /** @description Total funding payments (positive=received, negative=paid) */
-      funding?: number
+      funding?: number;
       /**
        * Format: int64
        * @description Position open timestamp (nanoseconds)
        */
-      openTime?: number
+      openTime?: number;
       /**
        * Format: int64
        * @description Position close timestamp (nanoseconds)
        */
-      closeTime?: number
-      closeReason?: components['schemas']['CloseReason']
+      closeTime?: number;
+      closeReason?: components["schemas"]["CloseReason"];
       /** @description `true` if this row belongs to a per-instrument isolated account, otherwise `false` */
-      iso?: boolean
-    }
+      iso?: boolean;
+    };
     /** @description Funding payment record */
     FundingPayment: {
       /** @description Owner public key (base58) */
-      owner?: string
+      owner?: string;
       /** @description Market symbol */
-      symbol?: string
+      symbol?: string;
       /** @description Position size at time of funding (positive=long, negative=short) */
-      size?: number
+      size?: number;
       /** @description Funding payment amount in USD (positive=received, negative=paid) */
-      payment?: number
+      payment?: number;
       /** @description Applied funding rate */
-      fundingRate?: number
+      fundingRate?: number;
       /** @description Fair price at time of funding */
-      markPrice?: number
+      markPrice?: number;
       /**
        * Format: int64
        * @description Slot number when funding was applied
        */
-      slot?: number
+      slot?: number;
       /**
        * Format: int64
        * @description Timestamp (nanoseconds)
        */
-      timestamp?: number
+      timestamp?: number;
       /** @description `true` if this row belongs to a per-instrument isolated account, otherwise `false` */
-      iso?: boolean
-    }
+      iso?: boolean;
+    };
     /** @description Terminal order history record */
     OrderHistoryEntry: {
       /** @description Order ID (base58) */
-      orderId?: string
+      orderId?: string;
       /** @description Market symbol */
-      symbol?: string
+      symbol?: string;
       /**
        * @description Order side
        * @enum {string}
        */
-      side?: 'buy' | 'sell'
+      side?: "buy" | "sell";
       /**
        * @description Order type
        * @enum {string}
        */
-      orderType?: 'limit' | 'market' | 'stop' | 'stopLimit' | 'takeProfit' | 'range' | 'trigger' | 'trailing'
+      orderType?: "limit" | "market" | "stop" | "stopLimit" | "takeProfit" | "range" | "trigger" | "trailing";
       /**
        * @description Time in force
        * @enum {string}
        */
-      tif?: 'gtc' | 'ioc' | 'postOnly'
+      tif?: "gtc" | "ioc" | "postOnly";
       /** @description Order price */
-      price?: number
+      price?: number;
       /** @description Volume-weighted average fill price (0 if no fills) */
-      vwap?: number
+      vwap?: number;
       /** @description Original order size */
-      originalSize?: number
+      originalSize?: number;
       /** @description Amount filled */
-      executedSize?: number
+      executedSize?: number;
       /** @description Whether order was reduce-only */
-      reduceOnly?: boolean
+      reduceOnly?: boolean;
       /**
        * @description Terminal order status
        * @enum {string}
        */
       status?:
-        | 'filled'
-        | 'partiallyFilled'
-        | 'cancelled'
-        | 'cancelledRiskLimit'
-        | 'cancelledSelfCrossing'
-        | 'cancelledReduceOnly'
-        | 'cancelledIoc'
-        | 'rejectedInvalid'
-        | 'rejectedRiskLimit'
-        | 'rejectedCrossing'
-        | 'rejectedDuplicate'
+        | "filled"
+        | "partiallyFilled"
+        | "cancelled"
+        | "cancelledRiskLimit"
+        | "cancelledSelfCrossing"
+        | "cancelledReduceOnly"
+        | "cancelledIoc"
+        | "rejectedInvalid"
+        | "rejectedRiskLimit"
+        | "rejectedCrossing"
+        | "rejectedDuplicate";
       /** @description Trigger metadata for conditional/trigger orders, otherwise `null` */
-      trigger?: components['schemas']['TriggerSpec'] | null
+      trigger?: components["schemas"]["TriggerSpec"] | null;
       /** @description Rejection/cancellation reason (optional) */
-      reason?: string | null
+      reason?: string | null;
       /**
        * Format: int64
        * @description Slot number when order became terminal
        */
-      slot?: number
+      slot?: number;
       /**
        * Format: int64
        * @description Timestamp (nanoseconds)
        */
-      timestamp?: number
+      timestamp?: number;
       /** @description `true` if this row belongs to a per-instrument isolated account, otherwise `false` */
-      iso?: boolean
-    }
+      iso?: boolean;
+    };
     /**
      * @description Unified signed transaction. All state-mutating operations use this model.
      *
@@ -1002,17 +1002,17 @@ export interface components {
        *
        *     Action types: `l`, `m`, `mod`, `cx`, `cxa`, `st`, `tp`, `rng`, `trig`, `trl`, `of`, `faucet`, `agentWalletCreation`, `updateUserSettings`, `createSubAccount`, `removeSubAccount`, `renameSubAccount`, `transfer`, `createMultisig`, `msp`, `msa`, `msr`, `msc`, `mse`, `msu`, `whitelistFaucet` (admin), `px` (admin), `o` (admin)
        */
-      actions: components['schemas']['Action'][]
+      actions: components["schemas"]["Action"][];
       /**
        * Format: int64
        * @description Unique nonce for replay protection (use timestamp in nanoseconds or incrementing counter)
        */
-      nonce: number
+      nonce: number;
       /**
        * @description Account public key (base58) whose account is being acted on. Must be a master pubkey or a sub-account pubkey. Per-instrument isolated accounts are managed implicitly via the `i` flag on order actions and are never set as `account`.
        * @example FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7
        */
-      account: string
+      account: string;
       /**
        * @description Signer public key (base58); who is signing. One of:
        *     - the `account` itself;
@@ -1020,13 +1020,13 @@ export interface components {
        *     - an agent wallet registered directly on `account`.
        * @example FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7
        */
-      signer: string
+      signer: string;
       /**
        * @description Ed25519 signature of wincode_serialize(actions + nonce + account) (base58)
        * @example 5j7sVt3k2YxPqH4w...
        */
-      signature: string
-    }
+      signature: string;
+    };
     /** @description Tagged action object. Each action type is an externally tagged enum using compact action tags. */
     Action: {
       l: {
@@ -1034,85 +1034,85 @@ export interface components {
          * @description Symbol
          * @example BTC-USD
          */
-        c: string
+        c: string;
         /** @description true = buy, false = sell */
-        b: boolean
+        b: boolean;
         /**
          * @description Limit price
          * @example 100000
          */
-        px: number
+        px: number;
         /**
          * @description Size / quantity
          * @example 0.1
          */
-        sz: number
+        sz: number;
         /**
          * @description Time in force (GTC = rests on book, IOC = immediate or cancel, ALO = post-only)
          * @enum {string}
          */
-        tif: 'GTC' | 'IOC' | 'ALO'
+        tif: "GTC" | "IOC" | "ALO";
         /** @description Reduce only */
-        r: boolean
+        r: boolean;
         /**
          * @description Required. `true` routes the order into the per-instrument isolated account under the signing account; `false` keeps base-account routing.
          *     Must be present in the JSON; the field is part of the canonical wincode binary message and omitting it produces a `bad signature`.
          */
-        i: boolean
-      }
+        i: boolean;
+      };
     } | {
       m: {
         /**
          * @description Symbol
          * @example BTC-USD
          */
-        c: string
+        c: string;
         /** @description true = buy, false = sell */
-        b: boolean
+        b: boolean;
         /**
          * @description Size / quantity
          * @example 0.1
          */
-        sz: number
+        sz: number;
         /** @description Reduce only */
-        r: boolean
+        r: boolean;
         /**
          * @description Required. `true` routes the order into the per-instrument isolated account under the signing account; `false` keeps base-account routing.
          *     Must be present in the JSON; the field is part of the canonical wincode binary message and omitting it produces a `bad signature`.
          */
-        i: boolean
-      }
+        i: boolean;
+      };
     } | {
       mod: {
         /**
          * @description Order ID (base58 hash)
          * @example Fpa3oVuL3UzjNANAMZZdmrn6D1Zhk83GmBuJpuAWG51F
          */
-        oid: string
+        oid: string;
         /**
          * @description Symbol
          * @example BTC-USD
          */
-        symbol: string
+        symbol: string;
         /**
          * @description New order size
          * @example 0.05
          */
-        amount: number
-      }
+        amount: number;
+      };
     } | {
       cx: {
         /**
          * @description Symbol
          * @example BTC-USD
          */
-        c: string
+        c: string;
         /**
          * @description Order ID (base58 hash)
          * @example Fpa3oVuL3UzjNANAMZZdmrn6D1Zhk83GmBuJpuAWG51F
          */
-        oid: string
-      }
+        oid: string;
+      };
     } | {
       cxa: {
         /**
@@ -1121,170 +1121,170 @@ export interface components {
          *       "BTC-USD"
          *     ]
          */
-        c: string[]
-      }
+        c: string[];
+      };
     } | {
       st: {
         /**
          * @description Symbol
          * @example BTC-USD
          */
-        c: string
+        c: string;
         /** @description Trigger direction (`true` = trigger above/equal threshold, `false` = below/equal) */
-        d: boolean
+        d: boolean;
         /**
          * @description Size to execute on trigger
          * @example 0.25
          */
-        sz: number
+        sz: number;
         /**
          * @description Trigger threshold
          * @example 98000
          */
-        tr: number
+        tr: number;
         /**
          * @description Optional triggered limit price. Omit for market-style trigger
          * @example 97950
          */
-        lim?: number | null
+        lim?: number | null;
         /**
          * @description Required. `true` routes the triggered order into the per-instrument isolated account under the signing account; `false` keeps base-account routing.
          *     Must be present in the JSON; the field is part of the canonical wincode binary message and omitting it produces a `bad signature`.
          */
-        i: boolean
-      }
+        i: boolean;
+      };
     } | {
       tp: {
         /**
          * @description Symbol
          * @example BTC-USD
          */
-        c: string
+        c: string;
         /** @description Trigger direction (`true` = trigger above/equal threshold, `false` = below/equal) */
-        d: boolean
+        d: boolean;
         /**
          * @description Size to execute on trigger
          * @example 0.25
          */
-        sz: number
+        sz: number;
         /**
          * @description Trigger threshold
          * @example 104000
          */
-        tr: number
+        tr: number;
         /**
          * @description Optional triggered limit price. Omit for market-style trigger
          * @example 103950
          */
-        lim?: number | null
+        lim?: number | null;
         /**
          * @description Required. `true` routes the triggered order into the per-instrument isolated account under the signing account; `false` keeps base-account routing.
          *     Must be present in the JSON; the field is part of the canonical wincode binary message and omitting it produces a `bad signature`.
          */
-        i: boolean
-      }
+        i: boolean;
+      };
     } | {
       rng: {
         /**
          * @description Symbol
          * @example BTC-USD
          */
-        c: string
+        c: string;
         /** @description Position direction (`true` = buy/long collar, `false` = sell/short collar) */
-        d: boolean
+        d: boolean;
         /**
          * @description Size to protect/exit
          * @example 0.5
          */
-        sz: number
+        sz: number;
         /**
          * @description Lower trigger threshold
          * @example 96000
          */
-        pmin: number
+        pmin: number;
         /**
          * @description Upper trigger threshold
          * @example 106000
          */
-        pmax: number
+        pmax: number;
         /**
          * @description Optional limit for the lower-trigger leg
          * @example 95950
          */
-        lmin?: number | null
+        lmin?: number | null;
         /**
          * @description Optional limit for the upper-trigger leg
          * @example 105950
          */
-        lmax?: number | null
+        lmax?: number | null;
         /**
          * @description Required. `true` routes the triggered legs into the per-instrument isolated account under the signing account; `false` keeps base-account routing.
          *     Must be present in the JSON; the field is part of the canonical wincode binary message and omitting it produces a `bad signature`.
          */
-        i: boolean
-      }
+        i: boolean;
+      };
     } | {
       trig: {
         /**
          * @description Symbol
          * @example BTC-USD
          */
-        c: string
+        c: string;
         /** @description Trigger direction (`true` = trigger above/equal threshold, `false` = below/equal) */
-        d: boolean
+        d: boolean;
         /**
          * @description Trigger threshold
          * @example 105000
          */
-        tr: number
+        tr: number;
         /**
          * @description Nested actions executed when trigger fires.
          *     Allowed today: `m`, `l`, `mod`, `cx`, `cxa`, `st`, `tp`, `rng`, `trl`.
          */
-        actions: Record<string, never>[]
+        actions: Record<string, never>[];
         /**
          * @description Required. `true` routes trigger execution into the per-instrument isolated account under the signing account; `false` keeps base-account routing.
          *     Must be present in the JSON; the field is part of the canonical wincode binary message and omitting it produces a `bad signature`.
          */
-        i: boolean
-      }
+        i: boolean;
+      };
     } | {
       trl: {
         /**
          * @description Symbol
          * @example BTC-USD
          */
-        c: string
+        c: string;
         /** @description Protected position direction (`true` = long protection, `false` = short protection) */
-        b: boolean
+        b: boolean;
         /**
          * @description Size to protect/exit
          * @example 0.25
          */
-        sz: number
+        sz: number;
         /**
          * Format: int32
          * @description Trailing distance in bps
          * @example 100
          */
-        trb: number
+        trb: number;
         /**
          * Format: int32
          * @description Favorable reset step in bps
          * @example 10
          */
-        stb: number
+        stb: number;
         /**
          * @description Optional triggered limit price. Omit for market-style trigger
          * @example null
          */
-        lim?: number | null
+        lim?: number | null;
         /**
          * @description Required. `true` routes trailing execution into the per-instrument isolated account under the signing account; `false` keeps base-account routing.
          *     Must be present in the JSON; the field is part of the canonical wincode binary message and omitting it produces a `bad signature`.
          */
-        i: boolean
-      }
+        i: boolean;
+      };
     } | {
       of: {
         /**
@@ -1292,31 +1292,31 @@ export interface components {
          * @description Parent action seqno in the same transaction. In normal processing this seqno is assigned from action position (0..n-1), so it is usually the parent action index.
          * @example 0
          */
-        p: number
+        p: number;
         /**
          * @description One-shot consequents executed on first fill of the parent.
          *     Allowed today: `m`, `l`, `mod`, `cx`, `cxa`, `st`, `tp`, `rng`, `trig`, `trl`.
          *     Parent candidates for `of` are `m`, `l`, `st`, `tp`, `rng`, `trl` (`trig` is not a parent candidate).
          */
-        actions: Record<string, never>[]
-      }
+        actions: Record<string, never>[];
+      };
     } | {
       faucet: {
         /**
          * @description Recipient public key (base58)
          * @example FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7
          */
-        u: string
+        u: string;
         /** @description Optional; ignored for testnet. Each claim credits a fixed 10,000. */
-        amount?: number | null
-      }
+        amount?: number | null;
+      };
     } | {
       agentWalletCreation: {
         /** @description Agent public key (base58) */
-        a: string
+        a: string;
         /** @description true = remove agent, false = add agent */
-        d: boolean
-      }
+        d: boolean;
+      };
     } | {
       updateUserSettings: {
         /**
@@ -1327,37 +1327,37 @@ export interface components {
          *     }
          */
         m: {
-          [key: string]: number
-        }
-      }
+          [key: string]: number;
+        };
+      };
     } | {
       whitelistFaucet: {
         /**
          * @description Target account public key (base58)
          * @example 9J8TUdEWrrcADK913r1Cs7DdqX63VdVU88imfDzT1ypt
          */
-        target: string
+        target: string;
         /** @description true = whitelist, false = un-whitelist */
-        whitelist: boolean
-      }
+        whitelist: boolean;
+      };
     } | {
       px: {
         /**
          * Format: int64
          * @description Timestamp (nanoseconds)
          */
-        t: number
+        t: number;
         /**
          * @description Asset symbol
          * @example BTC-USD
          */
-        c: string
+        c: string;
         /**
          * @description Oracle price
          * @example 102500
          */
-        px: number
-      }
+        px: number;
+      };
     } | {
       o: {
         /** @description Array of Pyth price updates */
@@ -1366,63 +1366,63 @@ export interface components {
            * Format: int64
            * @description Timestamp (nanoseconds)
            */
-          t: number
+          t: number;
           /**
            * Format: int64
            * @description Pyth feed ID
            */
-          fi: number
+          fi: number;
           /**
            * Format: int64
            * @description Price (raw integer, apply exponent)
            */
-          px: number
+          px: number;
           /**
            * Format: int16
            * @description Price exponent (e.g., -8 means price * 10^-8)
            */
-          e: number
-        }[]
-      }
+          e: number;
+        }[];
+      };
     } | {
       createSubAccount: {
         /**
          * @description Sub-account display name (1-32 chars, `A-Z a-z 0-9 - _`)
          * @example desk-1
          */
-        name: string
+        name: string;
         /**
          * @description Optional margin asset symbol to seed the sub-account with. Must be present when `marginAmount` is non-zero.
          * @example USDC
          */
-        marginSymbol?: string | null
+        marginSymbol?: string | null;
         /**
          * @description Optional initial margin amount transferred from master at creation time. Default `0.0`. Must be a JSON number (unquoted), e.g. `0` or `1000.0`, not `"0"` or `"1000.0"`.
          * @example 1000
          */
-        marginAmount?: number | null
-      }
+        marginAmount?: number | null;
+      };
     } | {
       removeSubAccount: {
         /**
          * @description Sub-account or isolated-account public key (base58) to remove
          * @example 8x7iUti9m6L6Y9yQPXkXj4zD2uP1Qx5Eo9W4vYm6cGmR
          */
-        toRemove: string
-      }
+        toRemove: string;
+      };
     } | {
       renameSubAccount: {
         /**
          * @description Sub-account public key (base58) to rename. Must belong to the signing master.
          * @example 8x7iUti9m6L6Y9yQPXkXj4zD2uP1Qx5Eo9W4vYm6cGmR
          */
-        a: string
+        a: string;
         /**
          * @description New display name (1-32 chars, `A-Z a-z 0-9 - _`). Must be unique within the master tree.
          * @example desk-2
          */
-        n: string
-      }
+        n: string;
+      };
     } | {
       transfer: {
         /**
@@ -1430,28 +1430,28 @@ export interface components {
          * @default internal
          * @enum {string}
          */
-        k: 'internal' | 'external'
+        k: "internal" | "external";
         /**
          * @description Source account public key (base58)
          * @example FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7
          */
-        from: string
+        from: string;
         /**
          * @description Destination account public key (base58). Use the position row's `isoPubkey` to top up a per-instrument isolated account.
          * @example 8x7iUti9m6L6Y9yQPXkXj4zD2uP1Qx5Eo9W4vYm6cGmR
          */
-        to: string
+        to: string;
         /**
          * @description Margin asset symbol
          * @example USDC
          */
-        marginSymbol: string
+        marginSymbol: string;
         /**
          * @description Margin amount to transfer
          * @example 100
          */
-        marginAmount: number
-      }
+        marginAmount: number;
+      };
     } | {
       createMultisig: {
         /**
@@ -1461,100 +1461,100 @@ export interface components {
          *       "5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux"
          *     ]
          */
-        signers: string[]
+        signers: string[];
         /**
          * Format: uint32
          * @description Required approvals to execute (1 â‰¤ threshold â‰¤ signers.length)
          * @example 2
          */
-        threshold: number
+        threshold: number;
         /**
          * Format: uint32
          * @description Mandatory delay between threshold-reached and execution, in seconds (0â€“30 days)
          * @example 60
          */
-        timeLockSecs: number
+        timeLockSecs: number;
         /**
          * Format: uint32
          * @description Proposal lifetime in seconds (1 hour to 90 days)
          * @example 604800
          */
-        proposalLifetimeSecs: number
-      }
+        proposalLifetimeSecs: number;
+      };
     } | {
       msp: {
         /**
          * @description Multisig account pubkey (base58)
          * @example 6q8Y4f6g8tR4mQ1H2Zr3u9x7k9a4nS2Yx1g6Wm8qJ5tK
          */
-        m: string
+        m: string;
         /** @description Inner actions to execute when the proposal is approved */
-        a: Record<string, never>[]
-      }
+        a: Record<string, never>[];
+      };
     } | {
       msa: {
         /** @description Multisig account pubkey (base58) */
-        m: string
+        m: string;
         /**
          * Format: uint64
          * @description Proposal ID
          * @example 7
          */
-        p: number
-      }
+        p: number;
+      };
     } | {
       msr: {
         /** @description Multisig account pubkey (base58) */
-        m: string
+        m: string;
         /**
          * Format: uint64
          * @description Proposal ID
          */
-        p: number
-      }
+        p: number;
+      };
     } | {
       msc: {
         /** @description Multisig account pubkey (base58) */
-        m: string
+        m: string;
         /**
          * Format: uint64
          * @description Proposal ID
          */
-        p: number
-      }
+        p: number;
+      };
     } | {
       mse: {
         /** @description Multisig account pubkey (base58) */
-        m: string
+        m: string;
         /**
          * Format: uint64
          * @description Proposal ID
          */
-        p: number
-      }
+        p: number;
+      };
     } | {
       msu: {
         /** @description Multisig account pubkey (base58) */
-        m: string
+        m: string;
         /** @description New signer set */
-        signers: string[]
+        signers: string[];
         /**
          * Format: uint32
          * @description New approval threshold
          */
-        threshold: number
+        threshold: number;
         /**
          * Format: uint32
          * @description New time-lock in seconds
          */
-        timeLockSecs: number
+        timeLockSecs: number;
         /**
          * Format: uint32
          * @description New proposal lifetime in seconds
          */
-        proposalLifetimeSecs: number
-      }
-    }
+        proposalLifetimeSecs: number;
+      };
+    };
     /**
      * @description Transaction accepted. One status per execution event in `response.data.statuses`.
      *
@@ -1576,442 +1576,442 @@ export interface components {
        * @description Top-level status (ok when request was accepted; check each item in statuses for per-action result)
        * @enum {string}
        */
-      status: 'ok' | 'error'
+      status: "ok" | "error";
       response: {
         /** @description Always "order" */
-        type: string
+        type: string;
         data: {
           /** @description One status object per execution event */
           statuses: ({
             resting?: {
               /** @description Order ID (base58) */
-              oid?: string
-            }
+              oid?: string;
+            };
           } | {
             working?: {
               /** @description Order ID (base58) */
-              oid?: string
+              oid?: string;
               /** @description Filled size so far (signed; negative for sell-side) */
-              filledSz?: number
+              filledSz?: number;
               /** @description Remaining size (signed; negative for sell-side) */
-              remainingSz?: number
+              remainingSz?: number;
               /** @description Volume-weighted average price */
-              vwap?: number
-            }
+              vwap?: number;
+            };
           } | {
             filled?: {
               /** @description Order ID (base58) */
-              oid?: string
+              oid?: string;
               /** @description Total filled size (signed; negative for sell-side) */
-              totalSz?: number
+              totalSz?: number;
               /** @description Average fill price (VWAP) */
-              avgPx?: number
-            }
+              avgPx?: number;
+            };
           } | {
             partiallyFilled?: {
               /** @description Order ID (base58) */
-              oid?: string
+              oid?: string;
               /** @description Total filled size (signed; negative for sell-side) */
-              totalSz?: number
+              totalSz?: number;
               /** @description Average fill price (VWAP) */
-              avgPx?: number
-            }
+              avgPx?: number;
+            };
           } | {
             cancelled?: {
               /** @description Order ID (base58) */
-              oid?: string
-            }
+              oid?: string;
+            };
           } | {
             cancelledRiskLimit?: {
               /** @description Order ID (base58) */
-              oid?: string
-              reason?: string | null
-            }
+              oid?: string;
+              reason?: string | null;
+            };
           } | {
             cancelledSelfCrossing?: {
               /** @description Order ID (base58) */
-              oid?: string
-            }
+              oid?: string;
+            };
           } | {
             cancelledReduceOnly?: {
               /** @description Order ID (base58) */
-              oid?: string
-            }
+              oid?: string;
+            };
           } | {
             cancelledIoc?: {
               /** @description Order ID (base58) */
-              oid?: string
+              oid?: string;
               /** @description Size filled before expiry (signed; negative for sell-side) */
-              filledSz?: number
-            }
+              filledSz?: number;
+            };
           } | {
             rejectedCrossing?: {
               /** @description Order ID (base58) */
-              oid?: string
-            }
+              oid?: string;
+            };
           } | {
             rejectedDuplicate?: {
               /** @description Order ID (base58) */
-              oid?: string
-            }
+              oid?: string;
+            };
           } | {
             rejectedRiskLimit?: {
               /** @description Order ID (base58) */
-              oid?: string
-              reason?: string | null
-            }
+              oid?: string;
+              reason?: string | null;
+            };
           } | {
             rejectedInvalid?: {
               /** @description Order ID (base58) */
-              oid?: string
-              reason?: string | null
-            }
+              oid?: string;
+              reason?: string | null;
+            };
           } | {
             deposit?: {
-              amount?: number
-            }
+              amount?: number;
+            };
           } | {
             depositFailed?: {
-              message?: string
-            }
+              message?: string;
+            };
           } | {
             agentWallet?: {
-              agentWallet?: string
-            }
+              agentWallet?: string;
+            };
           } | {
             agentWalletFailed?: {
-              message?: string
-            }
+              message?: string;
+            };
           } | {
             cancelOneRejected?: {
-              oid?: string
-              reason?: string
-            }
+              oid?: string;
+              reason?: string;
+            };
           } | {
             cancelAllRejected?: {
-              reason?: string
-            }
+              reason?: string;
+            };
           } | {
             triggered?: {
               /** @description Order ID (base58) */
-              oid?: string
-            }
+              oid?: string;
+            };
           } | {
             siblingCancelled?: {
               /** @description Order ID (base58) */
-              oid?: string
-            }
+              oid?: string;
+            };
           } | {
             triggerFailed?: {
               /** @description Order ID (base58) */
-              oid?: string
-              reason?: string | null
-            }
+              oid?: string;
+              reason?: string | null;
+            };
           } | {
             transfer?: {
               /** @description Source account pubkey (base58) */
-              from?: string
+              from?: string;
               /** @description Destination account pubkey (base58) */
-              to?: string
+              to?: string;
               /** @description Margin asset symbol */
-              symbol?: string
-              amount?: number
-            }
+              symbol?: string;
+              amount?: number;
+            };
           } | {
             transferFailed?: {
-              message?: string
-            }
+              message?: string;
+            };
           } | {
             createSubAccount?: {
               /** @description Owning master account pubkey (base58) */
-              master?: string
+              master?: string;
               /** @description Newly created sub-account pubkey (base58) */
-              sub?: string
+              sub?: string;
               /** @description Display name */
-              name?: string
+              name?: string;
               /** @description Initial margin transferred from master at creation (0 when none requested) */
-              margin?: number
-            }
+              margin?: number;
+            };
           } | {
             createSubAccountFailed?: {
-              message?: string
-            }
+              message?: string;
+            };
           } | {
             removeSubAccount?: {
               /** @description Removed sub-account pubkey (base58) */
-              account?: string
+              account?: string;
               /** @description Margin amount returned to the master account */
-              marginMoved?: number
-            }
+              marginMoved?: number;
+            };
           } | {
             removeSubAccountFailed?: {
-              message?: string
-            }
+              message?: string;
+            };
           } | {
             renameSubAccount?: {
               /** @description Owning master account pubkey (base58) */
-              master?: string
+              master?: string;
               /** @description Sub-account pubkey that was renamed (base58) */
-              account?: string
+              account?: string;
               /** @description New display name */
-              name?: string
-            }
+              name?: string;
+            };
           } | {
             renameSubAccountFailed?: {
-              message?: string
-            }
+              message?: string;
+            };
           } | {
             multisigCreated?: {
               /** @description New multisig account pubkey (base58) */
-              pubkey?: string
+              pubkey?: string;
               /** Format: uint32 */
-              threshold?: number
+              threshold?: number;
               /** Format: uint32 */
-              signersLen?: number
+              signersLen?: number;
               /** Format: uint32 */
-              timeLockSecs?: number
+              timeLockSecs?: number;
               /** Format: uint32 */
-              lifetimeSecs?: number
-              creator?: string
-            }
+              lifetimeSecs?: number;
+              creator?: string;
+            };
           } | {
             multisigCreatedFailed?: {
-              message?: string
-            }
+              message?: string;
+            };
           } | {
-            proposalCreated?: components['schemas']['MultisigProposalEvent']
+            proposalCreated?: components["schemas"]["MultisigProposalEvent"];
           } | {
-            proposalApproved?: components['schemas']['MultisigProposalEvent']
+            proposalApproved?: components["schemas"]["MultisigProposalEvent"];
           } | {
-            proposalReadyForExecution?: components['schemas']['MultisigProposalEvent']
+            proposalReadyForExecution?: components["schemas"]["MultisigProposalEvent"];
           } | {
-            proposalExecuted?: components['schemas']['MultisigProposalEvent']
+            proposalExecuted?: components["schemas"]["MultisigProposalEvent"];
           } | {
-            proposalFailed?: components['schemas']['MultisigProposalEvent'] & {
-              message?: string
-            }
+            proposalFailed?: components["schemas"]["MultisigProposalEvent"] & {
+              message?: string;
+            };
           } | {
-            proposalExpired?: components['schemas']['MultisigProposalEvent']
+            proposalExpired?: components["schemas"]["MultisigProposalEvent"];
           } | {
-            proposalCancelled?: components['schemas']['MultisigProposalEvent']
+            proposalCancelled?: components["schemas"]["MultisigProposalEvent"];
           } | {
-            proposalRejected?: components['schemas']['MultisigProposalEvent']
+            proposalRejected?: components["schemas"]["MultisigProposalEvent"];
           } | {
             error?: {
-              message?: string
-            }
-          })[]
-        }
-      }
-    }
+              message?: string;
+            };
+          })[];
+        };
+      };
+    };
     /** @description Full proposal list for a multisig account. Returned by `GET /multisig/{pubkey}/proposals`. */
     MultisigProposalsSnapshot: {
       /** @description Multisig account pubkey (base58) */
-      multisig: string
-      proposals: components['schemas']['MultisigProposalRow'][]
-    }
+      multisig: string;
+      proposals: components["schemas"]["MultisigProposalRow"][];
+    };
     /** @description One proposal row in the multisig snapshot */
     MultisigProposalRow: {
       /** Format: uint64 */
-      proposalId?: number
+      proposalId?: number;
       /** @description Proposer pubkey (base58) */
-      proposer?: string
+      proposer?: string;
       /**
        * Format: int64
        * @description Proposal creation timestamp (ms)
        */
-      createdAt?: number
+      createdAt?: number;
       /**
        * Format: int64
        * @description Earliest execution timestamp (ms) once threshold is met
        */
-      executeAfter?: number
+      executeAfter?: number;
       /**
        * Format: int64
        * @description Proposal expiry timestamp (ms)
        */
-      expiresAt?: number
+      expiresAt?: number;
       /** @description Pubkeys of signers that approved */
-      approvals?: string[]
+      approvals?: string[];
       /** @description Pubkeys of signers that rejected */
-      rejections?: string[]
+      rejections?: string[];
       /** Format: uint32 */
-      approvalsCount?: number
+      approvalsCount?: number;
       /** Format: uint32 */
-      rejectionsCount?: number
+      rejectionsCount?: number;
       /** @enum {string} */
-      status?: 'pending' | 'ready' | 'executed' | 'failed' | 'expired' | 'cancelled' | 'rejected'
+      status?: "pending" | "ready" | "executed" | "failed" | "expired" | "cancelled" | "rejected";
       /** @description Inner proposal actions exactly as stored at creation */
-      actions?: Record<string, never>[]
+      actions?: Record<string, never>[];
       /** @description Error message when `status` is `failed` */
-      error?: string | null
-    }
+      error?: string | null;
+    };
     /** @description Snapshot of a multisig proposal at the time of an event */
     MultisigProposalEvent: {
       /** @description Multisig account pubkey (base58) */
-      multisig?: string
+      multisig?: string;
       /** Format: uint64 */
-      proposalId?: number
+      proposalId?: number;
       /** @enum {string} */
-      status?: 'pending' | 'ready' | 'executed' | 'failed' | 'expired' | 'cancelled' | 'rejected'
+      status?: "pending" | "ready" | "executed" | "failed" | "expired" | "cancelled" | "rejected";
       /**
        * Format: uint32
        * @description Approval count
        */
-      approvals?: number
+      approvals?: number;
       /**
        * Format: uint32
        * @description Rejection count
        */
-      rejections?: number
+      rejections?: number;
       /** Format: uint32 */
-      threshold?: number
+      threshold?: number;
       /**
        * Format: int64
        * @description Earliest execution timestamp (ms) once threshold is met
        */
-      executeAfter?: number
+      executeAfter?: number;
       /**
        * Format: int64
        * @description Proposal expiry timestamp (ms)
        */
-      expiresAt?: number
+      expiresAt?: number;
       /** @description Signer that triggered this event (when applicable) */
-      signer?: string | null
+      signer?: string | null;
       /** @description Original proposer of the proposal */
-      proposer?: string | null
-    }
-  }
+      proposer?: string | null;
+    };
+  };
   responses: {
     /** @description Bad Request - Invalid parameters or transaction type */
     BadRequest: {
       headers: {
-        [name: string]: unknown
-      }
-      content?: never
-    }
+        [name: string]: unknown;
+      };
+      content?: never;
+    };
     /** @description Not Found - Symbol or account doesn't exist */
     NotFound: {
       headers: {
-        [name: string]: unknown
-      }
-      content?: never
-    }
+        [name: string]: unknown;
+      };
+      content?: never;
+    };
     /** @description Request Timeout - Executor didn't respond within 2s */
     Timeout: {
       headers: {
-        [name: string]: unknown
-      }
-      content?: never
-    }
+        [name: string]: unknown;
+      };
+      content?: never;
+    };
     /** @description Internal Server Error - Database or channel error */
     ServerError: {
       headers: {
-        [name: string]: unknown
-      }
-      content?: never
-    }
-  }
+        [name: string]: unknown;
+      };
+      content?: never;
+    };
+  };
   parameters: {
     /** @description Market symbol */
-    SymbolPath: string
+    SymbolPath: string;
     /** @description Market symbol */
-    SymbolQuery: string
+    SymbolQuery: string;
     /** @description Candle timeframe */
     Interval:
-      | '10s'
-      | '1m'
-      | '3m'
-      | '5m'
-      | '15m'
-      | '30m'
-      | '1h'
-      | '2h'
-      | '4h'
-      | '6h'
-      | '8h'
-      | '12h'
-      | '1d'
-      | '3d'
-      | '1w'
-      | '1M'
+      | "10s"
+      | "1m"
+      | "3m"
+      | "5m"
+      | "15m"
+      | "30m"
+      | "1h"
+      | "2h"
+      | "4h"
+      | "6h"
+      | "8h"
+      | "12h"
+      | "1d"
+      | "3d"
+      | "1w"
+      | "1M";
     /** @description Start timestamp (milliseconds) */
-    StartTime: number
+    StartTime: number;
     /** @description End timestamp (milliseconds) */
-    EndTime: number
-  }
-  requestBodies: never
-  headers: never
-  pathItems: never
+    EndTime: number;
+  };
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
-export type $defs = Record<string, never>
+export type $defs = Record<string, never>;
 export interface operations {
   getMetrics: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Metrics payload */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': Record<string, never>
-        }
-      }
-    }
-  }
+          "application/json": Record<string, never>;
+        };
+      };
+    };
+  };
   getVerify: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Verification result */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': {
+          "application/json": {
             ledger?: {
-              tx_count?: number
-              tx_xor?: string
-              latest_round?: number | null
-            }
+              tx_count?: number;
+              tx_xor?: string;
+              latest_round?: number | null;
+            };
             metrics?: {
-              committed_count?: number
-              committed_xor?: string
-            }
-            match?: boolean
-          }
-        }
-      }
-      500: components['responses']['ServerError']
-    }
-  }
+              committed_count?: number;
+              committed_xor?: string;
+            };
+            match?: boolean;
+          };
+        };
+      };
+      500: components["responses"]["ServerError"];
+    };
+  };
   getExchangeInfo: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Successful response */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
           /**
            * @example [
@@ -2042,105 +2042,105 @@ export interface operations {
            *       }
            *     ]
            */
-          'application/json': components['schemas']['MarketInfo'][]
-        }
-      }
+          "application/json": components["schemas"]["MarketInfo"][];
+        };
+      };
       /** @description Internal server error */
       500: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   getTicker: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
         /** @description Market symbol */
-        symbol: components['parameters']['SymbolPath']
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        symbol: components["parameters"]["SymbolPath"];
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Successful response */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['MarketStats']
-        }
-      }
-      404: components['responses']['NotFound']
-      500: components['responses']['ServerError']
-    }
-  }
+          "application/json": components["schemas"]["MarketStats"];
+        };
+      };
+      404: components["responses"]["NotFound"];
+      500: components["responses"]["ServerError"];
+    };
+  };
   getKlines: {
     parameters: {
       query: {
         /** @description Market symbol */
-        symbol: components['parameters']['SymbolQuery']
+        symbol: components["parameters"]["SymbolQuery"];
         /** @description Candle timeframe */
-        interval: components['parameters']['Interval']
+        interval: components["parameters"]["Interval"];
         /** @description Start timestamp (milliseconds) */
-        startTime?: components['parameters']['StartTime']
+        startTime?: components["parameters"]["StartTime"];
         /** @description End timestamp (milliseconds) */
-        endTime?: components['parameters']['EndTime']
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+        endTime?: components["parameters"]["EndTime"];
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Successful response */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['Candle'][]
-        }
-      }
-      500: components['responses']['ServerError']
-    }
-  }
+          "application/json": components["schemas"]["Candle"][];
+        };
+      };
+      500: components["responses"]["ServerError"];
+    };
+  };
   getL2Book: {
     parameters: {
       query: {
         /** @description Must be "l2book" */
-        type: 'l2book'
+        type: "l2book";
         /** @description Market symbol */
-        coin: string
+        coin: string;
         /** @description Number of price levels to return per side */
-        nlevels?: number
+        nlevels?: number;
         /** @description Price increment for aggregation (in quote currency) */
-        aggregation?: number
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+        aggregation?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Successful response */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['BookUpdate']
-        }
-      }
-      400: components['responses']['BadRequest']
-      404: components['responses']['NotFound']
-      500: components['responses']['ServerError']
-    }
-  }
+          "application/json": components["schemas"]["BookUpdate"];
+        };
+      };
+      400: components["responses"]["BadRequest"];
+      404: components["responses"]["NotFound"];
+      500: components["responses"]["ServerError"];
+    };
+  };
   getExchangeStats: {
     parameters: {
       query?: {
@@ -2148,121 +2148,121 @@ export interface operations {
          * @description Canonical period value.
          *     If omitted or invalid, defaults to `1d`.
          */
-        period?: '1d' | '7d' | '30d' | '90d' | '1y' | 'all'
+        period?: "1d" | "7d" | "30d" | "90d" | "1y" | "all";
         /** @description Optional symbol filter (e.g. BTC-USD) */
-        symbol?: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+        symbol?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Successful response */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['ExchangeStats']
-        }
-      }
-      500: components['responses']['ServerError']
-    }
-  }
+          "application/json": components["schemas"]["ExchangeStats"];
+        };
+      };
+      500: components["responses"]["ServerError"];
+    };
+  };
   getRiskSurfaces: {
     parameters: {
       query: {
         /** @description Market symbol or coin symbol (for example `BTC-USD` or `BTC`) */
-        market: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+        market: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Successful response */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['RiskSurfaces']
-        }
-      }
-      400: components['responses']['BadRequest']
-      404: components['responses']['NotFound']
-      408: components['responses']['Timeout']
-      500: components['responses']['ServerError']
-    }
-  }
+          "application/json": components["schemas"]["RiskSurfaces"];
+        };
+      };
+      400: components["responses"]["BadRequest"];
+      404: components["responses"]["NotFound"];
+      408: components["responses"]["Timeout"];
+      500: components["responses"]["ServerError"];
+    };
+  };
   getAccount: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['AccountQuery']
-      }
-    }
+        "application/json": components["schemas"]["AccountQuery"];
+      };
+    };
     responses: {
       /** @description Successful response */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['AccountData'][]
-        }
-      }
-      404: components['responses']['NotFound']
-      408: components['responses']['Timeout']
-      500: components['responses']['ServerError']
-    }
-  }
+          "application/json": components["schemas"]["AccountData"][];
+        };
+      };
+      404: components["responses"]["NotFound"];
+      408: components["responses"]["Timeout"];
+      500: components["responses"]["ServerError"];
+    };
+  };
   getProtocolFeeState: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Successful response */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['FeeState']
-        }
-      }
-      408: components['responses']['Timeout']
-      500: components['responses']['ServerError']
-    }
-  }
+          "application/json": components["schemas"]["FeeState"];
+        };
+      };
+      408: components["responses"]["Timeout"];
+      500: components["responses"]["ServerError"];
+    };
+  };
   getMultisigProposals: {
     parameters: {
-      query?: never
-      header?: never
+      query?: never;
+      header?: never;
       path: {
         /** @description Multisig account pubkey (base58) */
-        pubkey: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
+        pubkey: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Successful response */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
           /**
            * @example {
@@ -2297,31 +2297,31 @@ export interface operations {
            *       ]
            *     }
            */
-          'application/json': components['schemas']['MultisigProposalsSnapshot']
-        }
-      }
+          "application/json": components["schemas"]["MultisigProposalsSnapshot"];
+        };
+      };
       /** @description Not Found - Pubkey is not a multisig account */
       404: {
         headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      500: components['responses']['ServerError']
-    }
-  }
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      500: components["responses"]["ServerError"];
+    };
+  };
   submitTransaction: {
     parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody: {
       content: {
-        'application/json': components['schemas']['Transaction']
-      }
-    }
+        "application/json": components["schemas"]["Transaction"];
+      };
+    };
     responses: {
       /**
        * @description Transaction response.
@@ -2332,14 +2332,14 @@ export interface operations {
        */
       200: {
         headers: {
-          [name: string]: unknown
-        }
+          [name: string]: unknown;
+        };
         content: {
-          'application/json': components['schemas']['OrderResponse']
-        }
-      }
-      408: components['responses']['Timeout']
-      500: components['responses']['ServerError']
-    }
-  }
+          "application/json": components["schemas"]["OrderResponse"];
+        };
+      };
+      408: components["responses"]["Timeout"];
+      500: components["responses"]["ServerError"];
+    };
+  };
 }
