@@ -22,8 +22,9 @@
 
 ## 🔗 Links
 
-- **Official Website**: [bulktrade.exchange](https://bulk.trade)
-- **API Documentation**: [docs.bulktrade.exchange](https://docs.bulk.trade)
+- **Official Website**: [bulk.trade](https://bulk.trade)
+- **API Documentation**: [docs.bulk.trade](https://docs.bulk.trade)
+- **Github**: [https://github.com/Bulk-trade]https://github.com/Bulk-trade)
 - **Official X (Twitter)**: [@bulktrade](https://x.com/bulktrade)
 
 ---
