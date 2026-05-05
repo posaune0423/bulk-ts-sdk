@@ -1,0 +1,25 @@
+{
+  "name": "bulk-ts-sdk-simple-use",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "account": "bun src/account-info.ts",
+    "check": "bunx tsc --noEmit",
+    "get-market": "bun src/get-market.ts",
+    "market": "bun src/market-data.ts",
+    "start": "bun src/index.ts",
+    "trade": "bun src/trade-lifecycle.ts",
+    "ws": "bun src/ws-market-data.ts"
+  },
+  "dependencies": {
+    "bulk-ts-sdk": "^0.0.3"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.2",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "bun": ">=1.3.0"
+  }
+}
