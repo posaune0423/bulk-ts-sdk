@@ -1,11 +1,11 @@
 import { createClient, requireEnv } from "./client.ts";
 import process from "node:process";
 
-const privateKey = requireEnv("BULK_PRIVATE_KEY");
+const privateKey = requireEnv("PRIVATE_KEY");
 const client = createClient({ privateKey });
 
 if (!client.accountId) {
-  throw new Error("Unable to derive account id from BULK_PRIVATE_KEY.");
+  throw new Error("Unable to derive account id from PRIVATE_KEY.");
 }
 
 console.log("--- Account Info Example ---");

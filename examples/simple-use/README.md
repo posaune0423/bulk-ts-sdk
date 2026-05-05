@@ -4,22 +4,28 @@ This example is a separate npm project that consumes the published `bulk-ts-sdk`
 
 ```bash
 bun install
+cp .env.example .env
 bun run check
 bun start
 ```
+
+Runtime scripts load `./.env`.
 
 Available scripts:
 
 ```bash
 bun run get-market
 bun run market
-BULK_PRIVATE_KEY=0x... bun run account
-BULK_PRIVATE_KEY=0x... bun run trade
+bun run account
+bun run trade
 bun run ws
 ```
 
 Optional environment variables:
 
-```bash
-BULK_HTTP_URL=https://... BULK_WS_URL=wss://... BULK_SYMBOL=BTC-USD bun start
+```dotenv
+PRIVATE_KEY=0x...
+BULK_HTTP_URL=https://...
+BULK_WS_URL=wss://...
+BULK_SYMBOL=BTC-USD
 ```
