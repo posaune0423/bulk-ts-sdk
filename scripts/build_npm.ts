@@ -66,11 +66,13 @@ await build({
       "vendor",
       "README.md",
       "LICENSE",
+      "llm.txt",
     ],
   },
   async postBuild(): Promise<void> {
-    // Copy README and LICENSE
+    // Copy package-level documentation files.
     Deno.copyFileSync("README.md", "npm/README.md");
+    Deno.copyFileSync("llm.txt", "npm/llm.txt");
     try {
       Deno.copyFileSync("LICENSE", "npm/LICENSE");
     } catch {

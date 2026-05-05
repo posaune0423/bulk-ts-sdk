@@ -4,6 +4,9 @@ const denoJson = new URL("../../deno.json", import.meta.url);
 const gitignore = new URL("../../.gitignore", import.meta.url);
 
 type DenoConfig = {
+  publish?: {
+    include?: unknown;
+  };
   tasks?: Record<string, string>;
   test?: {
     exclude?: unknown;
@@ -44,4 +47,11 @@ Deno.test("git ignores generated coverage html", async () => {
 
   assert(ignore.includes("docs/coverage/html/"));
   assert(!ignore.includes("!docs/coverage/html/index.html"));
+});
+
+Deno.test("registry package includes LLM guide", async () => {
+  const config = JSON.parse(await Deno.readTextFile(denoJson)) as DenoConfig;
+
+  assert(Array.isArray(config.publish?.include));
+  assert(config.publish.include.includes("llm.txt"));
 });

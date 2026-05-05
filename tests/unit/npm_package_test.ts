@@ -68,3 +68,13 @@ Deno.test("npm package copies native keychain bindings beside generated runtime 
     assert(result.stat?.isFile, `Expected native binding to exist: ${result.nativePath}`);
   }
 });
+
+Deno.test("npm package includes LLM guide", async () => {
+  const packageJson = await readNpmPackageJson();
+  if (packageJson === undefined) return;
+
+  const llmGuide = path.join(npmDir, "llm.txt");
+  const stat = await Deno.stat(llmGuide).catch(() => undefined);
+
+  assert(stat?.isFile, `Expected LLM guide to exist: ${llmGuide}`);
+});
