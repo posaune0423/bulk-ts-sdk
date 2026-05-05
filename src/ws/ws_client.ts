@@ -32,8 +32,8 @@ export class WsClient {
 
     return new Promise((resolve, reject) => {
       try {
-        this.ws = new WebSocket(this.config.url)
-        this.ws.onopen = () => resolve()
+        this.ws = new WebSocket(this.config.url);
+        this.ws.onopen = () => resolve();
         this.ws.onerror = (event) => {
           const message = (event as ErrorEvent).message || "Unknown error";
           reject(new BulkWsError(`WebSocket error: ${message}`));

@@ -1,9 +1,9 @@
-import { BulkClient } from '../src/mod.ts'
+import { BulkClient } from "../src/mod.ts";
 
 const client = new BulkClient({
-  privateKey: Deno.env.get('BULK_PRIVATE_KEY') ?? '',
-})
+  privateKey: Deno.env.get("BULK_PRIVATE_KEY") ?? "",
+});
 
-const market = await client.market.ticker('BTC-USD')
+const market = await client.market.ticker("BTC-USD");
 
-console.log(market)
+console.log(market);

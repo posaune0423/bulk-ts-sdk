@@ -7,17 +7,17 @@
  * @module
  */
 
-export { BulkClient } from './client.ts'
-export type { BulkClientConfig } from './client.ts'
-export * from './types/index.ts'
-export * from './errors.ts'
+export { BulkClient } from "./client.ts";
+export type { BulkClientConfig } from "./client.ts";
+export * from "./types/index.ts";
+export * from "./errors.ts";
 
 /**
  * Default HTTP endpoint for the Bulk Exchange API.
  */
-export { BULK_DEFAULT_HTTP_URL } from './constants.ts'
+export { BULK_DEFAULT_HTTP_URL } from "./constants.ts";
 
 /**
  * Default WebSocket endpoint for the Bulk Exchange real-time API.
  */
-export { BULK_DEFAULT_WS_URL } from './constants.ts'
+export { BULK_DEFAULT_WS_URL } from "./constants.ts";

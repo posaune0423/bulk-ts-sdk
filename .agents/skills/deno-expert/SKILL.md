@@ -4,7 +4,7 @@ description: Expert-level Deno knowledge for code review, debugging, and best pr
 license: MIT
 metadata:
   author: denoland
-  version: '1.1'
+  version: "1.1"
 ---
 
 # Deno Expert Knowledge
@@ -142,8 +142,8 @@ When you see old URL-based imports from the deprecated registry, flag them and g
 Only show the correct approach:
 
 ```ts
-import * as oak from '@oak/oak'
-import { join } from '@std/path'
+import * as oak from "@oak/oak";
+import { join } from "@std/path";
 ```
 
 ### Old standard library imports (deprecated)
@@ -155,7 +155,7 @@ deno add jsr:@std/path
 ```
 
 ```ts
-import { join } from '@std/path'
+import { join } from "@std/path";
 ```
 
 ### Inline remote specifiers
@@ -169,8 +169,8 @@ deno add npm:chalk
 ```
 
 ```ts
-import * as oak from '@oak/oak'
-import chalk from 'chalk'
+import * as oak from "@oak/oak";
+import chalk from "chalk";
 ```
 
 Inline specifiers are fine in single file scripts, but if a deno.json exists then it should go there. It's preferable to
@@ -188,12 +188,12 @@ export default function HomePage() {
       <MainContent />
       <Footer />
     </div>
-  )
+  );
 }
 
 // Suggest: Only interactive parts as islands
 // routes/index.tsx
-import Counter from '../islands/Counter.tsx'
+import Counter from "../islands/Counter.tsx";
 
 export default function HomePage() {
   return (
@@ -203,7 +203,7 @@ export default function HomePage() {
       <Counter /> {/* Only this needs interactivity */}
       <Footer />
     </div>
-  )
+  );
 }
 ```
 

@@ -154,7 +154,7 @@ paths:
         - `tx_auth_unauthorized_signer`
       operationId: getMetrics
       responses:
-        '200':
+        "200":
           description: Metrics payload
           content:
             application/json:
@@ -171,7 +171,7 @@ paths:
         and compares them with committed metrics values when available.
       operationId: getVerify
       responses:
-        '200':
+        "200":
           description: Verification result
           content:
             application/json:
@@ -197,8 +197,8 @@ paths:
                         type: string
                   match:
                     type: boolean
-        '500':
-          $ref: '#/components/responses/ServerError'
+        "500":
+          $ref: "#/components/responses/ServerError"
 
   # ===================================================================
   # MARKET DATA ENDPOINTS (HTTP)
@@ -213,14 +213,14 @@ paths:
         Returns information about all available markets.
       operationId: getExchangeInfo
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MarketInfo'
+                  $ref: "#/components/schemas/MarketInfo"
               example:
                 - symbol: BTC-USD
                   baseAsset: BTC
@@ -234,7 +234,7 @@ paths:
                   maxLeverage: 10
                   orderTypes: [LIMIT, MARKET, STOP, TAKE_PROFIT, RANGE, TRIGGER, TRAILING]
                   timeInForces: [GTC, IOC]
-        '500':
+        "500":
           description: Internal server error
 
   /ticker/{symbol}:
@@ -246,18 +246,18 @@ paths:
         Returns 24-hour statistics for a specific symbol.
       operationId: getTicker
       parameters:
-        - $ref: '#/components/parameters/SymbolPath'
+        - $ref: "#/components/parameters/SymbolPath"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MarketStats'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
+                $ref: "#/components/schemas/MarketStats"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
 
   /klines:
     get:
@@ -270,21 +270,21 @@ paths:
         **Supported intervals**: 10s, 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M
       operationId: getKlines
       parameters:
-        - $ref: '#/components/parameters/SymbolQuery'
-        - $ref: '#/components/parameters/Interval'
-        - $ref: '#/components/parameters/StartTime'
-        - $ref: '#/components/parameters/EndTime'
+        - $ref: "#/components/parameters/SymbolQuery"
+        - $ref: "#/components/parameters/Interval"
+        - $ref: "#/components/parameters/StartTime"
+        - $ref: "#/components/parameters/EndTime"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Candle'
-        '500':
-          $ref: '#/components/responses/ServerError'
+                  $ref: "#/components/schemas/Candle"
+        "500":
+          $ref: "#/components/responses/ServerError"
 
   /l2book:
     get:
@@ -325,18 +325,18 @@ paths:
             format: double
             example: 0.5
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BookUpdate'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
+                $ref: "#/components/schemas/BookUpdate"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
 
   /stats:
     get:
@@ -382,12 +382,12 @@ paths:
             type: string
             example: BTC-USD
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExchangeStats'
+                $ref: "#/components/schemas/ExchangeStats"
               examples:
                 aggregate:
                   summary: Aggregate stats across all markets
@@ -450,8 +450,8 @@ paths:
                     funding:
                       rates: {}
                     markets: []
-        '500':
-          $ref: '#/components/responses/ServerError'
+        "500":
+          $ref: "#/components/responses/ServerError"
 
   /riskSurfaces:
     get:
@@ -471,20 +471,20 @@ paths:
             type: string
             example: BTC-USD
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RiskSurfaces'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '408':
-          $ref: '#/components/responses/Timeout'
-        '500':
-          $ref: '#/components/responses/ServerError'
+                $ref: "#/components/schemas/RiskSurfaces"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "408":
+          $ref: "#/components/responses/Timeout"
+        "500":
+          $ref: "#/components/responses/ServerError"
 
   # ===================================================================
   # ACCOUNT ENDPOINTS (UNSIGNED - Read-only)
@@ -514,59 +514,59 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AccountQuery'
+              $ref: "#/components/schemas/AccountQuery"
             examples:
               fullAccount:
                 summary: Get full account state
                 value:
                   type: fullAccount
-                  user: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
+                  user: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
               openOrders:
                 summary: Get open orders only
                 value:
                   type: openOrders
-                  user: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
+                  user: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
               fills:
                 summary: Get fill history
                 value:
                   type: fills
-                  user: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
+                  user: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
               positions:
                 summary: Get closed position history
                 value:
                   type: positions
-                  user: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
+                  user: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
               fundingHistory:
                 summary: Get funding payment history
                 value:
                   type: fundingHistory
-                  user: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
+                  user: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
               orderHistory:
                 summary: Get terminal order history
                 value:
                   type: orderHistory
-                  user: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
+                  user: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
               feeTier:
                 summary: Get account fee tier quote
                 value:
                   type: feeTier
-                  user: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  symbol: 'BTC-USD'
+                  user: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  symbol: "BTC-USD"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/AccountData'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '408':
-          $ref: '#/components/responses/Timeout'
-        '500':
-          $ref: '#/components/responses/ServerError'
+                  $ref: "#/components/schemas/AccountData"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "408":
+          $ref: "#/components/responses/Timeout"
+        "500":
+          $ref: "#/components/responses/ServerError"
 
   /feeState:
     get:
@@ -578,16 +578,16 @@ paths:
         This endpoint is read-only and unsigned.
       operationId: getProtocolFeeState
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FeeState'
-        '408':
-          $ref: '#/components/responses/Timeout'
-        '500':
-          $ref: '#/components/responses/ServerError'
+                $ref: "#/components/schemas/FeeState"
+        "408":
+          $ref: "#/components/responses/Timeout"
+        "500":
+          $ref: "#/components/responses/ServerError"
 
   /multisig/{pubkey}/proposals:
     get:
@@ -608,24 +608,24 @@ paths:
           description: Multisig account pubkey (base58)
           schema:
             type: string
-            example: '6q8Y4f6g8tR4mQ1H2Zr3u9x7k9a4nS2Yx1g6Wm8qJ5tK'
+            example: "6q8Y4f6g8tR4mQ1H2Zr3u9x7k9a4nS2Yx1g6Wm8qJ5tK"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MultisigProposalsSnapshot'
+                $ref: "#/components/schemas/MultisigProposalsSnapshot"
               example:
-                multisig: '6q8Y4f6g8tR4mQ1H2Zr3u9x7k9a4nS2Yx1g6Wm8qJ5tK'
+                multisig: "6q8Y4f6g8tR4mQ1H2Zr3u9x7k9a4nS2Yx1g6Wm8qJ5tK"
                 proposals:
                   - proposalId: 42
-                    proposer: '9J8TUdEWrrcADK913r1Cs7DdqX63VdVU88imfDzT1ypt'
+                    proposer: "9J8TUdEWrrcADK913r1Cs7DdqX63VdVU88imfDzT1ypt"
                     createdAt: 1776700149433
                     executeAfter: 1776700209433
                     expiresAt: 1777304949433
                     approvals:
-                      - '9J8TUdEWrrcADK913r1Cs7DdqX63VdVU88imfDzT1ypt'
+                      - "9J8TUdEWrrcADK913r1Cs7DdqX63VdVU88imfDzT1ypt"
                     rejections: []
                     approvalsCount: 1
                     rejectionsCount: 0
@@ -633,15 +633,15 @@ paths:
                     actions:
                       - transfer:
                           k: internal
-                          from: '8XJUssn2TxLhJ9XEPwA9pvtVJAtpgEEa2uRQYnKCGJmh'
-                          to: '5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux'
+                          from: "8XJUssn2TxLhJ9XEPwA9pvtVJAtpgEEa2uRQYnKCGJmh"
+                          to: "5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux"
                           marginSymbol: USDC
                           marginAmount: 10.0
                     error: null
-        '404':
+        "404":
           description: Not Found - Pubkey is not a multisig account
-        '500':
-          $ref: '#/components/responses/ServerError'
+        "500":
+          $ref: "#/components/responses/ServerError"
 
   # ===================================================================
   # TRADE ENDPOINTS (SIGNED - State-mutating)
@@ -694,7 +694,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Transaction'
+              $ref: "#/components/schemas/Transaction"
             examples:
               limitGTC:
                 summary: GTC Limit Order
@@ -709,9 +709,9 @@ paths:
                         r: false
                         i: false
                   nonce: 1704067200000
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               limitIsolated:
                 summary: GTC Limit Order routed into the per-instrument isolated account
                 value:
@@ -725,9 +725,9 @@ paths:
                         r: false
                         i: true
                   nonce: 1704067200030
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               limitFromSubAccount:
                 summary: GTC Limit Order placed from a sub-account (master signs, account = sub pubkey)
                 value:
@@ -741,9 +741,9 @@ paths:
                         r: false
                         i: false
                   nonce: 1704067200031
-                  account: '8x7iUti9m6L6Y9yQPXkXj4zD2uP1Qx5Eo9W4vYm6cGmR'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "8x7iUti9m6L6Y9yQPXkXj4zD2uP1Qx5Eo9W4vYm6cGmR"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               marketOrder:
                 summary: Market Order
                 value:
@@ -755,42 +755,42 @@ paths:
                         r: false
                         i: false
                   nonce: 1704067200001
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               modifyOrder:
                 summary: Modify Order Size
                 value:
                   actions:
                     - mod:
-                        oid: 'Fpa3oVuL3UzjNANAMZZdmrn6D1Zhk83GmBuJpuAWG51F'
+                        oid: "Fpa3oVuL3UzjNANAMZZdmrn6D1Zhk83GmBuJpuAWG51F"
                         symbol: BTC-USD
                         amount: 0.05
                   nonce: 1704067200008
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               cancelSingle:
                 summary: Cancel Single Order
                 value:
                   actions:
                     - cx:
                         c: BTC-USD
-                        oid: 'order_hash_base58'
+                        oid: "order_hash_base58"
                   nonce: 1704067200002
-                  account: '5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux'
-                  signer: '5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux'
-                  signature: 'rpkxJezRft2xqfFxaqYRCTRtoobV4Z2Btqj6P52bEcAKczLn5Rgf2Yfm37UN4HGJwywR4QkuDjJUkwZ93DB2Fw9'
+                  account: "5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux"
+                  signer: "5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux"
+                  signature: "rpkxJezRft2xqfFxaqYRCTRtoobV4Z2Btqj6P52bEcAKczLn5Rgf2Yfm37UN4HGJwywR4QkuDjJUkwZ93DB2Fw9"
               cancelAll:
                 summary: Cancel All Orders
                 value:
                   actions:
                     - cxa:
-                        c: ['BTC-USD']
+                        c: ["BTC-USD"]
                   nonce: 1704067200003
-                  account: '5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux'
-                  signer: '5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux'
-                  signature: 'rpkxJezRft2xqfFxaqYRCTRtoobV4Z2Btqj6P52bEcAKczLn5Rgf2Yfm37UN4HGJwywR4QkuDjJUkwZ93DB2Fw9'
+                  account: "5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux"
+                  signer: "5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux"
+                  signature: "rpkxJezRft2xqfFxaqYRCTRtoobV4Z2Btqj6P52bEcAKczLn5Rgf2Yfm37UN4HGJwywR4QkuDjJUkwZ93DB2Fw9"
               stopOrder:
                 summary: Stop Conditional Order
                 value:
@@ -803,9 +803,9 @@ paths:
                         lim: 97950.0
                         i: false
                   nonce: 1704067200011
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               takeProfitOrder:
                 summary: Take-Profit Conditional Order
                 value:
@@ -818,9 +818,9 @@ paths:
                         lim: 103950.0
                         i: false
                   nonce: 1704067200012
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               rangeOrder:
                 summary: Range / OCO Conditional Order
                 value:
@@ -835,9 +835,9 @@ paths:
                         lmax: 105950.0
                         i: false
                   nonce: 1704067200013
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               triggerBasket:
                 summary: Trigger Basket Order
                 value:
@@ -855,33 +855,33 @@ paths:
                               i: false
                           - cx:
                               c: BTC-USD
-                              oid: 'old_order_hash_base58'
+                              oid: "old_order_hash_base58"
                         i: false
                   nonce: 1704067200014
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               faucet:
                 summary: Request Faucet Funds
                 value:
                   actions:
                     - faucet:
-                        u: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
+                        u: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
                   nonce: 1704067200004
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: 'rpkxJezRft2xqfFxaqYRCTRtoobV4Z2Btqj6P52bEcAKczLn5Rgf2Yfm37UN4HGJwywR4QkuDjJUkwZ93DB2Fw9'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "rpkxJezRft2xqfFxaqYRCTRtoobV4Z2Btqj6P52bEcAKczLn5Rgf2Yfm37UN4HGJwywR4QkuDjJUkwZ93DB2Fw9"
               agentWallet:
                 summary: Register Agent Wallet
                 value:
                   actions:
                     - agentWalletCreation:
-                        a: '5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux'
+                        a: "5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux"
                         d: false
                   nonce: 1704067200005
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5JX7N4f2r2qsLheHyvCpwzs4iXQjLPp1UZH1Ec4a7B4wJQi8Np4ncn3tDrEVW9BLjLVWm2nqFaGgk9T3o4WdTgpx'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5JX7N4f2r2qsLheHyvCpwzs4iXQjLPp1UZH1Ec4a7B4wJQi8Np4ncn3tDrEVW9BLjLVWm2nqFaGgk9T3o4WdTgpx"
               updateSettings:
                 summary: Update Leverage Settings
                 value:
@@ -891,16 +891,16 @@ paths:
                           BTC-USD: 5.0
                           ETH-USD: 3.0
                   nonce: 1704067200006
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5JXWgp1fW6px2Gjhw6YHhQ4wEqb6FqMam6m4yg4uRcCksH9WxSv9dVjizGfD4StGtv1z9gR71unZY6tQ6dNDdJ3K'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5JXWgp1fW6px2Gjhw6YHhQ4wEqb6FqMam6m4yg4uRcCksH9WxSv9dVjizGfD4StGtv1z9gR71unZY6tQ6dNDdJ3K"
               batch:
                 summary: Batch (Cancel + Place)
                 value:
                   actions:
                     - cx:
                         c: BTC-USD
-                        oid: 'old_order_hash_base58'
+                        oid: "old_order_hash_base58"
                     - l:
                         c: BTC-USD
                         b: true
@@ -909,20 +909,20 @@ paths:
                         tif: GTC
                         r: false
                   nonce: 1704067200007
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               whitelistFaucet:
                 summary: Whitelist Faucet (Admin)
                 value:
                   actions:
                     - whitelistFaucet:
-                        target: '9J8TUdEWrrcADK913r1Cs7DdqX63VdVU88imfDzT1ypt'
+                        target: "9J8TUdEWrrcADK913r1Cs7DdqX63VdVU88imfDzT1ypt"
                         whitelist: true
                   nonce: 1704067200009
-                  account: 'ADMIN_PUBKEY_BASE58'
-                  signer: 'ADMIN_PUBKEY_BASE58'
-                  signature: '5j7s...base58...'
+                  account: "ADMIN_PUBKEY_BASE58"
+                  signer: "ADMIN_PUBKEY_BASE58"
+                  signature: "5j7s...base58..."
               oraclePrice:
                 summary: Oracle Price Update (Admin)
                 value:
@@ -932,166 +932,166 @@ paths:
                         c: BTC-USD
                         px: 102500.0
                   nonce: 1704067200010
-                  account: 'ORACLE_PUBKEY_BASE58'
-                  signer: 'ORACLE_PUBKEY_BASE58'
-                  signature: '5j7s...base58...'
+                  account: "ORACLE_PUBKEY_BASE58"
+                  signer: "ORACLE_PUBKEY_BASE58"
+                  signature: "5j7s...base58..."
               createSubAccountMinimal:
                 summary: Create Sub-Account (no initial margin)
                 value:
                   actions:
                     - createSubAccount:
-                        name: 'desk-1'
+                        name: "desk-1"
                   nonce: 1704067200019
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               createSubAccount:
                 summary: Create Sub-Account (with initial margin)
                 value:
                   actions:
                     - createSubAccount:
-                        name: 'desk-1'
-                        marginSymbol: 'USDC'
+                        name: "desk-1"
+                        marginSymbol: "USDC"
                         marginAmount: 1000.0
                   nonce: 1704067200020
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               removeSubAccount:
                 summary: Remove Sub-Account
                 value:
                   actions:
                     - removeSubAccount:
-                        toRemove: '8x7iUti9m6L6Y9yQPXkXj4zD2uP1Qx5Eo9W4vYm6cGmR'
+                        toRemove: "8x7iUti9m6L6Y9yQPXkXj4zD2uP1Qx5Eo9W4vYm6cGmR"
                   nonce: 1704067200021
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               renameSubAccount:
                 summary: Rename Sub-Account
                 value:
                   actions:
                     - renameSubAccount:
-                        a: '8x7iUti9m6L6Y9yQPXkXj4zD2uP1Qx5Eo9W4vYm6cGmR'
-                        n: 'desk-2'
+                        a: "8x7iUti9m6L6Y9yQPXkXj4zD2uP1Qx5Eo9W4vYm6cGmR"
+                        n: "desk-2"
                   nonce: 1704067200022
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               transferInternal:
                 summary: Transfer (internal, master to sub-account)
                 value:
                   actions:
                     - transfer:
                         k: internal
-                        from: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                        to: '8x7iUti9m6L6Y9yQPXkXj4zD2uP1Qx5Eo9W4vYm6cGmR'
-                        marginSymbol: 'USDC'
+                        from: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                        to: "8x7iUti9m6L6Y9yQPXkXj4zD2uP1Qx5Eo9W4vYm6cGmR"
+                        marginSymbol: "USDC"
                         marginAmount: 100.0
                   nonce: 1704067200022
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               transferIsoTopUp:
                 summary: Transfer (top up a per-instrument isolated account via isoPubkey)
                 value:
                   actions:
                     - transfer:
                         k: internal
-                        from: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                        to: 'ISO_ACCOUNT_PUBKEY_BASE58'
-                        marginSymbol: 'USDC'
+                        from: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                        to: "ISO_ACCOUNT_PUBKEY_BASE58"
+                        marginSymbol: "USDC"
                         marginAmount: 100.0
                   nonce: 1704067200023
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               transferExternal:
                 summary: Transfer (external, to any account on the network)
                 value:
                   actions:
                     - transfer:
                         k: external
-                        from: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                        to: '5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux'
-                        marginSymbol: 'USDC'
+                        from: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                        to: "5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux"
+                        marginSymbol: "USDC"
                         marginAmount: 50.0
                   nonce: 1704067200024
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               createMultisig:
                 summary: Create Multisig
                 value:
                   actions:
                     - createMultisig:
                         signers:
-                          - 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                          - '5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux'
+                          - "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                          - "5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux"
                         threshold: 2
                         timeLockSecs: 60
                         proposalLifetimeSecs: 604800
                   nonce: 1704067200025
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               multisigPropose:
                 summary: Multisig Propose (transfer)
                 value:
                   actions:
                     - msp:
-                        m: '6q8Y4f6g8tR4mQ1H2Zr3u9x7k9a4nS2Yx1g6Wm8qJ5tK'
+                        m: "6q8Y4f6g8tR4mQ1H2Zr3u9x7k9a4nS2Yx1g6Wm8qJ5tK"
                         a:
                           - transfer:
                               k: internal
-                              from: '6q8Y4f6g8tR4mQ1H2Zr3u9x7k9a4nS2Yx1g6Wm8qJ5tK'
-                              to: '5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux'
-                              marginSymbol: 'USDC'
+                              from: "6q8Y4f6g8tR4mQ1H2Zr3u9x7k9a4nS2Yx1g6Wm8qJ5tK"
+                              to: "5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux"
+                              marginSymbol: "USDC"
                               marginAmount: 10.0
                   nonce: 1704067200026
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               multisigApprove:
                 summary: Multisig Approve
                 value:
                   actions:
                     - msa:
-                        m: '6q8Y4f6g8tR4mQ1H2Zr3u9x7k9a4nS2Yx1g6Wm8qJ5tK'
+                        m: "6q8Y4f6g8tR4mQ1H2Zr3u9x7k9a4nS2Yx1g6Wm8qJ5tK"
                         p: 7
                   nonce: 1704067200027
-                  account: '5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux'
-                  signer: '5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux'
-                  signature: '5j7s...base58...'
+                  account: "5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux"
+                  signer: "5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux"
+                  signature: "5j7s...base58..."
               multisigExecute:
                 summary: Multisig Execute (after time-lock)
                 value:
                   actions:
                     - mse:
-                        m: '6q8Y4f6g8tR4mQ1H2Zr3u9x7k9a4nS2Yx1g6Wm8qJ5tK'
+                        m: "6q8Y4f6g8tR4mQ1H2Zr3u9x7k9a4nS2Yx1g6Wm8qJ5tK"
                         p: 7
                   nonce: 1704067200028
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
               multisigUpdatePolicy:
                 summary: Multisig Update Policy (proposal-only)
                 value:
                   actions:
                     - msu:
-                        m: '6q8Y4f6g8tR4mQ1H2Zr3u9x7k9a4nS2Yx1g6Wm8qJ5tK'
+                        m: "6q8Y4f6g8tR4mQ1H2Zr3u9x7k9a4nS2Yx1g6Wm8qJ5tK"
                         signers:
-                          - 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                          - '5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux'
+                          - "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                          - "5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux"
                         threshold: 2
                         timeLockSecs: 30
                         proposalLifetimeSecs: 604800
                   nonce: 1704067200029
-                  account: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signer: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                  signature: '5j7s...base58...'
+                  account: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signer: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                  signature: "5j7s...base58..."
       responses:
-        '200':
+        "200":
           description: |
             Transaction response.
 
@@ -1101,7 +1101,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrderResponse'
+                $ref: "#/components/schemas/OrderResponse"
               examples:
                 accepted:
                   summary: Accepted transaction (resting order)
@@ -1112,7 +1112,7 @@ paths:
                       data:
                         statuses:
                           - resting:
-                              oid: 'Fpa3oVuL3UzjNANAMZZdmrn6D1Zhk83GmBuJpuAWG51F'
+                              oid: "Fpa3oVuL3UzjNANAMZZdmrn6D1Zhk83GmBuJpuAWG51F"
                 authBadSignature:
                   summary: Authentication reject - bad signature
                   value:
@@ -1122,7 +1122,7 @@ paths:
                       data:
                         statuses:
                           - error:
-                              message: 'bad signature'
+                              message: "bad signature"
                 authUnauthorizedSigner:
                   summary: Authentication reject - unauthorized signer
                   value:
@@ -1132,11 +1132,11 @@ paths:
                       data:
                         statuses:
                           - error:
-                              message: 'unauthorized signer'
-        '408':
-          $ref: '#/components/responses/Timeout'
-        '500':
-          $ref: '#/components/responses/ServerError'
+                              message: "unauthorized signer"
+        "408":
+          $ref: "#/components/responses/Timeout"
+        "500":
+          $ref: "#/components/responses/ServerError"
 
 components:
   # ===================================================================
@@ -1361,14 +1361,14 @@ components:
           items:
             type: array
             items:
-              $ref: '#/components/schemas/RiskPoint'
+              $ref: "#/components/schemas/RiskPoint"
         sell:
           type: array
           description: 2D sell-side grid [notional_idx][leverage_idx]
           items:
             type: array
             items:
-              $ref: '#/components/schemas/RiskPoint'
+              $ref: "#/components/schemas/RiskPoint"
 
     RiskSurfaces:
       type: object
@@ -1385,7 +1385,7 @@ components:
           type: array
           description: Regime surfaces sorted by regime ascending
           items:
-            $ref: '#/components/schemas/RiskSurface'
+            $ref: "#/components/schemas/RiskSurface"
         corrs:
           type: array
           description: Correlation tuples [pair, rho]
@@ -1409,7 +1409,7 @@ components:
         period:
           type: string
           description: Requested period
-          example: '1d'
+          example: "1d"
         volume:
           type: object
           properties:
@@ -1522,7 +1522,7 @@ components:
           items:
             type: array
             items:
-              $ref: '#/components/schemas/Level'
+              $ref: "#/components/schemas/Level"
         timestamp:
           type: integer
           format: int64
@@ -1561,42 +1561,42 @@ components:
         user:
           type: string
           description: User public key (base58)
-          example: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
+          example: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
         symbol:
           type: string
           description: Optional market symbol for scope-specific requests (used by `feeTier`)
-          example: 'BTC-USD'
+          example: "BTC-USD"
 
     AccountData:
       oneOf:
         - type: object
           properties:
             fullAccount:
-              $ref: '#/components/schemas/FullAccount'
+              $ref: "#/components/schemas/FullAccount"
         - type: object
           properties:
             openOrder:
-              $ref: '#/components/schemas/OrderState'
+              $ref: "#/components/schemas/OrderState"
         - type: object
           properties:
             fills:
-              $ref: '#/components/schemas/Fill'
+              $ref: "#/components/schemas/Fill"
         - type: object
           properties:
             positions:
-              $ref: '#/components/schemas/ClosedPosition'
+              $ref: "#/components/schemas/ClosedPosition"
         - type: object
           properties:
             fundingPayment:
-              $ref: '#/components/schemas/FundingPayment'
+              $ref: "#/components/schemas/FundingPayment"
         - type: object
           properties:
             orderHistory:
-              $ref: '#/components/schemas/OrderHistoryEntry'
+              $ref: "#/components/schemas/OrderHistoryEntry"
         - type: object
           properties:
             feeTier:
-              $ref: '#/components/schemas/FeeState'
+              $ref: "#/components/schemas/FeeState"
 
     FullAccount:
       type: object
@@ -1636,32 +1636,32 @@ components:
           items:
             type: string
         margin:
-          $ref: '#/components/schemas/Margin'
+          $ref: "#/components/schemas/Margin"
         positions:
           type: array
           description: Open positions with full risk metrics. For master/sub accounts, includes per-instrument isolated-account rows (`iso=true`).
           items:
-            $ref: '#/components/schemas/Position'
+            $ref: "#/components/schemas/Position"
         openOrders:
           type: array
           description: Resting live orders, including conditional orders parked in conditional books. For master/sub accounts, includes per-instrument isolated-account rows (`iso=true`).
           items:
-            $ref: '#/components/schemas/OrderState'
+            $ref: "#/components/schemas/OrderState"
         pendingOnFill:
           type: array
           description: Registered on-fill plans waiting for parent order fill
           items:
-            $ref: '#/components/schemas/PendingOnFillPlan'
+            $ref: "#/components/schemas/PendingOnFillPlan"
         feeTiers:
           type: array
           description: Effective fee tier snapshot rows for global and instrument scopes
           items:
-            $ref: '#/components/schemas/FeeTierQuote'
+            $ref: "#/components/schemas/FeeTierQuote"
         leverageSettings:
           type: array
           description: Per-symbol leverage settings
           items:
-            $ref: '#/components/schemas/LeverageEntry'
+            $ref: "#/components/schemas/LeverageEntry"
 
     PendingOnFillPlan:
       type: object
@@ -1813,14 +1813,14 @@ components:
           description: Fraction of portfolio risk allocated
         iso:
           type: boolean
-          description: '`true` if this row belongs to a per-instrument isolated account, otherwise `false`'
+          description: "`true` if this row belongs to a per-instrument isolated account, otherwise `false`"
         isoPubkey:
           type: string
           nullable: true
           description: Present only when `iso=true`; base58 pubkey of the per-instrument isolated account. Use **only** as `to` in an internal `transfer` action to top up isolated-account margin. Isolated-account pubkeys are not valid as `account` on transactions and are not valid `user` values for `POST /account`.
         protection:
           allOf:
-            - $ref: '#/components/schemas/PositionProtection'
+            - $ref: "#/components/schemas/PositionProtection"
           nullable: true
           description: Optional attached reduce-only protective orders for this symbol
 
@@ -1831,7 +1831,7 @@ components:
           type: array
           description: Protective order references attached to this position
           items:
-            $ref: '#/components/schemas/ProtectionOrderRef'
+            $ref: "#/components/schemas/ProtectionOrderRef"
 
     ProtectionOrderRef:
       type: object
@@ -1845,7 +1845,7 @@ components:
           description: Conditional root order type
         trigger:
           allOf:
-            - $ref: '#/components/schemas/TriggerSpec'
+            - $ref: "#/components/schemas/TriggerSpec"
           nullable: true
           description: Conditional trigger metadata for this protective order
 
@@ -1933,7 +1933,7 @@ components:
           description: Inferred order type for snapshots/open-orders
         trigger:
           allOf:
-            - $ref: '#/components/schemas/TriggerSpec'
+            - $ref: "#/components/schemas/TriggerSpec"
           nullable: true
           description: Trigger metadata for conditional/trigger orders, otherwise `null`
         tif:
@@ -1970,7 +1970,7 @@ components:
           description: Order placement time (nanoseconds)
         iso:
           type: boolean
-          description: '`true` if this row belongs to a per-instrument isolated account, otherwise `false`'
+          description: "`true` if this row belongs to a per-instrument isolated account, otherwise `false`"
 
     Fill:
       type: object
@@ -2022,7 +2022,7 @@ components:
           description: Execution time (nanoseconds)
         iso:
           type: boolean
-          description: '`true` if this row belongs to a per-instrument isolated account, otherwise `false`'
+          description: "`true` if this row belongs to a per-instrument isolated account, otherwise `false`"
 
     CloseReason:
       type: string
@@ -2072,10 +2072,10 @@ components:
           format: int64
           description: Position close timestamp (nanoseconds)
         closeReason:
-          $ref: '#/components/schemas/CloseReason'
+          $ref: "#/components/schemas/CloseReason"
         iso:
           type: boolean
-          description: '`true` if this row belongs to a per-instrument isolated account, otherwise `false`'
+          description: "`true` if this row belongs to a per-instrument isolated account, otherwise `false`"
 
     FundingPayment:
       type: object
@@ -2109,7 +2109,7 @@ components:
           description: Timestamp (nanoseconds)
         iso:
           type: boolean
-          description: '`true` if this row belongs to a per-instrument isolated account, otherwise `false`'
+          description: "`true` if this row belongs to a per-instrument isolated account, otherwise `false`"
 
     OrderHistoryEntry:
       type: object
@@ -2166,7 +2166,7 @@ components:
           description: Terminal order status
         trigger:
           allOf:
-            - $ref: '#/components/schemas/TriggerSpec'
+            - $ref: "#/components/schemas/TriggerSpec"
           nullable: true
           description: Trigger metadata for conditional/trigger orders, otherwise `null`
         reason:
@@ -2183,7 +2183,7 @@ components:
           description: Timestamp (nanoseconds)
         iso:
           type: boolean
-          description: '`true` if this row belongs to a per-instrument isolated account, otherwise `false`'
+          description: "`true` if this row belongs to a per-instrument isolated account, otherwise `false`"
 
     # Trading Schemas (Signed)
 
@@ -2209,7 +2209,7 @@ components:
 
             Action types: `l`, `m`, `mod`, `cx`, `cxa`, `st`, `tp`, `rng`, `trig`, `trl`, `of`, `faucet`, `agentWalletCreation`, `updateUserSettings`, `createSubAccount`, `removeSubAccount`, `renameSubAccount`, `transfer`, `createMultisig`, `msp`, `msa`, `msr`, `msc`, `mse`, `msu`, `whitelistFaucet` (admin), `px` (admin), `o` (admin)
           items:
-            $ref: '#/components/schemas/Action'
+            $ref: "#/components/schemas/Action"
         nonce:
           type: integer
           format: int64
@@ -2218,7 +2218,7 @@ components:
           type: string
           description: |
             Account public key (base58) whose account is being acted on. Must be a master pubkey or a sub-account pubkey. Per-instrument isolated accounts are managed implicitly via the `i` flag on order actions and are never set as `account`.
-          example: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
+          example: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
         signer:
           type: string
           description: |
@@ -2226,11 +2226,11 @@ components:
             - the `account` itself;
             - when `account` is a sub-account: the parent master, or an [agent wallet](/api-reference/manageAgentWallet) registered on the parent master (automatically authorized for its sub-accounts);
             - an agent wallet registered directly on `account`.
-          example: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
+          example: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
         signature:
           type: string
           description: Ed25519 signature of wincode_serialize(actions + nonce + account) (base58)
-          example: '5j7sVt3k2YxPqH4w...'
+          example: "5j7sVt3k2YxPqH4w..."
 
     Action:
       description: |
@@ -2312,7 +2312,7 @@ components:
                 oid:
                   type: string
                   description: Order ID (base58 hash)
-                  example: 'Fpa3oVuL3UzjNANAMZZdmrn6D1Zhk83GmBuJpuAWG51F'
+                  example: "Fpa3oVuL3UzjNANAMZZdmrn6D1Zhk83GmBuJpuAWG51F"
                 symbol:
                   type: string
                   description: Symbol
@@ -2337,7 +2337,7 @@ components:
                 oid:
                   type: string
                   description: Order ID (base58 hash)
-                  example: 'Fpa3oVuL3UzjNANAMZZdmrn6D1Zhk83GmBuJpuAWG51F'
+                  example: "Fpa3oVuL3UzjNANAMZZdmrn6D1Zhk83GmBuJpuAWG51F"
         - title: Cancel all (cxa)
           type: object
           description: Cancel all orders (optionally filtered by symbol)
@@ -2352,7 +2352,7 @@ components:
                   description: Symbols to cancel. Empty array `[]` cancels all symbols.
                   items:
                     type: string
-                  example: ['BTC-USD']
+                  example: ["BTC-USD"]
         - title: Stop (st)
           type: object
           description: Place a conditional stop order
@@ -2573,7 +2573,7 @@ components:
                 u:
                   type: string
                   description: Recipient public key (base58)
-                  example: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
+                  example: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
                 amount:
                   type: number
                   description: Optional; ignored for testnet. Each claim credits a fixed 10,000.
@@ -2622,7 +2622,7 @@ components:
                 target:
                   type: string
                   description: Target account public key (base58)
-                  example: '9J8TUdEWrrcADK913r1Cs7DdqX63VdVU88imfDzT1ypt'
+                  example: "9J8TUdEWrrcADK913r1Cs7DdqX63VdVU88imfDzT1ypt"
                 whitelist:
                   type: boolean
                   description: true = whitelist, false = un-whitelist
@@ -2694,12 +2694,12 @@ components:
                 name:
                   type: string
                   description: Sub-account display name (1-32 chars, `A-Z a-z 0-9 - _`)
-                  example: 'desk-1'
+                  example: "desk-1"
                 marginSymbol:
                   type: string
                   nullable: true
                   description: Optional margin asset symbol to seed the sub-account with. Must be present when `marginAmount` is non-zero.
-                  example: 'USDC'
+                  example: "USDC"
                 marginAmount:
                   type: number
                   nullable: true
@@ -2719,7 +2719,7 @@ components:
                 toRemove:
                   type: string
                   description: Sub-account or isolated-account public key (base58) to remove
-                  example: '8x7iUti9m6L6Y9yQPXkXj4zD2uP1Qx5Eo9W4vYm6cGmR'
+                  example: "8x7iUti9m6L6Y9yQPXkXj4zD2uP1Qx5Eo9W4vYm6cGmR"
         - title: Rename sub-account (renameSubAccount)
           type: object
           description: |
@@ -2735,11 +2735,11 @@ components:
                 a:
                   type: string
                   description: Sub-account public key (base58) to rename. Must belong to the signing master.
-                  example: '8x7iUti9m6L6Y9yQPXkXj4zD2uP1Qx5Eo9W4vYm6cGmR'
+                  example: "8x7iUti9m6L6Y9yQPXkXj4zD2uP1Qx5Eo9W4vYm6cGmR"
                 n:
                   type: string
                   description: New display name (1-32 chars, `A-Z a-z 0-9 - _`). Must be unique within the master tree.
-                  example: 'desk-2'
+                  example: "desk-2"
         - title: Transfer (transfer)
           type: object
           description: |
@@ -2760,15 +2760,15 @@ components:
                 from:
                   type: string
                   description: Source account public key (base58)
-                  example: 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
+                  example: "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
                 to:
                   type: string
                   description: Destination account public key (base58). Use the position row's `isoPubkey` to top up a per-instrument isolated account.
-                  example: '8x7iUti9m6L6Y9yQPXkXj4zD2uP1Qx5Eo9W4vYm6cGmR'
+                  example: "8x7iUti9m6L6Y9yQPXkXj4zD2uP1Qx5Eo9W4vYm6cGmR"
                 marginSymbol:
                   type: string
                   description: Margin asset symbol
-                  example: 'USDC'
+                  example: "USDC"
                 marginAmount:
                   type: number
                   description: Margin amount to transfer
@@ -2790,8 +2790,8 @@ components:
                   items:
                     type: string
                   example:
-                    - 'FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7'
-                    - '5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux'
+                    - "FuueqefENiGEW6uMqZQgmwjzgpnb85EgUcZa5Em4PQh7"
+                    - "5Am6JkEHAjYG1itNWRMGpQrxvY8AaqkXCo1TZvenqVux"
                 threshold:
                   type: integer
                   format: uint32
@@ -2819,7 +2819,7 @@ components:
                 m:
                   type: string
                   description: Multisig account pubkey (base58)
-                  example: '6q8Y4f6g8tR4mQ1H2Zr3u9x7k9a4nS2Yx1g6Wm8qJ5tK'
+                  example: "6q8Y4f6g8tR4mQ1H2Zr3u9x7k9a4nS2Yx1g6Wm8qJ5tK"
                 a:
                   type: array
                   description: Inner actions to execute when the proposal is approved
@@ -3352,32 +3352,32 @@ components:
                         description: Multisig proposal created (non-terminal)
                         properties:
                           proposalCreated:
-                            $ref: '#/components/schemas/MultisigProposalEvent'
+                            $ref: "#/components/schemas/MultisigProposalEvent"
                       - title: proposalApproved
                         type: object
                         description: Multisig proposal approved (non-terminal)
                         properties:
                           proposalApproved:
-                            $ref: '#/components/schemas/MultisigProposalEvent'
+                            $ref: "#/components/schemas/MultisigProposalEvent"
                       - title: proposalReadyForExecution
                         type: object
                         description: Multisig proposal reached threshold and is awaiting time-lock (non-terminal)
                         properties:
                           proposalReadyForExecution:
-                            $ref: '#/components/schemas/MultisigProposalEvent'
+                            $ref: "#/components/schemas/MultisigProposalEvent"
                       - title: proposalExecuted
                         type: object
                         description: Multisig proposal executed atomically (terminal)
                         properties:
                           proposalExecuted:
-                            $ref: '#/components/schemas/MultisigProposalEvent'
+                            $ref: "#/components/schemas/MultisigProposalEvent"
                       - title: proposalFailed
                         type: object
                         description: Multisig proposal execution failed and was rolled back (terminal)
                         properties:
                           proposalFailed:
                             allOf:
-                              - $ref: '#/components/schemas/MultisigProposalEvent'
+                              - $ref: "#/components/schemas/MultisigProposalEvent"
                               - type: object
                                 properties:
                                   message:
@@ -3387,19 +3387,19 @@ components:
                         description: Multisig proposal expired before execution (terminal)
                         properties:
                           proposalExpired:
-                            $ref: '#/components/schemas/MultisigProposalEvent'
+                            $ref: "#/components/schemas/MultisigProposalEvent"
                       - title: proposalCancelled
                         type: object
                         description: Multisig proposal cancelled by proposer (terminal)
                         properties:
                           proposalCancelled:
-                            $ref: '#/components/schemas/MultisigProposalEvent'
+                            $ref: "#/components/schemas/MultisigProposalEvent"
                       - title: proposalRejected
                         type: object
-                        description: 'Multisig proposal rejected: threshold can no longer be met (terminal)'
+                        description: "Multisig proposal rejected: threshold can no longer be met (terminal)"
                         properties:
                           proposalRejected:
-                            $ref: '#/components/schemas/MultisigProposalEvent'
+                            $ref: "#/components/schemas/MultisigProposalEvent"
                       - title: error
                         type: object
                         description: Generic error
@@ -3422,7 +3422,7 @@ components:
         proposals:
           type: array
           items:
-            $ref: '#/components/schemas/MultisigProposalRow'
+            $ref: "#/components/schemas/MultisigProposalRow"
 
     MultisigProposalRow:
       type: object

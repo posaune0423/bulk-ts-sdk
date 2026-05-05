@@ -4,10 +4,10 @@
 pre-commit:
   commands:
     fmt:
-      glob: '*.{ts,js,json,md}'
+      glob: "*.{ts,js,json,md}"
       run: deno fmt {staged_files} && git add {staged_files}
     lint:
-      glob: '*.{ts,js}'
+      glob: "*.{ts,js}"
       run: deno lint {staged_files}
     test:
       run: deno task test

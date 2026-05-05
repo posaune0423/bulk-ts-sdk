@@ -1,31 +1,31 @@
-import type { WsHandler } from '../types/ws.ts'
+import type { WsHandler } from "../types/ws.ts";
 
 export class WsRouter {
-  private readonly handlers = new Map<string, Set<WsHandler<unknown>>>()
+  private readonly handlers = new Map<string, Set<WsHandler<unknown>>>();
 
   add<T>(topic: string, handler: WsHandler<T>): void {
-    let set = this.handlers.get(topic)
+    let set = this.handlers.get(topic);
     if (!set) {
-      set = new Set()
-      this.handlers.set(topic, set)
+      set = new Set();
+      this.handlers.set(topic, set);
     }
-    set.add(handler as WsHandler<unknown>)
+    set.add(handler as WsHandler<unknown>);
   }
 
   remove<T>(topic: string, handler: WsHandler<T>): void {
-    const set = this.handlers.get(topic)
+    const set = this.handlers.get(topic);
     if (set) {
-      set.delete(handler as WsHandler<unknown>)
+      set.delete(handler as WsHandler<unknown>);
       if (set.size === 0) {
-        this.handlers.delete(topic)
+        this.handlers.delete(topic);
       }
     }
   }
 
   dispatch(topic: string, message: unknown): void {
-    const set = this.handlers.get(topic)
+    const set = this.handlers.get(topic);
     if (!set || set.size === 0) {
-      return
+      return;
     }
     for (const handler of set) {
       // Use queueMicrotask to avoid blocking the WebSocket receive loop
@@ -33,13 +33,13 @@ export class WsRouter {
         Promise.resolve()
           .then(() => handler(message))
           .catch((error) => {
-            console.error(`Error in WsHandler for topic ${topic}:`, error)
-          })
-      })
+            console.error(`Error in WsHandler for topic ${topic}:`, error);
+          });
+      });
     }
   }
 
   clear(): void {
-    this.handlers.clear()
+    this.handlers.clear();
   }
 }

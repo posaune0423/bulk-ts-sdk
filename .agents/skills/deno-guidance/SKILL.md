@@ -4,7 +4,7 @@ description: Use when starting any Deno project, choosing packages, configuring 
 license: MIT
 metadata:
   author: denoland
-  version: '1.2'
+  version: "1.2"
 ---
 
 # Deno Development Guidance
@@ -83,9 +83,9 @@ The Deno standard library lives at `@std/` on JSR:
 ```
 
 ```typescript
-import { serve } from '@std/http'
-import { join } from '@std/path'
-import { assertEquals } from '@std/assert'
+import { serve } from "@std/http";
+import { join } from "@std/path";
+import { assertEquals } from "@std/assert";
 ```
 
 Always use `jsr:@std/*` for the standard library (the old URL-based imports are deprecated).
@@ -204,8 +204,8 @@ The old URL-based imports are deprecated. Always use `jsr:` imports with bare sp
 
 ```ts
 // ✅ Correct - use JSR and a bare specifier
-import { serve } from '@std/http'
-import { join } from '@std/path'
+import { serve } from "@std/http";
+import { join } from "@std/path";
 ```
 
 ```jsonc

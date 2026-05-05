@@ -3,7 +3,7 @@ name: Publish NPM
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 jobs:
   publish:
@@ -69,8 +69,8 @@ jobs:
         if: steps.npm_version.outputs.should_publish == 'true'
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "22.x"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Publish to npm
         if: steps.npm_version.outputs.should_publish == 'true'

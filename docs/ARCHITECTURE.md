@@ -6,11 +6,11 @@
 方式を採用します。
 
 ```ts
-const client = new BulkClient({ privateKey })
-client.market
-client.account
-client.trade
-client.ws
+const client = new BulkClient({ privateKey });
+client.market;
+client.account;
+client.trade;
+client.ws;
 ```
 
 public interface は simple に保ちつつ、内部実装は責務ごとに module を分離します。
@@ -39,17 +39,17 @@ SDK user は基本的に `BulkClient` だけを生成します。
 
 ```ts
 const client = new BulkClient({
-  privateKey: Deno.env.get('BULK_PRIVATE_KEY'),
-})
+  privateKey: Deno.env.get("BULK_PRIVATE_KEY"),
+});
 ```
 
 用途別に以下の namespace を使います。
 
 ```ts
-await client.market.ticker('BTC-USD')
-await client.account.fullAccount(user)
-await client.trade.placeLimitOrder(params)
-await client.ws.trades('BTC-USD', handler)
+await client.market.ticker("BTC-USD");
+await client.account.fullAccount(user);
+await client.trade.placeLimitOrder(params);
+await client.ws.trades("BTC-USD", handler);
 ```
 
 ### 2. Internal separation
@@ -92,8 +92,8 @@ Bulk Trade は REST と WebSocket の両方を提供します。 SDK では以�
   の両方に流せるようにします。
 
 ```ts
-await client.trade.placeLimitOrder(params, { via: 'http' })
-await client.trade.placeLimitOrder(params, { via: 'ws' })
+await client.trade.placeLimitOrder(params, { via: "http" });
+await client.trade.placeLimitOrder(params, { via: "ws" });
 ```
 
 default は HTTP とします。
@@ -190,17 +190,17 @@ bulk-ts-sdk/
 Deno package の public entry point です。 原則として SDK user が import するものは `mod.ts` から export します。
 
 ```ts
-export { BulkClient } from './client.ts'
-export * from './types/index.ts'
-export * from './errors.ts'
+export { BulkClient } from "./client.ts";
+export * from "./types/index.ts";
+export * from "./errors.ts";
 ```
 
 MVP では advanced module export は不要です。 将来的に必要であれば以下を追加します。
 
 ```ts
-export * from './http/index.ts'
-export * from './ws/index.ts'
-export * from './signing/index.ts'
+export * from "./http/index.ts";
+export * from "./ws/index.ts";
+export * from "./signing/index.ts";
 ```
 
 ## `src/client.ts`
@@ -216,46 +216,46 @@ export * from './signing/index.ts'
 
 ```ts
 const client = new BulkClient({
-  privateKey: Deno.env.get('BULK_PRIVATE_KEY'),
-})
-client.market
-client.account
-client.trade
-client.ws
-client.accountId
+  privateKey: Deno.env.get("BULK_PRIVATE_KEY"),
+});
+client.market;
+client.account;
+client.trade;
+client.ws;
+client.accountId;
 ```
 
 実装イメージ:
 
 ```ts
 export type BulkClientConfig = {
-  httpUrl?: string
-  wsUrl?: string
-  privateKey?: string
-  timeoutMs?: number
-  validateResponses?: boolean
-}
+  httpUrl?: string;
+  wsUrl?: string;
+  privateKey?: string;
+  timeoutMs?: number;
+  validateResponses?: boolean;
+};
 export class BulkClient {
-  readonly market: MarketClient
-  readonly account: AccountClient
-  readonly trade: TradeClient
-  readonly ws: WsClient
-  readonly accountId?: string
+  readonly market: MarketClient;
+  readonly account: AccountClient;
+  readonly trade: TradeClient;
+  readonly ws: WsClient;
+  readonly accountId?: string;
   constructor(config: BulkClientConfig = {}) {
     const http = new HttpTransport({
       baseUrl: config.httpUrl ?? BULK_DEFAULT_HTTP_URL,
       timeoutMs: config.timeoutMs ?? DEFAULT_TIMEOUT_MS,
-    })
+    });
     const ws = new WsClient({
       url: config.wsUrl ?? BULK_DEFAULT_WS_URL,
       timeoutMs: config.timeoutMs ?? DEFAULT_TIMEOUT_MS,
-    })
-    const signer = config.privateKey ? KeychainSigner.fromPrivateKey(config.privateKey) : undefined
-    this.market = new MarketClient({ http })
-    this.account = new AccountClient({ http })
-    this.ws = ws
-    this.trade = new TradeClient({ http, ws, signer })
-    this.accountId = signer?.account
+    });
+    const signer = config.privateKey ? KeychainSigner.fromPrivateKey(config.privateKey) : undefined;
+    this.market = new MarketClient({ http });
+    this.account = new AccountClient({ http });
+    this.ws = ws;
+    this.trade = new TradeClient({ http, ws, signer });
+    this.accountId = signer?.account;
   }
 }
 ```
@@ -265,10 +265,10 @@ export class BulkClient {
 SDK 全体の定数を定義します。 例:
 
 ```ts
-export const BULK_DEFAULT_HTTP_URL = 'https://exchange-api.bulk.trade/api/v1'
-export const BULK_DEFAULT_WS_URL = 'wss://exchange-ws1.bulk.trade'
-export const DEFAULT_TIMEOUT_MS = 10_000
-export const DEFAULT_WS_POST_TIMEOUT_MS = 10_000
+export const BULK_DEFAULT_HTTP_URL = "https://exchange-api.bulk.trade/api/v1";
+export const BULK_DEFAULT_WS_URL = "wss://exchange-ws1.bulk.trade";
+export const DEFAULT_TIMEOUT_MS = 10_000;
+export const DEFAULT_WS_POST_TIMEOUT_MS = 10_000;
 ```
 
 ## `src/errors.ts`
@@ -336,26 +336,26 @@ SDK の public type を定義します。 OpenAPI generated type を直接使え
 ### `types/common.ts`
 
 ```ts
-export type Side = 'buy' | 'sell'
-export type TimeInForce = 'GTC' | 'IOC' | 'ALO'
-export type TransportKind = 'http' | 'ws'
+export type Side = "buy" | "sell";
+export type TimeInForce = "GTC" | "IOC" | "ALO";
+export type TransportKind = "http" | "ws";
 export type CandleInterval =
-  | '10s'
-  | '1m'
-  | '3m'
-  | '5m'
-  | '15m'
-  | '30m'
-  | '1h'
-  | '2h'
-  | '4h'
-  | '6h'
-  | '8h'
-  | '12h'
-  | '1d'
-  | '3d'
-  | '1w'
-  | '1M'
+  | "10s"
+  | "1m"
+  | "3m"
+  | "5m"
+  | "15m"
+  | "30m"
+  | "1h"
+  | "2h"
+  | "4h"
+  | "6h"
+  | "8h"
+  | "12h"
+  | "1d"
+  | "3d"
+  | "1w"
+  | "1M";
 ```
 
 ### `types/market.ts`
@@ -363,14 +363,14 @@ export type CandleInterval =
 Market data 関連型を定義します。 基本的には generated type を re-export します。
 
 ```ts
-import type { components } from '../generated/openapi.ts'
-export type MarketInfo = components['schemas']['MarketInfo']
-export type MarketStats = components['schemas']['MarketStats']
-export type Candle = components['schemas']['Candle']
-export type BookUpdate = components['schemas']['BookUpdate']
-export type Level = components['schemas']['Level']
-export type ExchangeStats = components['schemas']['ExchangeStats']
-export type RiskSurfaces = components['schemas']['RiskSurfaces']
+import type { components } from "../generated/openapi.ts";
+export type MarketInfo = components["schemas"]["MarketInfo"];
+export type MarketStats = components["schemas"]["MarketStats"];
+export type Candle = components["schemas"]["Candle"];
+export type BookUpdate = components["schemas"]["BookUpdate"];
+export type Level = components["schemas"]["Level"];
+export type ExchangeStats = components["schemas"]["ExchangeStats"];
+export type RiskSurfaces = components["schemas"]["RiskSurfaces"];
 ```
 
 ### `types/account.ts`
@@ -378,15 +378,15 @@ export type RiskSurfaces = components['schemas']['RiskSurfaces']
 Account data 関連型を定義します。
 
 ```ts
-import type { components } from '../generated/openapi.ts'
-export type FullAccount = components['schemas']['FullAccount']
-export type OrderState = components['schemas']['OrderState']
-export type Fill = components['schemas']['Fill']
-export type ClosedPosition = components['schemas']['ClosedPosition']
-export type FundingPayment = components['schemas']['FundingPayment']
-export type OrderHistoryEntry = components['schemas']['OrderHistoryEntry']
-export type FeeState = components['schemas']['FeeState']
-export type MultisigProposalsSnapshot = components['schemas']['MultisigProposalsSnapshot']
+import type { components } from "../generated/openapi.ts";
+export type FullAccount = components["schemas"]["FullAccount"];
+export type OrderState = components["schemas"]["OrderState"];
+export type Fill = components["schemas"]["Fill"];
+export type ClosedPosition = components["schemas"]["ClosedPosition"];
+export type FundingPayment = components["schemas"]["FundingPayment"];
+export type OrderHistoryEntry = components["schemas"]["OrderHistoryEntry"];
+export type FeeState = components["schemas"]["FeeState"];
+export type MultisigProposalsSnapshot = components["schemas"]["MultisigProposalsSnapshot"];
 ```
 
 ### `types/trade.ts`
@@ -395,61 +395,61 @@ Trading input / response 型を定義します。
 
 ```ts
 export type LimitOrderParams = {
-  symbol: string
-  side: Side
-  price: number
-  size: number
-  tif?: TimeInForce
-  reduceOnly?: boolean
-  isolated?: boolean
-}
+  symbol: string;
+  side: Side;
+  price: number;
+  size: number;
+  tif?: TimeInForce;
+  reduceOnly?: boolean;
+  isolated?: boolean;
+};
 export type MarketOrderParams = {
-  symbol: string
-  side: Side
-  size: number
-  reduceOnly?: boolean
-  isolated?: boolean
-}
+  symbol: string;
+  side: Side;
+  size: number;
+  reduceOnly?: boolean;
+  isolated?: boolean;
+};
 export type CancelOrderParams = {
-  symbol: string
-  orderId: string
-}
+  symbol: string;
+  orderId: string;
+};
 export type CancelAllParams = {
-  symbols?: string[]
-}
+  symbols?: string[];
+};
 export type TradeOptions = {
-  via?: TransportKind
-  timeoutMs?: number
-  throwOnReject?: boolean
-}
+  via?: TransportKind;
+  timeoutMs?: number;
+  throwOnReject?: boolean;
+};
 ```
 
 `SignedTransaction` は SDK 内部で normalize 後の shape を使います。
 
 ```ts
 export type SignedTransaction = {
-  actions: unknown[]
-  nonce: number
-  account: string
-  signer: string
-  signature: string
-  orderId?: string
-  orderIds?: string[]
-}
+  actions: unknown[];
+  nonce: number;
+  account: string;
+  signer: string;
+  signature: string;
+  orderId?: string;
+  orderIds?: string[];
+};
 ```
 
 `bulk-keychain` 由来の transaction は `actions` が string の場合があるため、SDK 境界で normalize します。
 
 ```ts
 export type KeychainSignedTransaction = {
-  actions: string | unknown[]
-  nonce: number
-  account: string
-  signer: string
-  signature: string
-  orderId?: string
-  orderIds?: string[]
-}
+  actions: string | unknown[];
+  nonce: number;
+  account: string;
+  signer: string;
+  signature: string;
+  orderId?: string;
+  orderIds?: string[];
+};
 ```
 
 ### `types/ws.ts`
@@ -458,24 +458,24 @@ WebSocket subscription / message 型を定義します。
 
 ```ts
 export type WsSubscription =
-  | { type: 'ticker'; symbol: string }
-  | { type: 'candle'; symbol: string; interval: CandleInterval }
-  | { type: 'trades'; symbol: string }
-  | { type: 'risk'; symbol: string }
-  | { type: 'frontendContext' }
+  | { type: "ticker"; symbol: string }
+  | { type: "candle"; symbol: string; interval: CandleInterval }
+  | { type: "trades"; symbol: string }
+  | { type: "risk"; symbol: string }
+  | { type: "frontendContext" }
   | {
-    type: 'l2Snapshot'
-    symbol: string
-    nlevels?: number
-    aggregation?: number
+    type: "l2Snapshot";
+    symbol: string;
+    nlevels?: number;
+    aggregation?: number;
   }
-  | { type: 'l2Delta'; symbol: string }
-  | { type: 'account'; user: string | string[] }
-export type WsHandler<T> = (message: T) => void | Promise<void>
+  | { type: "l2Delta"; symbol: string }
+  | { type: "account"; user: string | string[] };
+export type WsHandler<T> = (message: T) => void | Promise<void>;
 export type SubscriptionHandle = {
-  topics: string[]
-  unsubscribe: () => Promise<void>
-}
+  topics: string[];
+  unsubscribe: () => Promise<void>;
+};
 ```
 
 ## Validation
@@ -507,15 +507,15 @@ WebSocket hot path
 ```ts
 export const limitOrderParamsSchema = v.object({
   symbol: v.string(),
-  side: v.union([v.literal('buy'), v.literal('sell')]),
+  side: v.union([v.literal("buy"), v.literal("sell")]),
   price: v.number(),
   size: v.number(),
   tif: v.optional(
-    v.union([v.literal('GTC'), v.literal('IOC'), v.literal('ALO')]),
+    v.union([v.literal("GTC"), v.literal("IOC"), v.literal("ALO")]),
   ),
   reduceOnly: v.optional(v.boolean()),
   isolated: v.optional(v.boolean()),
-})
+});
 ```
 
 ### Validation mode
@@ -524,9 +524,9 @@ export const limitOrderParamsSchema = v.object({
 
 ```ts
 export type BulkClientConfig = {
-  validateInputs?: boolean
-  validateResponses?: boolean
-}
+  validateInputs?: boolean;
+  validateResponses?: boolean;
+};
 ```
 
 MVP では `validateInputs` は有効、`validateResponses` は無効でもよいです。
@@ -548,13 +548,13 @@ REST の low-level transport です。 責務:
 
 ```ts
 export class HttpTransport {
-  constructor(config: HttpTransportConfig)
-  get<T>(path: string, options?: HttpRequestOptions): Promise<T>
+  constructor(config: HttpTransportConfig);
+  get<T>(path: string, options?: HttpRequestOptions): Promise<T>;
   post<T>(
     path: string,
     body?: unknown,
     options?: HttpRequestOptions,
-  ): Promise<T>
+  ): Promise<T>;
 }
 ```
 
@@ -562,60 +562,60 @@ export class HttpTransport {
 
 ```ts
 export type HttpTransportConfig = {
-  baseUrl: string
-  timeoutMs: number
-  headers?: Record<string, string>
-}
+  baseUrl: string;
+  timeoutMs: number;
+  headers?: Record<string, string>;
+};
 export type HttpRequestOptions = {
-  query?: Record<string, string | number | boolean | undefined>
-  signal?: AbortSignal
-  timeoutMs?: number
-}
+  query?: Record<string, string | number | boolean | undefined>;
+  signal?: AbortSignal;
+  timeoutMs?: number;
+};
 export class HttpTransport {
   constructor(private readonly config: HttpTransportConfig) {}
   async get<T>(path: string, options: HttpRequestOptions = {}): Promise<T> {
-    return await this.request<T>('GET', path, undefined, options)
+    return await this.request<T>("GET", path, undefined, options);
   }
   async post<T>(
     path: string,
     body?: unknown,
     options: HttpRequestOptions = {},
   ): Promise<T> {
-    return await this.request<T>('POST', path, body, options)
+    return await this.request<T>("POST", path, body, options);
   }
   private async request<T>(
-    method: 'GET' | 'POST',
+    method: "GET" | "POST",
     path: string,
     body: unknown,
     options: HttpRequestOptions,
   ): Promise<T> {
-    const url = buildUrl(this.config.baseUrl, path, options.query)
-    const controller = new AbortController()
-    const timeoutMs = options.timeoutMs ?? this.config.timeoutMs
-    const timer = setTimeout(() => controller.abort(), timeoutMs)
+    const url = buildUrl(this.config.baseUrl, path, options.query);
+    const controller = new AbortController();
+    const timeoutMs = options.timeoutMs ?? this.config.timeoutMs;
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
     try {
       const response = await fetch(url, {
         method,
         headers: {
-          'content-type': 'application/json',
+          "content-type": "application/json",
           ...this.config.headers,
         },
         body: body === undefined ? undefined : JSON.stringify(body),
         signal: options.signal ?? controller.signal,
-      })
-      const text = await response.text()
-      const json = text.length > 0 ? safeJsonParse(text) : undefined
+      });
+      const text = await response.text();
+      const json = text.length > 0 ? safeJsonParse(text) : undefined;
       if (!response.ok) {
-        throw new BulkHttpError(response.status, json)
+        throw new BulkHttpError(response.status, json);
       }
-      return json as T
+      return json as T;
     } catch (error) {
-      if (error instanceof DOMException && error.name === 'AbortError') {
-        throw new BulkTimeoutError(`HTTP request timed out: ${method} ${path}`)
+      if (error instanceof DOMException && error.name === "AbortError") {
+        throw new BulkTimeoutError(`HTTP request timed out: ${method} ${path}`);
       }
-      throw error
+      throw error;
     } finally {
-      clearTimeout(timer)
+      clearTimeout(timer);
     }
   }
 }
@@ -628,14 +628,14 @@ export class HttpTransport {
 ```ts
 export class MarketClient {
   constructor(private readonly deps: { http: HttpTransport }) {}
-  metrics(): Promise<Record<string, unknown>>
-  verify(): Promise<VerifyResult>
-  exchangeInfo(): Promise<MarketInfo[]>
-  ticker(symbol: string): Promise<MarketStats>
-  klines(params: KlinesParams): Promise<Candle[]>
-  l2Book(params: L2BookParams): Promise<BookUpdate>
-  stats(params?: ExchangeStatsParams): Promise<ExchangeStats>
-  riskSurfaces(market: string): Promise<RiskSurfaces>
+  metrics(): Promise<Record<string, unknown>>;
+  verify(): Promise<VerifyResult>;
+  exchangeInfo(): Promise<MarketInfo[]>;
+  ticker(symbol: string): Promise<MarketStats>;
+  klines(params: KlinesParams): Promise<Candle[]>;
+  l2Book(params: L2BookParams): Promise<BookUpdate>;
+  stats(params?: ExchangeStatsParams): Promise<ExchangeStats>;
+  riskSurfaces(market: string): Promise<RiskSurfaces>;
 }
 ```
 
@@ -672,15 +672,15 @@ async l2Book(params: L2BookParams): Promise<BookUpdate> {
 ```ts
 export class AccountClient {
   constructor(private readonly deps: { http: HttpTransport }) {}
-  fullAccount(user: string): Promise<FullAccount>
-  openOrders(user: string): Promise<OrderState[]>
-  fills(user: string): Promise<Fill[]>
-  positions(user: string): Promise<ClosedPosition[]>
-  fundingHistory(user: string): Promise<FundingPayment[]>
-  orderHistory(user: string): Promise<OrderHistoryEntry[]>
-  feeTier(user: string, params?: { symbol?: string }): Promise<FeeState>
-  feeState(): Promise<FeeState>
-  multisigProposals(pubkey: string): Promise<MultisigProposalsSnapshot>
+  fullAccount(user: string): Promise<FullAccount>;
+  openOrders(user: string): Promise<OrderState[]>;
+  fills(user: string): Promise<Fill[]>;
+  positions(user: string): Promise<ClosedPosition[]>;
+  fundingHistory(user: string): Promise<FundingPayment[]>;
+  orderHistory(user: string): Promise<OrderHistoryEntry[]>;
+  feeTier(user: string, params?: { symbol?: string }): Promise<FeeState>;
+  feeState(): Promise<FeeState>;
+  multisigProposals(pubkey: string): Promise<MultisigProposalsSnapshot>;
 }
 ```
 
@@ -729,27 +729,27 @@ export class TradeClient {
   submit(
     tx: SignedTransaction | KeychainSignedTransaction,
     options?: TradeOptions,
-  ): Promise<OrderResponse>
+  ): Promise<OrderResponse>;
   placeLimitOrder(
     params: LimitOrderParams,
     options?: TradeOptions,
-  ): Promise<OrderResponse>
+  ): Promise<OrderResponse>;
   placeMarketOrder(
     params: MarketOrderParams,
     options?: TradeOptions,
-  ): Promise<OrderResponse>
+  ): Promise<OrderResponse>;
   cancelOrder(
     params: CancelOrderParams,
     options?: TradeOptions,
-  ): Promise<OrderResponse>
+  ): Promise<OrderResponse>;
   cancelAll(
     params?: CancelAllParams,
     options?: TradeOptions,
-  ): Promise<OrderResponse>
+  ): Promise<OrderResponse>;
   batch(
     inputs: KeychainOrderInput[],
     options?: TradeOptions,
-  ): Promise<OrderResponse>
+  ): Promise<OrderResponse>;
 }
 ```
 
@@ -776,8 +776,8 @@ async submit(
 
 ```ts
 export function assertOrderResponseOk(response: OrderResponse): void {
-  if (response.status === 'error') {
-    throw new BulkTransactionRejectedError(response)
+  if (response.status === "error") {
+    throw new BulkTransactionRejectedError(response);
   }
 }
 ```
@@ -796,36 +796,36 @@ export function assertOrderResponseOk(response: OrderResponse): void {
 
 ```ts
 export class KeychainSigner {
-  readonly account: string
-  static fromPrivateKey(privateKey: string): KeychainSigner
-  sign(input: KeychainOrderInput): SignedTransaction
-  signGroup(inputs: KeychainOrderInput[]): SignedTransaction
-  signAll(inputs: KeychainOrderInput[]): SignedTransaction[]
+  readonly account: string;
+  static fromPrivateKey(privateKey: string): KeychainSigner;
+  sign(input: KeychainOrderInput): SignedTransaction;
+  signGroup(inputs: KeychainOrderInput[]): SignedTransaction;
+  signAll(inputs: KeychainOrderInput[]): SignedTransaction[];
 }
 ```
 
 実装イメージ:
 
 ```ts
-import { NativeKeypair, NativeSigner } from 'bulk-keychain'
+import { NativeKeypair, NativeSigner } from "bulk-keychain";
 export class KeychainSigner {
   private constructor(private readonly nativeSigner: NativeSigner) {}
   static fromPrivateKey(privateKey: string): KeychainSigner {
-    const keypair = NativeKeypair.fromBase58(privateKey)
-    const nativeSigner = new NativeSigner(keypair)
-    return new KeychainSigner(nativeSigner)
+    const keypair = NativeKeypair.fromBase58(privateKey);
+    const nativeSigner = new NativeSigner(keypair);
+    return new KeychainSigner(nativeSigner);
   }
   get account(): string {
-    return this.nativeSigner.pubkey
+    return this.nativeSigner.pubkey;
   }
   sign(input: KeychainOrderInput): SignedTransaction {
-    return normalizeSignedTransaction(this.nativeSigner.sign(input))
+    return normalizeSignedTransaction(this.nativeSigner.sign(input));
   }
   signGroup(inputs: KeychainOrderInput[]): SignedTransaction {
-    return normalizeSignedTransaction(this.nativeSigner.signGroup(inputs))
+    return normalizeSignedTransaction(this.nativeSigner.signGroup(inputs));
   }
   signAll(inputs: KeychainOrderInput[]): SignedTransaction[] {
-    return this.nativeSigner.signAll(inputs).map(normalizeSignedTransaction)
+    return this.nativeSigner.signAll(inputs).map(normalizeSignedTransaction);
   }
 }
 ```
@@ -849,14 +849,14 @@ export function normalizeSignedTransaction(
   signed: SignedTransaction | KeychainSignedTransaction,
 ): SignedTransaction {
   return {
-    actions: typeof signed.actions === 'string' ? safeJsonParse(signed.actions) : signed.actions,
+    actions: typeof signed.actions === "string" ? safeJsonParse(signed.actions) : signed.actions,
     nonce: signed.nonce,
     account: signed.account,
     signer: signed.signer,
     signature: signed.signature,
     orderId: signed.orderId,
     orderIds: signed.orderIds,
-  }
+  };
 }
 ```
 
@@ -871,18 +871,18 @@ export function toKeychainLimitOrder(
   params: LimitOrderParams,
 ): KeychainOrderInput {
   return {
-    type: 'order',
+    type: "order",
     symbol: params.symbol,
-    isBuy: params.side === 'buy',
+    isBuy: params.side === "buy",
     price: params.price,
     size: params.size,
     reduceOnly: params.reduceOnly ?? false,
     iso: params.isolated ?? false,
     orderType: {
-      type: 'limit',
-      tif: params.tif ?? 'GTC',
+      type: "limit",
+      tif: params.tif ?? "GTC",
     },
-  }
+  };
 }
 ```
 
@@ -893,16 +893,16 @@ export function toKeychainMarketOrder(
   params: MarketOrderParams,
 ): KeychainOrderInput {
   return {
-    type: 'order',
+    type: "order",
     symbol: params.symbol,
-    isBuy: params.side === 'buy',
+    isBuy: params.side === "buy",
     size: params.size,
     reduceOnly: params.reduceOnly ?? false,
     iso: params.isolated ?? false,
     orderType: {
-      type: 'market',
+      type: "market",
     },
-  }
+  };
 }
 ```
 
@@ -913,10 +913,10 @@ export function toKeychainCancelOrder(
   params: CancelOrderParams,
 ): KeychainOrderInput {
   return {
-    type: 'cancel',
+    type: "cancel",
     symbol: params.symbol,
     orderId: params.orderId,
-  }
+  };
 }
 ```
 
@@ -927,9 +927,9 @@ export function toKeychainCancelAll(
   params: CancelAllParams = {},
 ): KeychainOrderInput {
   return {
-    type: 'cancelAll',
+    type: "cancelAll",
     symbols: params.symbols ?? [],
-  }
+  };
 }
 ```
 
@@ -941,7 +941,7 @@ batch / raw transaction helper を置きます。 MVP では minimal でよい�
 export function createBatch(
   inputs: KeychainOrderInput[],
 ): KeychainOrderInput[] {
-  return inputs
+  return inputs;
 }
 ```
 
@@ -968,44 +968,44 @@ export function createBatch(
 
 ```ts
 export class WsClient {
-  connect(): Promise<void>
-  close(): Promise<void>
+  connect(): Promise<void>;
+  close(): Promise<void>;
   subscribe<T>(
     subscription: WsSubscription,
     handler: WsHandler<T>,
-  ): Promise<SubscriptionHandle>
+  ): Promise<SubscriptionHandle>;
   ticker(
     symbol: string,
     handler: WsHandler<TickerMessage>,
-  ): Promise<SubscriptionHandle>
+  ): Promise<SubscriptionHandle>;
   candles(
     params: CandleSubscriptionParams,
     handler: WsHandler<CandleMessage>,
-  ): Promise<SubscriptionHandle>
+  ): Promise<SubscriptionHandle>;
   trades(
     symbol: string,
     handler: WsHandler<TradeMessage>,
-  ): Promise<SubscriptionHandle>
+  ): Promise<SubscriptionHandle>;
   risk(
     symbol: string,
     handler: WsHandler<RiskMessage>,
-  ): Promise<SubscriptionHandle>
+  ): Promise<SubscriptionHandle>;
   frontendContext(
     handler: WsHandler<FrontendContextMessage>,
-  ): Promise<SubscriptionHandle>
+  ): Promise<SubscriptionHandle>;
   l2Snapshot(
     params: L2SnapshotSubscriptionParams,
     handler: WsHandler<L2SnapshotMessage>,
-  ): Promise<SubscriptionHandle>
+  ): Promise<SubscriptionHandle>;
   l2Delta(
     symbol: string,
     handler: WsHandler<L2DeltaMessage>,
-  ): Promise<SubscriptionHandle>
+  ): Promise<SubscriptionHandle>;
   account(
     user: string | string[],
     handler: WsHandler<AccountStreamEvent>,
-  ): Promise<SubscriptionHandle>
-  post(tx: SignedTransaction, options?: WsPostOptions): Promise<OrderResponse>
+  ): Promise<SubscriptionHandle>;
+  post(tx: SignedTransaction, options?: WsPostOptions): Promise<OrderResponse>;
 }
 ```
 
@@ -1014,12 +1014,12 @@ export class WsClient {
 `WsClient` は lazy connect を基本にします。 つまり、以下のどちらでも動くようにします。
 
 ```ts
-await client.ws.connect()
-await client.ws.trades('BTC-USD', handler)
+await client.ws.connect();
+await client.ws.trades("BTC-USD", handler);
 ```
 
 ```ts
-await client.ws.trades('BTC-USD', handler)
+await client.ws.trades("BTC-USD", handler);
 ```
 
 後者では `trades()` 内で未接続なら自動 connect します。
@@ -1061,8 +1061,8 @@ unsubscribe:
 ただし、API response から subscription id を取れない場合に備え、MVP では topic-based local unsubscribe を優先します。
 
 ```ts
-const sub = await client.ws.trades('BTC-USD', handler)
-await sub.unsubscribe()
+const sub = await client.ws.trades("BTC-USD", handler);
+await sub.unsubscribe();
 ```
 
 local unsubscribe の責務:
@@ -1078,24 +1078,24 @@ subscription object と topic mapping を定義します。
 ```ts
 export function topicOf(subscription: WsSubscription): string[] {
   switch (subscription.type) {
-    case 'ticker':
-      return [`ticker.${subscription.symbol}`]
-    case 'candle':
-      return [`candle.${subscription.symbol}.${subscription.interval}`]
-    case 'trades':
-      return [`trades.${subscription.symbol}`]
-    case 'risk':
-      return [`risk.${subscription.symbol}`]
-    case 'frontendContext':
-      return ['frontendContext']
-    case 'l2Snapshot':
-      return [`l2snapshot.${subscription.symbol}`]
-    case 'l2Delta':
-      return [`l2delta.${subscription.symbol}`]
-    case 'account':
+    case "ticker":
+      return [`ticker.${subscription.symbol}`];
+    case "candle":
+      return [`candle.${subscription.symbol}.${subscription.interval}`];
+    case "trades":
+      return [`trades.${subscription.symbol}`];
+    case "risk":
+      return [`risk.${subscription.symbol}`];
+    case "frontendContext":
+      return ["frontendContext"];
+    case "l2Snapshot":
+      return [`l2snapshot.${subscription.symbol}`];
+    case "l2Delta":
+      return [`l2delta.${subscription.symbol}`];
+    case "account":
       return Array.isArray(subscription.user)
         ? subscription.user.map((user) => `account.${user}`)
-        : [`account.${subscription.user}`]
+        : [`account.${subscription.user}`];
   }
 }
 ```
@@ -1105,12 +1105,12 @@ export function topicOf(subscription: WsSubscription): string[] {
 WebSocket message を topic 単位で handler に dispatch します。 内部構造:
 
 ```ts
-type HandlerSet = Set<WsHandler<unknown>>
+type HandlerSet = Set<WsHandler<unknown>>;
 export class WsRouter {
-  private readonly handlers = new Map<string, HandlerSet>()
-  add(topic: string, handler: WsHandler<unknown>): void
-  remove(topic: string, handler: WsHandler<unknown>): void
-  dispatch(topic: string, message: unknown): void
+  private readonly handlers = new Map<string, HandlerSet>();
+  add(topic: string, handler: WsHandler<unknown>): void;
+  remove(topic: string, handler: WsHandler<unknown>): void;
+  dispatch(topic: string, message: unknown): void;
 }
 ```
 
@@ -1275,25 +1275,25 @@ MVP では必須ではありません。 ただし、architecture 上は追加�
 将来的に以下を追加します。
 
 ```ts
-const book = await client.ws.orderBook('BTC-USD', {
+const book = await client.ws.orderBook("BTC-USD", {
   nlevels: 20,
   aggregation: 0.5,
-})
+});
 book.onUpdate((state) => {
-  console.log(state.bestBid, state.bestAsk)
-})
+  console.log(state.bestBid, state.bestAsk);
+});
 ```
 
 内部 state:
 
 ```ts
 class OrderBook {
-  private bids = new Map<number, Level>()
-  private asks = new Map<number, Level>()
-  apply(update: BookUpdate): void
-  snapshot(): OrderBookSnapshot
-  bestBid(): Level | undefined
-  bestAsk(): Level | undefined
+  private bids = new Map<number, Level>();
+  private asks = new Map<number, Level>();
+  apply(update: BookUpdate): void;
+  snapshot(): OrderBookSnapshot;
+  bestBid(): Level | undefined;
+  bestAsk(): Level | undefined;
 }
 ```
 
@@ -1308,23 +1308,23 @@ class OrderBook {
 将来的に以下を追加します。
 
 ```ts
-const account = await client.ws.watchAccount(user)
+const account = await client.ws.watchAccount(user);
 account.onUpdate((state) => {
-  console.log(state.margin)
-})
+  console.log(state.margin);
+});
 ```
 
 内部 state:
 
 ```ts
 type AccountState = {
-  user: string
-  margin?: Margin
-  positions: Map<string, Position>
-  openOrders: Map<string, OrderState>
-  fills: Fill[]
-  lastUpdatedAt?: number
-}
+  user: string;
+  margin?: Margin;
+  positions: Map<string, Position>;
+  openOrders: Map<string, OrderState>;
+  fills: Fill[];
+  lastUpdatedAt?: number;
+};
 ```
 
 account stream event を reducer に通して state を更新します。
@@ -1355,8 +1355,8 @@ BulkTransactionRejectedError
 
 ```ts
 function assertOrderResponseOk(response: OrderResponse): void {
-  if (response.status === 'error') {
-    throw new BulkTransactionRejectedError(response)
+  if (response.status === "error") {
+    throw new BulkTransactionRejectedError(response);
   }
 }
 ```
@@ -1364,7 +1364,7 @@ function assertOrderResponseOk(response: OrderResponse): void {
 default は reject 時に throw します。
 
 ```ts
-await client.trade.placeLimitOrder(params)
+await client.trade.placeLimitOrder(params);
 ```
 
 raw response が欲しい場合:
@@ -1372,7 +1372,7 @@ raw response が欲しい場合:
 ```ts
 const response = await client.trade.placeLimitOrder(params, {
   throwOnReject: false,
-})
+});
 ```
 
 ## Timeout handling
@@ -1380,12 +1380,12 @@ const response = await client.trade.placeLimitOrder(params, {
 HTTP / WS post は timeout をサポートします。
 
 ```ts
-await client.market.ticker('BTC-USD', {
+await client.market.ticker("BTC-USD", {
   timeoutMs: 5_000,
-})
+});
 await client.trade.placeLimitOrder(params, {
   timeoutMs: 5_000,
-})
+});
 ```
 
 MVP では method 単位の timeout option は trading / transport layer から実装し、market/account
@@ -1407,7 +1407,7 @@ export const env = createEnv({
     BULK_WS_URL: z.string().url().optional(),
   },
   runtimeEnv: Deno.env.toObject(),
-})
+});
 ```
 
 ## Deno Runtime Notes
@@ -1681,8 +1681,8 @@ nonce / signer / ws connection / subscriptions は client instance に閉じ込�
 high-level helper が未実装でも、raw submit で API に到達できる設計にします。
 
 ```ts
-await client.trade.submit(signedTransaction)
-await client.ws.post(signedTransaction)
+await client.trade.submit(signedTransaction);
+await client.ws.post(signedTransaction);
 ```
 
 ## Future Extensions
@@ -1712,10 +1712,10 @@ await client.ws.post(signedTransaction)
 ### Advanced package exports
 
 ```ts
-import { BulkClient } from 'bulk-ts-sdk'
-import { MarketClient } from 'bulk-ts-sdk/http'
-import { WsClient } from 'bulk-ts-sdk/ws'
-import { KeychainSigner } from 'bulk-ts-sdk/signing'
+import { BulkClient } from "bulk-ts-sdk";
+import { MarketClient } from "bulk-ts-sdk/http";
+import { WsClient } from "bulk-ts-sdk/ws";
+import { KeychainSigner } from "bulk-ts-sdk/signing";
 ```
 
 MVP では不要です。
