@@ -2800,7 +2800,7 @@ components:
                 timeLockSecs:
                   type: integer
                   format: uint32
-                  description: Mandatory delay between threshold-reached and execution, in seconds (0â€“30 days)
+                  description: Mandatory delay between threshold-reached and execution, in seconds (0–30 days)
                   example: 60
                 proposalLifetimeSecs:
                   type: integer

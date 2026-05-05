@@ -9,10 +9,12 @@
     "fmt": "deno fmt",
     "lint": "deno lint",
     "test": "deno test --allow-net --allow-env --allow-read --allow-ffi tests/unit tests/integration",
+    "test:coverage": "deno test --coverage=docs/coverage --allow-net --allow-env --allow-read --allow-ffi tests/unit tests/integration",
     "test:integration": "deno test --allow-net --allow-env --allow-read --allow-ffi tests/integration",
-    "test:e2e": "deno test --allow-net --allow-env --allow-read --allow-ffi tests/e2e",
+    "test:e2e": "deno test --env-file=.env --allow-net --allow-env --allow-read --allow-ffi tests/e2e",
     "build:npm": "deno run -A scripts/build_npm.ts",
     "generate:types": "deno run --allow-read --allow-write --allow-net scripts/generate_openapi_types.ts",
+    "update:docs": "deno run --allow-net --allow-write=docs/references/openapi.yml scripts/fetch_openapi.ts",
     "hook:install": "lefthook install"
   },
   "imports": {

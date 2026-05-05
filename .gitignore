@@ -1,4 +1,6 @@
 .env
 node_modules/
 npm
-coverage/
+/coverage/
+# Deno raw coverage profiles (lcov.info + html/ are committed under docs/coverage)
+docs/coverage/*.json
