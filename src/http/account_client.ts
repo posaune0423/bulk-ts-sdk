@@ -77,26 +77,13 @@ export class AccountClient {
   }
 
   async feeState(): Promise<FeeState> {
-    const rows = await this.deps.http.post<AccountData[]>("/account", {
-      type: "feeState",
-    });
-    const row = rows.find((r) => "feeState" in r);
-    if (!row || !("feeState" in row) || !row.feeState) {
-      throw new BulkDecodeError("feeState response is empty");
-    }
-    return row.feeState as FeeState;
+    return await this.deps.http.get<FeeState>("/feeState");
   }
 
   async multisigProposals(pubkey: string): Promise<MultisigProposalsSnapshot> {
-    const rows = await this.deps.http.post<AccountData[]>("/account", {
-      type: "multisigProposals",
-      pubkey,
-    });
-    const row = rows.find((r) => "multisigProposals" in r);
-    if (!row || !("multisigProposals" in row) || !row.multisigProposals) {
-      throw new BulkDecodeError("multisigProposals response is empty");
-    }
-    return row.multisigProposals as MultisigProposalsSnapshot;
+    return await this.deps.http.get<MultisigProposalsSnapshot>(
+      `/multisig/${encodeURIComponent(pubkey)}/proposals`,
+    );
   }
 
   private async queryAccount<T>(

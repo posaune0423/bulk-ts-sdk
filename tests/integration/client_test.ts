@@ -160,6 +160,35 @@ Deno.test("Integration: BulkClient - Market API (klines)", async () => {
   }
 });
 
+Deno.test("Integration: BulkClient - Market API (riskSurfaces)", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+  });
+
+  const mockResponse = new Response(
+    JSON.stringify({ symbol: "BTC-USD", regimes: [] }),
+    {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    },
+  );
+
+  const fetchStub = stub(globalThis, "fetch", () => Promise.resolve(mockResponse));
+
+  try {
+    await client.market.riskSurfaces("BTC-USD");
+
+    assertEquals(
+      fetchStub.calls[0].args[0].toString(),
+      "https://api.example.com/riskSurfaces?market=BTC-USD",
+    );
+    const requestInit = fetchStub.calls[0].args[1] as RequestInit;
+    assertEquals(requestInit?.method, "GET");
+  } finally {
+    fetchStub.restore();
+  }
+});
+
 Deno.test("Integration: BulkClient - Trade API (cancelOrder)", async () => {
   const client = new BulkClient({
     httpUrl: "https://api.example.com",
@@ -241,6 +270,63 @@ Deno.test("Integration: BulkClient - Account API (feeTier)", async () => {
   try {
     const fee = await client.account.feeTier("0x123");
     assertEquals(fee.globalPolicyActive, true);
+  } finally {
+    fetchStub.restore();
+  }
+});
+
+Deno.test("Integration: BulkClient - Account API (feeState)", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+  });
+
+  const mockResponse = new Response(
+    JSON.stringify({ symbol: "global", makerBps: 10, globalPolicyActive: true }),
+    {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    },
+  );
+
+  const fetchStub = stub(globalThis, "fetch", () => Promise.resolve(mockResponse));
+
+  try {
+    const fee = await client.account.feeState();
+
+    assertEquals(fee.globalPolicyActive, true);
+    assertEquals(fetchStub.calls[0].args[0].toString(), "https://api.example.com/feeState");
+    const requestInit = fetchStub.calls[0].args[1] as RequestInit;
+    assertEquals(requestInit?.method, "GET");
+  } finally {
+    fetchStub.restore();
+  }
+});
+
+Deno.test("Integration: BulkClient - Account API (multisigProposals)", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+  });
+
+  const mockResponse = new Response(
+    JSON.stringify({ multisig: "abc123", proposals: [] }),
+    {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    },
+  );
+
+  const fetchStub = stub(globalThis, "fetch", () => Promise.resolve(mockResponse));
+
+  try {
+    const proposals = await client.account.multisigProposals("abc123");
+
+    assertEquals(proposals.proposals, []);
+    assertEquals(
+      fetchStub.calls[0].args[0].toString(),
+      "https://api.example.com/multisig/abc123/proposals",
+    );
+    const requestInit = fetchStub.calls[0].args[1] as RequestInit;
+    assertEquals(requestInit?.method, "GET");
   } finally {
     fetchStub.restore();
   }

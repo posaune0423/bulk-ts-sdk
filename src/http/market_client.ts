@@ -64,8 +64,8 @@ export class MarketClient {
   }
 
   async riskSurfaces(market: string): Promise<RiskSurfaces> {
-    return await this.deps.http.get<RiskSurfaces>(
-      `/risk-surfaces/${encodeURIComponent(market)}`,
-    );
+    return await this.deps.http.get<RiskSurfaces>("/riskSurfaces", {
+      query: { market },
+    });
   }
 }
