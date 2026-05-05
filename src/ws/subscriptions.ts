@@ -12,8 +12,10 @@ export function topicOf(subscription: WsSubscription): string[] {
       return [`risk.${subscription.symbol}`];
     case "frontendContext":
       return ["frontendContext"];
-    case "l2Snapshot":
-      return [`l2snapshot.${subscription.symbol}`];
+    case "l2Snapshot": {
+      const baseTopic = `l2snapshot.${subscription.symbol}`;
+      return [subscription.nlevels === undefined ? baseTopic : `${baseTopic}.${subscription.nlevels}`];
+    }
     case "l2Delta":
       return [`l2delta.${subscription.symbol}`];
     case "account":

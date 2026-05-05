@@ -1,5 +1,6 @@
 import { assertEquals } from "@std/assert";
 import {
+  toKeychainAgentWalletCreation,
   toKeychainCancelAll,
   toKeychainCancelOrder,
   toKeychainLimitOrder,
@@ -70,5 +71,18 @@ Deno.test("toKeychainCancelAll builder", () => {
   assertEquals(result, {
     type: "cancelAll",
     symbols: ["BTC-USD", "ETH-USD"],
+  });
+});
+
+Deno.test("toKeychainAgentWalletCreation builder", () => {
+  const result = toKeychainAgentWalletCreation({
+    agent: "agent-wallet-public-key",
+    remove: false,
+  });
+
+  assertEquals(result, {
+    type: "agentWalletCreation",
+    agent: "agent-wallet-public-key",
+    remove: false,
   });
 });

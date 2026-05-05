@@ -35,8 +35,9 @@ Raw profile `*.json` files there are gitignored. See `docs/TEST.md`.
 
 This repository is an SDK. The minimum test guarantee is:
 
-- **E2E is the source of truth**: every Bulk API exposed by this SDK must be callable end-to-end via `tests/e2e/` using
-  the public client surface.
+- **E2E is the source of truth**: public Bulk APIs exposed by this SDK should be callable end-to-end via `tests/e2e/`
+  using the public client surface. Operational endpoints such as `/metrics` and `/verify` are excluded; see
+  `docs/TEST.md`.
 - **When adding/updating endpoints**: add/update E2E tests so the new/changed API is exercised at least once
   (happy-path). If the API requires signing, cover the signing flow too.
 - **Unit/integration are supportive**: use them for pure transforms/validation/normalization and error mapping, but they

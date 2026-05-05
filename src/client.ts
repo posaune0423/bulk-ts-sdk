@@ -14,8 +14,18 @@ export type BulkClientConfig = {
   httpUrl?: string;
   /** The URL for WebSocket connections. Defaults to production URL. */
   wsUrl?: string;
-  /** Optional private key for signing trades. If omitted, trade operations will fail. */
+  /**
+   * Private key used to sign order actions.
+   * Use the main wallet key for normal trading, or an agent wallet key with
+   * accountPublicKey when acting on behalf of a registered main account.
+   */
   privateKey?: string;
+  /**
+   * Optional account public key (base58) to act on.
+   * Only required when privateKey belongs to an agent wallet instead of the
+   * target main account.
+   */
+  accountPublicKey?: string;
   /** Request timeout in milliseconds. Defaults to 10 seconds. */
   timeoutMs?: number;
   /** Whether to perform runtime validation on API responses. */
@@ -35,7 +45,12 @@ export class BulkClient {
   readonly trade: TradeClient;
   /** Client for WebSocket-based real-time subscriptions. */
   readonly ws: WsClient;
-  /** The account ID (address) derived from the provided private key, if any. */
+  /**
+   * Account public key used for account queries and signed actions.
+   * Derived from privateKey unless accountPublicKey is explicitly provided.
+   */
+  readonly accountPublicKey?: string;
+  /** Backward-compatible account identifier alias used by venue integrations. */
   readonly accountId?: string;
 
   /**
@@ -53,12 +68,15 @@ export class BulkClient {
       timeoutMs: config.timeoutMs ?? DEFAULT_TIMEOUT_MS,
     });
 
-    const signer = config.privateKey ? KeychainSigner.fromPrivateKey(config.privateKey) : undefined;
+    const signer = config.privateKey
+      ? KeychainSigner.fromPrivateKey(config.privateKey, config.accountPublicKey)
+      : undefined;
 
     this.market = new MarketClient({ http });
     this.account = new AccountClient({ http });
     this.ws = ws;
     this.trade = new TradeClient({ http, ws, signer });
-    this.accountId = signer?.account;
+    this.accountPublicKey = signer?.accountPublicKey;
+    this.accountId = this.accountPublicKey;
   }
 }

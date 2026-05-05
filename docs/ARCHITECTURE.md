@@ -222,7 +222,7 @@ client.market;
 client.account;
 client.trade;
 client.ws;
-client.accountId;
+client.accountPublicKey;
 ```
 
 実装イメージ:
@@ -232,6 +232,7 @@ export type BulkClientConfig = {
   httpUrl?: string;
   wsUrl?: string;
   privateKey?: string;
+  accountPublicKey?: string;
   timeoutMs?: number;
   validateResponses?: boolean;
 };
@@ -240,7 +241,7 @@ export class BulkClient {
   readonly account: AccountClient;
   readonly trade: TradeClient;
   readonly ws: WsClient;
-  readonly accountId?: string;
+  readonly accountPublicKey?: string;
   constructor(config: BulkClientConfig = {}) {
     const http = new HttpTransport({
       baseUrl: config.httpUrl ?? BULK_DEFAULT_HTTP_URL,
@@ -250,12 +251,14 @@ export class BulkClient {
       url: config.wsUrl ?? BULK_DEFAULT_WS_URL,
       timeoutMs: config.timeoutMs ?? DEFAULT_TIMEOUT_MS,
     });
-    const signer = config.privateKey ? KeychainSigner.fromPrivateKey(config.privateKey) : undefined;
+    const signer = config.privateKey
+      ? KeychainSigner.fromPrivateKey(config.privateKey, config.accountPublicKey)
+      : undefined;
     this.market = new MarketClient({ http });
     this.account = new AccountClient({ http });
     this.ws = ws;
     this.trade = new TradeClient({ http, ws, signer });
-    this.accountId = signer?.account;
+    this.accountPublicKey = signer?.accountPublicKey;
   }
 }
 ```
@@ -790,14 +793,16 @@ export function assertOrderResponseOk(response: OrderResponse): void {
 に閉じ込めます。 責務:
 
 - private key から signer を生成
+- target account public key を保持する
 - order input を署名
 - batch input を署名
+- native `bulk-keychain` が target account signing を提供しない場合は、別accountへの署名をlocalで拒否する
 - signed transaction を normalize 想定 API:
 
 ```ts
 export class KeychainSigner {
-  readonly account: string;
-  static fromPrivateKey(privateKey: string): KeychainSigner;
+  readonly accountPublicKey: string;
+  static fromPrivateKey(privateKey: string, targetAccountPublicKey?: string): KeychainSigner;
   sign(input: KeychainOrderInput): SignedTransaction;
   signGroup(inputs: KeychainOrderInput[]): SignedTransaction;
   signAll(inputs: KeychainOrderInput[]): SignedTransaction[];
@@ -809,23 +814,37 @@ export class KeychainSigner {
 ```ts
 import { NativeKeypair, NativeSigner } from "bulk-keychain";
 export class KeychainSigner {
-  private constructor(private readonly nativeSigner: NativeSigner) {}
-  static fromPrivateKey(privateKey: string): KeychainSigner {
+  private constructor(
+    private readonly nativeSigner: NativeSigner,
+    private readonly targetAccountPublicKey?: string,
+  ) {}
+  static fromPrivateKey(privateKey: string, targetAccountPublicKey?: string): KeychainSigner {
     const keypair = NativeKeypair.fromBase58(privateKey);
     const nativeSigner = new NativeSigner(keypair);
-    return new KeychainSigner(nativeSigner);
+    return new KeychainSigner(nativeSigner, targetAccountPublicKey);
   }
-  get account(): string {
-    return this.nativeSigner.pubkey;
+  get accountPublicKey(): string {
+    return this.targetAccountPublicKey ?? this.nativeSigner.pubkey;
   }
   sign(input: KeychainOrderInput): SignedTransaction {
-    return normalizeSignedTransaction(this.nativeSigner.sign(input));
+    return this.signActions([input]);
   }
   signGroup(inputs: KeychainOrderInput[]): SignedTransaction {
-    return normalizeSignedTransaction(this.nativeSigner.signGroup(inputs));
+    return this.signActions(inputs);
   }
   signAll(inputs: KeychainOrderInput[]): SignedTransaction[] {
     return this.nativeSigner.signAll(inputs).map(normalizeSignedTransaction);
+  }
+  private signActions(inputs: KeychainOrderInput[]): SignedTransaction {
+    this.assertCanSignTargetAccount();
+    return normalizeSignedTransaction(
+      this.nativeSigner.signOrder(inputs, Date.now() * 1000),
+    );
+  }
+  private assertCanSignTargetAccount(): void {
+    if (this.targetAccountPublicKey && this.targetAccountPublicKey !== this.nativeSigner.pubkey) {
+      throw new Error("target-account signing support is required");
+    }
   }
 }
 ```
@@ -851,6 +870,7 @@ export function normalizeSignedTransaction(
   return {
     actions: typeof signed.actions === "string" ? safeJsonParse(signed.actions) : signed.actions,
     nonce: signed.nonce,
+    // API wire field: target account public key.
     account: signed.account,
     signer: signed.signer,
     signature: signed.signature,

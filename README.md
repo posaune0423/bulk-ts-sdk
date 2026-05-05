@@ -69,41 +69,188 @@ pnpm add bulk-ts-sdk
 import { BulkClient } from "bulk-ts-sdk";
 
 const client = new BulkClient({
-  privateKey: "0x...", // Required for trading
+  privateKey: "main-wallet-private-key",
+});
+```
+
+The client can be used without a key for public market data. A `privateKey` is required only when you call signing
+methods such as `client.trade.placeLimitOrder()`, `client.trade.cancelOrder()`, or `client.trade.manageAgentWallet()`.
+
+| Option             | Required | Purpose                                                                                      |
+| :----------------- | :------- | :------------------------------------------------------------------------------------------- |
+| `httpUrl`          | No       | HTTP API base URL. Defaults to Bulk production.                                              |
+| `wsUrl`            | No       | WebSocket API URL. Defaults to Bulk production.                                              |
+| `privateKey`       | No       | Wallet private key used for signing trade and agent-wallet actions.                          |
+| `accountPublicKey` | No       | Target account public key. Only needed when signing with an agent wallet for a main account. |
+| `timeoutMs`        | No       | Request timeout in milliseconds.                                                             |
+
+For normal trading, use the main wallet private key as `privateKey`. In that case `client.accountPublicKey` is derived
+from the signer and can be reused for account queries.
+
+```typescript
+const client = new BulkClient({
+  privateKey: Deno.env.get("PRIVATE_KEY"),
+});
+
+const accountPublicKey = client.accountPublicKey;
+if (!accountPublicKey) throw new Error("privateKey is required for account-scoped examples");
+```
+
+When signing with a registered agent wallet, pass the agent wallet key as `privateKey` and the target main wallet pubkey
+as `accountPublicKey`. Target-account order signing depends on native `bulk-keychain` support for signing that target
+account; unsupported native builds fail before submitting an invalid signature.
+
+```typescript
+const client = new BulkClient({
+  privateKey: Deno.env.get("AGENT_WALLET_PRIVATE_KEY"),
+  accountPublicKey: "main-wallet-public-key",
 });
 ```
 
 ### Fetch Market Data
 
 ```typescript
-// Get current ticker for a symbol
-const ticker = await client.market.ticker("BTC-USD");
-console.log(`Current Price: ${ticker.last}`);
-
-// Get exchange information
 const info = await client.market.exchangeInfo();
+const ticker = await client.market.ticker("BTC-USD");
+const candles = await client.market.klines({
+  symbol: "BTC-USD",
+  interval: "1m",
+  limit: 100,
+});
+const book = await client.market.l2Book({
+  symbol: "BTC-USD",
+  nlevels: 20,
+});
+const stats = await client.market.stats({ symbol: "BTC-USD" });
+const risk = await client.market.riskSurfaces("BTC-USD");
+
+console.log(info.length, ticker.lastPrice, candles.length, book, stats, risk);
 ```
 
-### Trading Operations
+### Read Account Data
+
+Account history methods take the account public key you want to inspect. If the client was created with a main wallet
+`privateKey`, use `client.accountPublicKey`.
 
 ```typescript
-// Place a limit order
+const accountPublicKey = client.accountPublicKey;
+if (!accountPublicKey) throw new Error("privateKey is required");
+
+const full = await client.account.fullAccount(accountPublicKey);
+const openOrders = await client.account.openOrders(accountPublicKey);
+const fills = await client.account.fills(accountPublicKey);
+const positions = await client.account.positions(accountPublicKey);
+const funding = await client.account.fundingHistory(accountPublicKey);
+const orders = await client.account.orderHistory(accountPublicKey);
+const feeTier = await client.account.feeTier(accountPublicKey);
+
+// Global fee state does not require an account public key.
+const feeState = await client.account.feeState();
+
+console.log({ full, openOrders, fills, positions, funding, orders, feeTier, feeState });
+```
+
+Multisig proposal snapshots are available when you already have a multisig account public key:
+
+```typescript
+const proposals = await client.account.multisigProposals("multisig-account-public-key");
+console.log(proposals.proposals);
+```
+
+### Trade
+
+```typescript
 const order = await client.trade.placeLimitOrder({
   symbol: "BTC-USD",
   side: "buy",
   price: 50000,
   size: 0.1,
+  tif: "GTC",
 });
 
-console.log(`Order ID: ${order.response.data.oid}`);
+const firstStatus = order.response.data.statuses[0];
+if (firstStatus && "resting" in firstStatus && firstStatus.resting) {
+  console.log(`Order ID: ${firstStatus.resting.oid}`);
+}
+
+await client.trade.cancelAll({ symbols: ["BTC-USD"] });
+```
+
+Market orders, single-order cancel, and batch submission use the same signer:
+
+```typescript
+await client.trade.placeMarketOrder({
+  symbol: "BTC-USD",
+  side: "sell",
+  size: 0.05,
+});
+
+await client.trade.cancelOrder({
+  symbol: "BTC-USD",
+  orderId: "order-id",
+});
+
+import { toKeychainCancelOrder, toKeychainLimitOrder } from "bulk-ts-sdk";
+
+await client.trade.batch([
+  toKeychainLimitOrder({
+    symbol: "BTC-USD",
+    side: "buy",
+    price: 49000,
+    size: 0.001,
+  }),
+  toKeychainCancelOrder({
+    symbol: "BTC-USD",
+    orderId: "order-id",
+  }),
+]);
+```
+
+### Agent Wallet Management
+
+Register and remove an agent wallet with the main wallet signer:
+
+```typescript
+await client.trade.manageAgentWallet({
+  agent: "agent-wallet-public-key",
+  remove: false,
+});
+
+await client.trade.manageAgentWallet({
+  agent: "agent-wallet-public-key",
+  remove: true,
+});
 ```
 
 ### Real-time Subscriptions (WebSocket)
 
 ```typescript
-client.ws.subscribe({ type: "ticker", symbol: "BTC-USD" }, (data) => {
+await client.ws.connect();
+
+const subscription = await client.ws.subscribe({ type: "ticker", symbol: "BTC-USD" }, (data) => {
   console.log("Real-time Update:", data);
 });
+
+await subscription.unsubscribe();
+await client.ws.close();
+```
+
+You can also submit signed trades over WebSocket:
+
+```typescript
+await client.ws.connect();
+
+const order = await client.trade.placeLimitOrder(
+  {
+    symbol: "BTC-USD",
+    side: "buy",
+    price: 50000,
+    size: 0.001,
+  },
+  { via: "ws" },
+);
+
+console.log(order.status);
 ```
 
 ---
@@ -122,6 +269,25 @@ The `BulkClient` is organized into focused sub-clients:
 ---
 
 ## 🧪 Testing
+
+E2E tests read `.env` through Deno's `--env-file=.env` support.
+
+```bash
+cp .env.example .env
+```
+
+Required for normal account/trade E2E:
+
+```bash
+PRIVATE_KEY=main-wallet-private-key
+```
+
+Optional E2E variables:
+
+```bash
+AGENT_WALLET_PRIVATE_KEY=agent-wallet-private-key
+MULTISIG_PUBKEY=multisig-account-public-key
+```
 
 ```bash
 # Run all tests

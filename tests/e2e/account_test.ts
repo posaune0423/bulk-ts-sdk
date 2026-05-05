@@ -10,52 +10,52 @@ const client = new BulkClient({
 });
 
 Deno.test("E2E: Account - fullAccount", async () => {
-  const accountId = client.accountId;
-  assert(accountId !== undefined, "AccountId should be derived from private key");
-  const account = await client.account.fullAccount(accountId);
+  const accountPublicKey = client.accountPublicKey;
+  assert(accountPublicKey !== undefined, "accountPublicKey should be derived from private key");
+  const account = await client.account.fullAccount(accountPublicKey);
   assert(account !== undefined);
   assert(account.kind !== undefined);
 });
 
 Deno.test("E2E: Account - openOrders", async () => {
-  const accountId = client.accountId;
-  assert(accountId !== undefined);
-  const orders = await client.account.openOrders(accountId);
+  const accountPublicKey = client.accountPublicKey;
+  assert(accountPublicKey !== undefined);
+  const orders = await client.account.openOrders(accountPublicKey);
   assert(Array.isArray(orders));
 });
 
 Deno.test("E2E: Account - fills", async () => {
-  const accountId = client.accountId;
-  assert(accountId !== undefined);
-  const fills = await client.account.fills(accountId);
+  const accountPublicKey = client.accountPublicKey;
+  assert(accountPublicKey !== undefined);
+  const fills = await client.account.fills(accountPublicKey);
   assert(Array.isArray(fills));
 });
 
 Deno.test("E2E: Account - positions", async () => {
-  const accountId = client.accountId;
-  assert(accountId !== undefined);
-  const positions = await client.account.positions(accountId);
+  const accountPublicKey = client.accountPublicKey;
+  assert(accountPublicKey !== undefined);
+  const positions = await client.account.positions(accountPublicKey);
   assert(Array.isArray(positions));
 });
 
 Deno.test("E2E: Account - fundingHistory", async () => {
-  const accountId = client.accountId;
-  assert(accountId !== undefined);
-  const funding = await client.account.fundingHistory(accountId);
+  const accountPublicKey = client.accountPublicKey;
+  assert(accountPublicKey !== undefined);
+  const funding = await client.account.fundingHistory(accountPublicKey);
   assert(Array.isArray(funding));
 });
 
 Deno.test("E2E: Account - orderHistory", async () => {
-  const accountId = client.accountId;
-  assert(accountId !== undefined);
-  const orders = await client.account.orderHistory(accountId);
+  const accountPublicKey = client.accountPublicKey;
+  assert(accountPublicKey !== undefined);
+  const orders = await client.account.orderHistory(accountPublicKey);
   assert(Array.isArray(orders));
 });
 
 Deno.test("E2E: Account - feeTier", async () => {
-  const accountId = client.accountId;
-  assert(accountId !== undefined);
-  const fee = await client.account.feeTier(accountId);
+  const accountPublicKey = client.accountPublicKey;
+  assert(accountPublicKey !== undefined);
+  const fee = await client.account.feeTier(accountPublicKey);
   assert(fee !== undefined);
 });
 

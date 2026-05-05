@@ -4,6 +4,15 @@
   "exports": "./src/mod.ts",
   "description": "Unofficial TypeScript SDK for Bulk Exchange.",
   "license": "MIT",
+  "publish": {
+    "include": [
+      "LICENSE",
+      "README.md",
+      "src/**/*.ts",
+      "src/**/*.js",
+      "src/**/*.node"
+    ]
+  },
   "tasks": {
     "check": "deno check src/mod.ts",
     "fmt": "deno fmt",

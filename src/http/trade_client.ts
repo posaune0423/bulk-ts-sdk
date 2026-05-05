@@ -1,6 +1,7 @@
 import { BulkTransactionRejectedError } from "../errors.ts";
 import { normalizeSignedTransaction } from "../signing/normalize_signed_transaction.ts";
 import {
+  toKeychainAgentWalletCreation,
   toKeychainCancelAll,
   toKeychainCancelOrder,
   toKeychainLimitOrder,
@@ -10,6 +11,7 @@ import type { HttpTransport } from "./http_transport.ts";
 import type { WsClient } from "../ws/ws_client.ts";
 import type { KeychainSigner } from "../signing/keychain_signer.ts";
 import type {
+  AgentWalletParams,
   CancelAllParams,
   CancelOrderParams,
   KeychainOrderInput,
@@ -31,10 +33,10 @@ export class TradeClient {
   ) {}
 
   async submit(
-    tx: SignedTransaction | KeychainSignedTransaction,
+    transaction: SignedTransaction | KeychainSignedTransaction,
     options: TradeOptions = {},
   ): Promise<OrderResponse> {
-    const normalized = normalizeSignedTransaction(tx);
+    const normalized = normalizeSignedTransaction(transaction);
     const via = options.via ?? "http";
 
     let response: OrderResponse;
@@ -59,40 +61,40 @@ export class TradeClient {
     params: LimitOrderParams,
     options: TradeOptions = {},
   ): Promise<OrderResponse> {
-    const signer = this.ensureSigner();
     const input = toKeychainLimitOrder(params);
-    const tx = signer.sign(input);
-    return await this.submit(tx, options);
+    return await this.submitSignedAction(input, options);
   }
 
   async placeMarketOrder(
     params: MarketOrderParams,
     options: TradeOptions = {},
   ): Promise<OrderResponse> {
-    const signer = this.ensureSigner();
     const input = toKeychainMarketOrder(params);
-    const tx = signer.sign(input);
-    return await this.submit(tx, options);
+    return await this.submitSignedAction(input, options);
   }
 
   async cancelOrder(
     params: CancelOrderParams,
     options: TradeOptions = {},
   ): Promise<OrderResponse> {
-    const signer = this.ensureSigner();
     const input = toKeychainCancelOrder(params);
-    const tx = signer.sign(input);
-    return await this.submit(tx, options);
+    return await this.submitSignedAction(input, options);
   }
 
   async cancelAll(
     params: CancelAllParams = {},
     options: TradeOptions = {},
   ): Promise<OrderResponse> {
-    const signer = this.ensureSigner();
     const input = toKeychainCancelAll(params);
-    const tx = signer.sign(input);
-    return await this.submit(tx, options);
+    return await this.submitSignedAction(input, options);
+  }
+
+  async manageAgentWallet(
+    params: AgentWalletParams,
+    options: TradeOptions = {},
+  ): Promise<OrderResponse> {
+    const input = toKeychainAgentWalletCreation(params);
+    return await this.submitSignedAction(input, options);
   }
 
   async batch(
@@ -100,8 +102,17 @@ export class TradeClient {
     options: TradeOptions = {},
   ): Promise<OrderResponse> {
     const signer = this.ensureSigner();
-    const tx = signer.signGroup(inputs);
-    return await this.submit(tx, options);
+    const signedTransaction = signer.signGroup(inputs);
+    return await this.submit(signedTransaction, options);
+  }
+
+  private async submitSignedAction(
+    input: KeychainOrderInput,
+    options: TradeOptions,
+  ): Promise<OrderResponse> {
+    const signer = this.ensureSigner();
+    const signedTransaction = signer.sign(input);
+    return await this.submit(signedTransaction, options);
   }
 
   private ensureSigner(): KeychainSigner {

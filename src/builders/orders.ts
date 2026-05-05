@@ -1,10 +1,19 @@
 import type {
+  AgentWalletParams,
   CancelAllParams,
   CancelOrderParams,
   KeychainOrderInput,
   LimitOrderParams,
   MarketOrderParams,
 } from "../types/trade.ts";
+
+export function toKeychainAgentWalletCreation(params: AgentWalletParams): KeychainOrderInput {
+  return {
+    type: "agentWalletCreation",
+    agent: params.agent,
+    remove: params.remove,
+  };
+}
 
 export function toKeychainLimitOrder(params: LimitOrderParams): KeychainOrderInput {
   return {

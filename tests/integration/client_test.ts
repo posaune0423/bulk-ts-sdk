@@ -1,8 +1,10 @@
-import { assertEquals, assertRejects } from "@std/assert";
+import { assert, assertEquals, assertRejects } from "@std/assert";
 import { stub } from "@std/testing/mock";
 import { BulkClient } from "../../src/client.ts";
 
 const DUMMY_PRIVATE_KEY = "J1vPZ1J1vPZ1J1vPZ1J1vPZ1J1vPZ1J1vPZ1J1vPZ1J1";
+const SECOND_DUMMY_PRIVATE_KEY =
+  "2AXDGYSE4f2sz7tvMMzyHvUfcoJmxudvdhBcmiUSo6iuCXagjUCKEQF21awZnUGxmwD4m9vGXuC3qieHXJQHAcT";
 
 Deno.test("Integration: BulkClient - Market API (GET)", async () => {
   const client = new BulkClient({
@@ -318,18 +320,55 @@ Deno.test("Integration: BulkClient - Account API (multisigProposals)", async () 
   const fetchStub = stub(globalThis, "fetch", () => Promise.resolve(mockResponse));
 
   try {
-    const proposals = await client.account.multisigProposals("abc123");
+    const rawPubkey = "abc/123==";
+    const proposals = await client.account.multisigProposals(rawPubkey);
 
     assertEquals(proposals.proposals, []);
     assertEquals(
       fetchStub.calls[0].args[0].toString(),
-      "https://api.example.com/multisig/abc123/proposals",
+      `https://api.example.com/multisig/${encodeURIComponent(rawPubkey)}/proposals`,
     );
     const requestInit = fetchStub.calls[0].args[1] as RequestInit;
     assertEquals(requestInit?.method, "GET");
   } finally {
     fetchStub.restore();
   }
+});
+
+Deno.test("Integration: BulkClient - exposes derived accountPublicKey", () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+    privateKey: DUMMY_PRIVATE_KEY,
+  });
+
+  assertEquals(typeof client.accountPublicKey, "string");
+});
+
+Deno.test("Integration: BulkClient - rejects target account signing when native keychain cannot sign it", async () => {
+  const targetAccount = new BulkClient({
+    httpUrl: "https://api.example.com",
+    privateKey: SECOND_DUMMY_PRIVATE_KEY,
+  }).accountPublicKey;
+  assert(targetAccount !== undefined);
+
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+    privateKey: DUMMY_PRIVATE_KEY,
+    accountPublicKey: targetAccount,
+  });
+
+  assertEquals(client.accountPublicKey, targetAccount);
+  await assertRejects(
+    () =>
+      client.trade.placeLimitOrder({
+        symbol: "BTC-USD",
+        side: "buy",
+        price: 100000,
+        size: 0.1,
+      }),
+    Error,
+    "target-account signing support",
+  );
 });
 
 Deno.test("Integration: BulkClient - Error Handling", async () => {
