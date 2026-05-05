@@ -47,3 +47,8 @@ Deno.test("E2E: Market - stats", async () => {
   const stats = await client.market.stats({ symbol: "BTC-USD" });
   assert(stats !== undefined);
 });
+
+Deno.test("E2E: Market - riskSurfaces", async () => {
+  const riskSurfaces = await client.market.riskSurfaces("BTC-USD");
+  assert(riskSurfaces !== undefined);
+});

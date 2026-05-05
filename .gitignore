@@ -1,4 +1,7 @@
 .env
 node_modules/
 npm
-coverage/
+/coverage/
+# Deno coverage under docs/: commit lcov.info only. Raw profiles + HTML (many files) stay local.
+docs/coverage/*.json
+docs/coverage/html/

@@ -35,6 +35,7 @@ await build({
       "Unofficial TypeScript SDK for Bulk Exchange, providing high-performance, type-safe access to market data and trading operations.",
     author: "posaune0423",
     license: "MIT",
+    types: "./esm/mod.d.ts",
     sideEffects: false,
     repository: {
       type: "git",
@@ -47,6 +48,25 @@ await build({
     engines: {
       node: ">=18.0.0",
     },
+    exports: {
+      ".": {
+        import: {
+          types: "./esm/mod.d.ts",
+          default: "./esm/mod.js",
+        },
+        require: {
+          types: "./script/mod.d.ts",
+          default: "./script/mod.js",
+        },
+      },
+    },
+    files: [
+      "esm",
+      "script",
+      "vendor",
+      "README.md",
+      "LICENSE",
+    ],
   },
   async postBuild(): Promise<void> {
     // Copy README and LICENSE
@@ -57,21 +77,31 @@ await build({
       // Ignore if LICENSE is missing
     }
 
-    // Copy vendor directory into npm output
-    // We need to maintain the relative structure for native modules
+    // Copy vendor directory into every runtime location generated code imports from.
     const vendorDir = "./src/vendor";
-    const outVendorDir = "./npm/vendor";
-
-    await emptyDir(outVendorDir);
+    const vendorTargets = ["./npm/vendor", "./npm/esm/vendor", "./npm/script/vendor"];
+    const bulkKeychainEntries: string[] = [];
 
     for await (const entry of Deno.readDir(path.join(vendorDir, "bulk-keychain"))) {
       if (entry.isFile) {
-        const src = path.join(vendorDir, "bulk-keychain", entry.name);
-        const dest = path.join(outVendorDir, "bulk-keychain", entry.name);
-        await Deno.mkdir(path.dirname(dest), { recursive: true });
-        await Deno.copyFile(src, dest);
+        bulkKeychainEntries.push(entry.name);
       }
     }
+
+    async function copyVendorTarget(outVendorDir: string): Promise<void> {
+      await emptyDir(outVendorDir);
+
+      await Promise.all(
+        bulkKeychainEntries.map(async (entryName) => {
+          const src = path.join(vendorDir, "bulk-keychain", entryName);
+          const dest = path.join(outVendorDir, "bulk-keychain", entryName);
+          await Deno.mkdir(path.dirname(dest), { recursive: true });
+          await Deno.copyFile(src, dest);
+        }),
+      );
+    }
+
+    await Promise.all(vendorTargets.map(copyVendorTarget));
 
     console.log("NPM build complete with vendor assets.");
   },

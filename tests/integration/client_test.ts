@@ -1,8 +1,9 @@
-import { assertEquals, assertRejects } from "@std/assert";
+import { assertEquals, assertExists, assertRejects } from "@std/assert";
 import { stub } from "@std/testing/mock";
 import { BulkClient } from "../../src/client.ts";
 
 const DUMMY_PRIVATE_KEY = "J1vPZ1J1vPZ1J1vPZ1J1vPZ1J1vPZ1J1vPZ1J1vPZ1J1";
+const TARGET_ACCOUNT_PUBLIC_KEY = "synthetic-target-account-public-key";
 
 Deno.test("Integration: BulkClient - Market API (GET)", async () => {
   const client = new BulkClient({
@@ -35,12 +36,17 @@ Deno.test("Integration: BulkClient - Trade API (POST with Signature)", async () 
     privateKey: DUMMY_PRIVATE_KEY,
   });
 
-  const mockResponse = new Response(JSON.stringify({ status: "ok", response: { type: "order", status: "filled" } }), {
-    status: 200,
-    headers: { "content-type": "application/json" },
-  });
-
-  const fetchStub = stub(globalThis, "fetch", () => Promise.resolve(mockResponse));
+  const fetchStub = stub(
+    globalThis,
+    "fetch",
+    () =>
+      Promise.resolve(
+        new Response(JSON.stringify({ status: "ok", response: { type: "order", status: "filled" } }), {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        }),
+      ),
+  );
 
   try {
     const response = await client.trade.placeLimitOrder({
@@ -160,6 +166,35 @@ Deno.test("Integration: BulkClient - Market API (klines)", async () => {
   }
 });
 
+Deno.test("Integration: BulkClient - Market API (riskSurfaces)", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+  });
+
+  const mockResponse = new Response(
+    JSON.stringify({ symbol: "BTC-USD", regimes: [] }),
+    {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    },
+  );
+
+  const fetchStub = stub(globalThis, "fetch", () => Promise.resolve(mockResponse));
+
+  try {
+    await client.market.riskSurfaces("BTC-USD");
+
+    assertEquals(
+      fetchStub.calls[0].args[0].toString(),
+      "https://api.example.com/riskSurfaces?market=BTC-USD",
+    );
+    const requestInit = fetchStub.calls[0].args[1] as RequestInit;
+    assertEquals(requestInit?.method, "GET");
+  } finally {
+    fetchStub.restore();
+  }
+});
+
 Deno.test("Integration: BulkClient - Trade API (cancelOrder)", async () => {
   const client = new BulkClient({
     httpUrl: "https://api.example.com",
@@ -242,6 +277,147 @@ Deno.test("Integration: BulkClient - Account API (feeTier)", async () => {
     const fee = await client.account.feeTier("0x123");
     assertEquals(fee.globalPolicyActive, true);
   } finally {
+    fetchStub.restore();
+  }
+});
+
+Deno.test("Integration: BulkClient - Account API (feeState)", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+  });
+
+  const mockResponse = new Response(
+    JSON.stringify({ symbol: "global", makerBps: 10, globalPolicyActive: true }),
+    {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    },
+  );
+
+  const fetchStub = stub(globalThis, "fetch", () => Promise.resolve(mockResponse));
+
+  try {
+    const fee = await client.account.feeState();
+
+    assertEquals(fee.globalPolicyActive, true);
+    assertEquals(fetchStub.calls[0].args[0].toString(), "https://api.example.com/feeState");
+    const requestInit = fetchStub.calls[0].args[1] as RequestInit;
+    assertEquals(requestInit?.method, "GET");
+  } finally {
+    fetchStub.restore();
+  }
+});
+
+Deno.test("Integration: BulkClient - Account API (multisigProposals)", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+  });
+
+  const mockResponse = new Response(
+    JSON.stringify({ multisig: "abc123", proposals: [] }),
+    {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    },
+  );
+
+  const fetchStub = stub(globalThis, "fetch", () => Promise.resolve(mockResponse));
+
+  try {
+    const rawPubkey = "abc/123==";
+    const proposals = await client.account.multisigProposals(rawPubkey);
+
+    assertEquals(proposals.proposals, []);
+    assertEquals(
+      fetchStub.calls[0].args[0].toString(),
+      `https://api.example.com/multisig/${encodeURIComponent(rawPubkey)}/proposals`,
+    );
+    const requestInit = fetchStub.calls[0].args[1] as RequestInit;
+    assertEquals(requestInit?.method, "GET");
+  } finally {
+    fetchStub.restore();
+  }
+});
+
+Deno.test("Integration: BulkClient - exposes derived accountPublicKey", () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+    privateKey: DUMMY_PRIVATE_KEY,
+  });
+
+  assertEquals(typeof client.accountPublicKey, "string");
+});
+
+Deno.test("Integration: BulkClient - exposes explicit accountPublicKey without signer", () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+    accountPublicKey: TARGET_ACCOUNT_PUBLIC_KEY,
+  });
+
+  assertEquals(client.accountPublicKey, TARGET_ACCOUNT_PUBLIC_KEY);
+  assertEquals(client.accountId, TARGET_ACCOUNT_PUBLIC_KEY);
+});
+
+Deno.test("Integration: BulkClient - rejects target account signing when native keychain cannot sign it", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+    privateKey: DUMMY_PRIVATE_KEY,
+    accountPublicKey: TARGET_ACCOUNT_PUBLIC_KEY,
+  });
+
+  assertEquals(client.accountPublicKey, TARGET_ACCOUNT_PUBLIC_KEY);
+  await assertRejects(
+    () =>
+      client.trade.placeLimitOrder({
+        symbol: "BTC-USD",
+        side: "buy",
+        price: 100000,
+        size: 0.1,
+      }),
+    Error,
+    "target-account signing support",
+  );
+});
+
+Deno.test("Integration: BulkClient - signing nonce is monotonic within same millisecond", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+    privateKey: DUMMY_PRIVATE_KEY,
+  });
+
+  const fetchStub = stub(globalThis, "fetch", () =>
+    Promise.resolve(
+      new Response(JSON.stringify({ status: "ok", response: { type: "order", status: "filled" } }), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      }),
+    ));
+  const nowStub = stub(Date, "now", () => 1234567890);
+
+  try {
+    await client.trade.placeLimitOrder({
+      symbol: "BTC-USD",
+      side: "buy",
+      price: 100000,
+      size: 0.1,
+    });
+    await client.trade.placeLimitOrder({
+      symbol: "BTC-USD",
+      side: "buy",
+      price: 100001,
+      size: 0.1,
+    });
+
+    const firstRequestInit = fetchStub.calls[0].args[1] as { body?: string };
+    const secondRequestInit = fetchStub.calls[1].args[1] as { body?: string };
+    assertExists(firstRequestInit.body);
+    assertExists(secondRequestInit.body);
+    const firstBody = JSON.parse(firstRequestInit.body);
+    const secondBody = JSON.parse(secondRequestInit.body);
+    assertEquals(firstBody.nonce, 1234567890000);
+    assertEquals(secondBody.nonce, 1234567890001);
+  } finally {
+    nowStub.restore();
     fetchStub.restore();
   }
 });

@@ -1,0 +1,70 @@
+import { assert, assertEquals } from "@std/assert";
+import * as path from "jsr:@std/path@1.0.8";
+
+const npmDir = path.fromFileUrl(new URL("../../npm", import.meta.url));
+
+type NpmPackageJson = {
+  main: unknown;
+  module: unknown;
+  types: unknown;
+  exports: {
+    ".": {
+      import: unknown;
+      require: unknown;
+    };
+  };
+};
+
+async function readNpmPackageJson(): Promise<NpmPackageJson | undefined> {
+  try {
+    return JSON.parse(await Deno.readTextFile(path.join(npmDir, "package.json")));
+  } catch (error) {
+    if (error instanceof Deno.errors.NotFound) {
+      console.info("Skipping npm package metadata test: run deno task build:npm <version> first.");
+      return undefined;
+    }
+    throw error;
+  }
+}
+
+Deno.test("npm package exposes Bun-compatible module metadata", async () => {
+  const packageJson = await readNpmPackageJson();
+  if (packageJson === undefined) return;
+
+  assertEquals(packageJson.main, "./script/mod.js");
+  assertEquals(packageJson.module, "./esm/mod.js");
+  assertEquals(packageJson.types, "./esm/mod.d.ts");
+  assertEquals(packageJson.exports["."].import, {
+    types: "./esm/mod.d.ts",
+    default: "./esm/mod.js",
+  });
+  assertEquals(packageJson.exports["."].require, {
+    types: "./script/mod.d.ts",
+    default: "./script/mod.js",
+  });
+});
+
+Deno.test("npm package copies native keychain bindings beside generated runtime imports", async () => {
+  if ((await readNpmPackageJson()) === undefined) return;
+
+  const nativeFiles = [
+    "bulk-keychain.darwin-arm64.node",
+    "bulk-keychain.darwin-x64.node",
+    "bulk-keychain.linux-x64-gnu.node",
+    "bulk-keychain.win32-x64-msvc.node",
+  ];
+
+  const nativePaths = ["vendor", "esm/vendor", "script/vendor"].flatMap((vendorDir) =>
+    nativeFiles.map((nativeFile) => path.join(npmDir, vendorDir, "bulk-keychain", nativeFile))
+  );
+  const results = await Promise.all(
+    nativePaths.map(async (nativePath) => ({
+      nativePath,
+      stat: await Deno.stat(nativePath).catch(() => undefined),
+    })),
+  );
+
+  for (const result of results) {
+    assert(result.stat?.isFile, `Expected native binding to exist: ${result.nativePath}`);
+  }
+});

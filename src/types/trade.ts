@@ -28,6 +28,13 @@ export type CancelAllParams = {
   symbols?: string[];
 };
 
+export type AgentWalletParams = {
+  /** Agent wallet public key to register or remove for the signing account. */
+  agent: string;
+  /** false registers the agent wallet, true removes it. */
+  remove: boolean;
+};
+
 export type TradeOptions = {
   via?: TransportKind;
   timeoutMs?: number;
@@ -39,7 +46,9 @@ export type OrderResponse = components["schemas"]["OrderResponse"];
 export type SignedTransaction = {
   actions: unknown[];
   nonce: number;
+  /** API wire field: target account public key being acted on. */
   account: string;
+  /** Public key of the wallet that produced the signature. */
   signer: string;
   signature: string;
   orderId?: string;
@@ -49,11 +58,19 @@ export type SignedTransaction = {
 export type KeychainSignedTransaction = {
   actions: string | unknown[];
   nonce: number;
+  /** API wire field: target account public key being acted on. */
   account: string;
+  /** Public key of the wallet that produced the signature. */
   signer: string;
   signature: string;
   orderId?: string;
   orderIds?: string[];
+};
+
+export type AgentWalletKeychainInput = {
+  type: "agentWalletCreation";
+  agent: string;
+  remove: boolean;
 };
 
 /** Shape passed to bulk-keychain signing for order flows (matches `builders/orders.ts`). */
@@ -86,3 +103,5 @@ export type KeychainOrderInput =
     type: "cancelAll";
     symbols: string[];
   };
+
+export type KeychainSignInput = KeychainOrderInput | AgentWalletKeychainInput;

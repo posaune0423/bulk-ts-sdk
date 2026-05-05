@@ -25,6 +25,10 @@ Deno.test("topicOf - l2Snapshot", () => {
   assertEquals(topicOf({ type: "l2Snapshot", symbol: "ETH-USD" }), ["l2snapshot.ETH-USD"]);
 });
 
+Deno.test("topicOf - l2Snapshot includes nlevels when provided", () => {
+  assertEquals(topicOf({ type: "l2Snapshot", symbol: "ETH-USD", nlevels: 20 }), ["l2snapshot.ETH-USD.20"]);
+});
+
 Deno.test("topicOf - account", () => {
   assertEquals(topicOf({ type: "account", user: "0x123" }), ["account.0x123"]);
 });

@@ -31,9 +31,9 @@ Deno.test("E2E: Trade - Limit Order Flow", async () => {
   assert(orderId !== undefined);
 
   // 2. Verify order exists in open orders
-  const accountId = client.accountId;
-  assert(accountId !== undefined);
-  const openOrders = await client.account.openOrders(accountId);
+  const accountPublicKey = client.accountPublicKey;
+  assert(accountPublicKey !== undefined);
+  const openOrders = await client.account.openOrders(accountPublicKey);
   const found = openOrders.find((o) => o.orderId === orderId);
   assert(found !== undefined, "Order should be found in open orders");
 
@@ -45,16 +45,16 @@ Deno.test("E2E: Trade - Limit Order Flow", async () => {
   assertEquals(cancel.status, "ok");
 
   // 4. Verify order is gone from open orders
-  const openOrdersAfter = await client.account.openOrders(accountId);
+  const openOrdersAfter = await client.account.openOrders(accountPublicKey);
   const foundAfter = openOrdersAfter.find((o) => o.orderId === orderId);
   assert(foundAfter === undefined, "Order should be removed from open orders");
 });
 
 Deno.test("E2E: Trade - Cancel All", async () => {
   await client.trade.cancelAll({ symbols: ["BTC-USD"] });
-  const accountId = client.accountId;
-  assert(accountId !== undefined);
-  const openOrders = await client.account.openOrders(accountId);
+  const accountPublicKey = client.accountPublicKey;
+  assert(accountPublicKey !== undefined);
+  const openOrders = await client.account.openOrders(accountPublicKey);
   const btcOrders = openOrders.filter((o) => o.symbol === "BTC-USD");
   assertEquals(btcOrders.length, 0);
 });
