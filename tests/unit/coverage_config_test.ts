@@ -36,12 +36,12 @@ Deno.test("coverage task generates lcov and html without vendored runtime files"
   assert(task.includes("deno coverage --lcov"));
   assert(task.includes("deno coverage --html"));
   assert(task.includes("[\\\\/]vendor[\\\\/]"));
-  assert(task.includes("deno fmt docs/coverage/html/index.html"));
+  assert(!task.includes("deno fmt docs/coverage/html/index.html"));
 });
 
-Deno.test("git tracks only coverage html index", async () => {
+Deno.test("git ignores generated coverage html", async () => {
   const ignore = await Deno.readTextFile(gitignore);
 
-  assert(ignore.includes("docs/coverage/html/*"));
-  assert(ignore.includes("!docs/coverage/html/index.html"));
+  assert(ignore.includes("docs/coverage/html/"));
+  assert(!ignore.includes("!docs/coverage/html/index.html"));
 });

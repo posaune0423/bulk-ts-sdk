@@ -10,7 +10,7 @@ pre-commit:
       glob: "*.{ts,js}"
       run: deno lint {staged_files}
     test:
-      run: deno task test
+      run: deno task test && git add docs/coverage/lcov.info
 
 pre-push:
   commands:

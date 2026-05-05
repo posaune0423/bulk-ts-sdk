@@ -2,7 +2,6 @@
 node_modules/
 npm
 /coverage/
-# Deno coverage under docs/: commit lcov.info and the HTML entrypoint only.
+# Deno coverage under docs/: commit lcov.info only. HTML is generated locally.
 docs/coverage/*.json
-docs/coverage/html/*
-!docs/coverage/html/index.html
+docs/coverage/html/

@@ -1,6 +1,6 @@
 {
   "name": "@posaune0423/bulk-ts-sdk",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "exports": "./src/mod.ts",
   "description": "Unofficial TypeScript SDK for Bulk Trade.",
   "license": "MIT",
@@ -18,7 +18,7 @@
     "check": "deno check src/mod.ts",
     "fmt": "deno fmt",
     "lint": "deno lint",
-    "test": "deno test --clean --coverage=docs/coverage --coverage-raw-data-only --allow-write=docs/coverage --allow-net --allow-env --allow-read --allow-ffi tests/unit tests/integration && deno coverage --lcov --exclude='test\\.(js|mjs|ts|jsx|tsx)$' --exclude='[\\\\/]vendor[\\\\/]' --output=docs/coverage/lcov.info docs/coverage && deno coverage --html --exclude='test\\.(js|mjs|ts|jsx|tsx)$' --exclude='[\\\\/]vendor[\\\\/]' docs/coverage && deno fmt docs/coverage/html/index.html",
+    "test": "deno test --clean --coverage=docs/coverage --coverage-raw-data-only --allow-write=docs/coverage --allow-net --allow-env --allow-read --allow-ffi tests/unit tests/integration && deno coverage --lcov --exclude='test\\.(js|mjs|ts|jsx|tsx)$' --exclude='[\\\\/]vendor[\\\\/]' --output=docs/coverage/lcov.info docs/coverage && deno coverage --html --exclude='test\\.(js|mjs|ts|jsx|tsx)$' --exclude='[\\\\/]vendor[\\\\/]' docs/coverage",
     "test:coverage": "deno task test",
     "test:integration": "deno test --allow-net --allow-env --allow-read --allow-ffi tests/integration",
     "test:e2e": "deno test --env-file=.env --allow-net --allow-env --allow-read --allow-ffi tests/e2e",
