@@ -44,11 +44,14 @@ Deno.test("toKeychainMarketOrder builder", () => {
     type: "order",
     symbol: "BTC-USD",
     isBuy: false,
+    price: 0,
     size: 0.5,
     reduceOnly: false,
     iso: false,
     orderType: {
       type: "market",
+      isMarket: true,
+      triggerPx: 0,
     },
   });
 });

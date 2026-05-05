@@ -1,4 +1,5 @@
 import { assert, assertEquals } from "@std/assert";
+import { BulkTransactionRejectedError } from "../../src/errors.ts";
 import { BulkClient } from "../../src/client.ts";
 import type { OrderResponse } from "../../src/types/trade.ts";
 import { getEnv } from "../helpers/env.ts";
@@ -48,6 +49,34 @@ Deno.test("E2E: Trade - Limit Order Flow", async () => {
   const openOrdersAfter = await client.account.openOrders(accountPublicKey);
   const foundAfter = openOrdersAfter.find((o) => o.orderId === orderId);
   assert(foundAfter === undefined, "Order should be removed from open orders");
+});
+
+Deno.test({
+  name: "E2E: Trade - Market Order signing reaches API without bad signature",
+  async fn(): Promise<void> {
+    let response: OrderResponse;
+    try {
+      response = await client.trade.placeMarketOrder(
+        {
+          symbol: "SDK-E2E-INVALID",
+          side: "sell",
+          size: 0.001,
+          reduceOnly: true,
+        },
+        { throwOnReject: false },
+      );
+    } catch (error) {
+      if (error instanceof BulkTransactionRejectedError) {
+        response = error.response as OrderResponse;
+      } else {
+        throw error;
+      }
+    }
+
+    assert(["ok", "error"].includes(response.status));
+    const encoded = JSON.stringify(response);
+    assert(!encoded.includes("bad signature"), encoded);
+  },
 });
 
 Deno.test("E2E: Trade - Cancel All", async () => {
