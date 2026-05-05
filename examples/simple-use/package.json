@@ -4,13 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "account": "bun src/account-info.ts",
+    "account": "bun --env-file=.env src/account-info.ts",
     "check": "bunx tsc --noEmit",
-    "get-market": "bun src/get-market.ts",
-    "market": "bun src/market-data.ts",
-    "start": "bun src/index.ts",
-    "trade": "bun src/trade-lifecycle.ts",
-    "ws": "bun src/ws-market-data.ts"
+    "get-market": "bun --env-file=.env src/get-market.ts",
+    "market": "bun --env-file=.env src/market-data.ts",
+    "start": "bun --env-file=.env src/index.ts",
+    "trade": "bun --env-file=.env src/trade-lifecycle.ts",
+    "ws": "bun --env-file=.env src/ws-market-data.ts"
   },
   "dependencies": {
     "bulk-ts-sdk": "^0.0.4"
