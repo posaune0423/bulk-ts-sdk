@@ -16,6 +16,10 @@ const tradeLifecycleExample = new URL(
   "../../examples/simple-use/src/trade-lifecycle.ts",
   import.meta.url,
 );
+const wsMarketDataExample = new URL(
+  "../../examples/simple-use/src/ws-market-data.ts",
+  import.meta.url,
+);
 
 type ExamplePackageJson = {
   scripts?: Record<string, string>;
@@ -56,4 +60,11 @@ Deno.test("simple-use account and trade examples read PRIVATE_KEY", async () => 
     assert(source.includes('requireEnv("PRIVATE_KEY")'));
     assert(!source.includes("BULK_PRIVATE_KEY"));
   }
+});
+
+Deno.test("simple-use websocket example reads l2 snapshots from the documented book payload", async () => {
+  const source = await Deno.readTextFile(wsMarketDataExample);
+
+  assert(source.includes("snapshot.data?.book?.levels"));
+  assert(!source.includes("snapshot.data?.levels"));
 });

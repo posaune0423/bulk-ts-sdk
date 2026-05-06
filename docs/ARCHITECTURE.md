@@ -1077,11 +1077,12 @@ unsubscribe:
 ```ts
 {
   method: 'unsubscribe',
-  subscription_id: 123,
+  topic: 'trades.BTC-USD',
 }
 ```
 
-ただし、API response から subscription id を取れない場合に備え、MVP では topic-based local unsubscribe を優先します。
+API response は topics を返すため、SDK は topic 単位で local handler を外し、同じ topic を server unsubscribe
+に送ります。
 
 ```ts
 const sub = await client.ws.trades("BTC-USD", handler);
@@ -1091,8 +1092,7 @@ await sub.unsubscribe();
 local unsubscribe の責務:
 
 - local router から handler を削除する
-- server unsubscribe が可能なら unsubscribe message を送る
-- server subscription id が不明なら no-op にする
+- topic-based unsubscribe message を server に送る
 
 ## `src/ws/subscriptions.ts`
 

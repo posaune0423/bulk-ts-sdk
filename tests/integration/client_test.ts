@@ -220,6 +220,73 @@ Deno.test("Integration: BulkClient - Market API (klines)", async () => {
   }
 });
 
+Deno.test("Integration: BulkClient - Market API (klines) applies range and limit locally", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+  });
+
+  const mockResponse = new Response(
+    JSON.stringify([
+      { t: 1000, T: 1999, o: 100, h: 110, l: 90, c: 105, v: 1, n: 1 },
+      { t: 2000, T: 2999, o: 105, h: 115, l: 95, c: 110, v: 2, n: 2 },
+      { t: 3000, T: 3999, o: 110, h: 120, l: 100, c: 115, v: 3, n: 3 },
+      { t: 4000, T: 4999, o: 115, h: 125, l: 105, c: 120, v: 4, n: 4 },
+    ]),
+    {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    },
+  );
+
+  const fetchStub = stub(globalThis, "fetch", () => Promise.resolve(mockResponse));
+
+  try {
+    const klines = await client.market.klines({
+      symbol: "BTC-USD",
+      interval: "1m",
+      startTime: 1500,
+      endTime: 3500,
+      limit: 1,
+    });
+
+    assertEquals(klines.map((candle) => candle.t), [2000]);
+  } finally {
+    fetchStub.restore();
+  }
+});
+
+Deno.test("Integration: BulkClient - Market API (klines) returns latest candles for limit-only requests", async () => {
+  const client = new BulkClient({
+    httpUrl: "https://api.example.com",
+  });
+
+  const mockResponse = new Response(
+    JSON.stringify([
+      { t: 1000, T: 1999, o: 100, h: 110, l: 90, c: 105, v: 1, n: 1 },
+      { t: 2000, T: 2999, o: 105, h: 115, l: 95, c: 110, v: 2, n: 2 },
+      { t: 3000, T: 3999, o: 110, h: 120, l: 100, c: 115, v: 3, n: 3 },
+    ]),
+    {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    },
+  );
+
+  const fetchStub = stub(globalThis, "fetch", () => Promise.resolve(mockResponse));
+
+  try {
+    const klines = await client.market.klines({
+      symbol: "BTC-USD",
+      interval: "1m",
+      limit: 2,
+    });
+
+    assertEquals(klines.map((candle) => candle.t), [2000, 3000]);
+  } finally {
+    fetchStub.restore();
+  }
+});
+
 Deno.test("Integration: BulkClient - Market API (riskSurfaces)", async () => {
   const client = new BulkClient({
     httpUrl: "https://api.example.com",

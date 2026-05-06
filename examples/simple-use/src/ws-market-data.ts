@@ -4,10 +4,12 @@ import process from "node:process";
 type L2SnapshotMessage = {
   topic: string;
   data?: {
-    levels?: [
-      Array<{ px?: number; sz?: number }>,
-      Array<{ px?: number; sz?: number }>,
-    ];
+    book?: {
+      levels?: [
+        Array<{ px?: number; sz?: number }>,
+        Array<{ px?: number; sz?: number }>,
+      ];
+    };
   };
 };
 
@@ -22,11 +24,12 @@ try {
     { type: "l2Snapshot", symbol },
     (message: unknown) => {
       const snapshot = message as L2SnapshotMessage;
+      const levels = snapshot.data?.book?.levels;
       console.log("\n[WS L2Book Update]");
       console.log("Topic:", snapshot.topic);
-      if (snapshot.data?.levels) {
-        console.log("Top Bid:", snapshot.data.levels[0][0]?.px, "@", snapshot.data.levels[0][0]?.sz);
-        console.log("Top Ask:", snapshot.data.levels[1][0]?.px, "@", snapshot.data.levels[1][0]?.sz);
+      if (levels) {
+        console.log("Top Bid:", levels[0][0]?.px, "@", levels[0][0]?.sz);
+        console.log("Top Ask:", levels[1][0]?.px, "@", levels[1][0]?.sz);
       }
     },
   );

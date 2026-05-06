@@ -33,7 +33,7 @@ export class MarketClient {
   }
 
   async klines(params: KlinesParams): Promise<Candle[]> {
-    return await this.deps.http.get<Candle[]>("/klines", {
+    const candles = await this.deps.http.get<Candle[]>("/klines", {
       query: {
         symbol: params.symbol,
         interval: params.interval,
@@ -42,6 +42,7 @@ export class MarketClient {
         limit: params.limit,
       },
     });
+    return filterKlines(candles, params);
   }
 
   async l2Book(params: L2BookParams): Promise<BookUpdate> {
@@ -68,4 +69,20 @@ export class MarketClient {
       query: { market },
     });
   }
+}
+
+function filterKlines(candles: Candle[], params: KlinesParams): Candle[] {
+  const ranged = candles.filter((candle) => {
+    if (params.startTime !== undefined && candle.t < params.startTime) return false;
+    if (params.endTime !== undefined && candle.t > params.endTime) return false;
+    return true;
+  });
+
+  if (params.limit === undefined) return ranged;
+
+  const limit = Math.trunc(params.limit);
+  if (!Number.isFinite(limit) || limit < 0) return ranged;
+  if (limit === 0) return [];
+
+  return params.startTime === undefined ? ranged.slice(-limit) : ranged.slice(0, limit);
 }
