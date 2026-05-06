@@ -271,7 +271,6 @@ SDK 全体の定数を定義します。 例:
 export const BULK_DEFAULT_HTTP_URL = "https://exchange-api.bulk.trade/api/v1";
 export const BULK_DEFAULT_WS_URL = "wss://exchange-ws1.bulk.trade";
 export const DEFAULT_TIMEOUT_MS = 10_000;
-export const DEFAULT_WS_POST_TIMEOUT_MS = 10_000;
 ```
 
 ## `src/errors.ts`
@@ -561,15 +560,15 @@ export class HttpTransport {
 }
 ```
 
-実装イメージ:
+実装イメージ（`HttpTransportConfig` / `HttpRequestOptions` はモジュール内部の `type` で、`mod.ts` からは公開しない）:
 
 ```ts
-export type HttpTransportConfig = {
+type HttpTransportConfig = {
   baseUrl: string;
   timeoutMs: number;
   headers?: Record<string, string>;
 };
-export type HttpRequestOptions = {
+type HttpRequestOptions = {
   query?: Record<string, string | number | boolean | undefined>;
   signal?: AbortSignal;
   timeoutMs?: number;

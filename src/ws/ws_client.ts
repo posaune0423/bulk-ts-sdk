@@ -12,7 +12,7 @@ import type {
 } from "../types/ws.ts";
 import type { OrderResponse, SignedTransaction } from "../types/trade.ts";
 
-export type WsClientConfig = {
+type WsClientConfig = {
   url: string;
   timeoutMs: number;
 };

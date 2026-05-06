@@ -6,6 +6,3 @@ export const BULK_DEFAULT_WS_URL = "wss://exchange-ws1.bulk.trade";
 
 /** Default timeout for HTTP requests in milliseconds. */
 export const DEFAULT_TIMEOUT_MS = 10_000;
-
-/** Default timeout for WebSocket operations in milliseconds. */
-export const DEFAULT_WS_POST_TIMEOUT_MS = 10_000;
