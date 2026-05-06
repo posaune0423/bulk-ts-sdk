@@ -2,13 +2,13 @@ import { BulkHttpError, BulkTimeoutError } from "../errors.ts";
 import { buildUrl } from "../utils/url.ts";
 import { safeJsonParse } from "../utils/json.ts";
 
-export type HttpTransportConfig = {
+type HttpTransportConfig = {
   baseUrl: string;
   timeoutMs: number;
   headers?: Record<string, string>;
 };
 
-export type HttpRequestOptions = {
+type HttpRequestOptions = {
   query?: Record<string, string | number | boolean | undefined>;
   signal?: AbortSignal;
   timeoutMs?: number;

@@ -2,10 +2,17 @@ import { BulkTimeoutError, BulkWsError } from "../errors.ts";
 import { safeJsonParse } from "../utils/json.ts";
 import { WsRouter } from "./router.ts";
 import { topicOf } from "./subscriptions.ts";
-import type { SubscriptionHandle, WsClientOutbound, WsHandler, WsPostOptions, WsSubscription } from "../types/ws.ts";
+import type {
+  SubscriptionHandle,
+  WsClientOutbound,
+  WsHandler,
+  WsMessageForSubscription,
+  WsPostOptions,
+  WsSubscription,
+} from "../types/ws.ts";
 import type { OrderResponse, SignedTransaction } from "../types/trade.ts";
 
-export type WsClientConfig = {
+type WsClientConfig = {
   url: string;
   timeoutMs: number;
 };
@@ -13,6 +20,7 @@ export type WsClientConfig = {
 export class WsClient {
   private ws: WebSocket | null = null;
   private readonly router = new WsRouter();
+  private readonly topicRefCounts = new Map<string, number>();
   private nextRequestId = 1;
   private readonly pendingPosts = new Map<
     number,
@@ -54,34 +62,52 @@ export class WsClient {
     return Promise.resolve();
   }
 
+  async subscribe<S extends WsSubscription>(
+    subscription: S,
+    handler: WsHandler<WsMessageForSubscription<S>>,
+  ): Promise<SubscriptionHandle>;
   async subscribe<T>(
     subscription: WsSubscription,
     handler: WsHandler<T>,
+  ): Promise<SubscriptionHandle>;
+  async subscribe(
+    subscription: WsSubscription,
+    handler: WsHandler<never>,
   ): Promise<SubscriptionHandle> {
     await this.ensureConnected();
 
     const topics = topicOf(subscription);
+    let shouldSendSubscribe = false;
     for (const topic of topics) {
       this.router.add(topic, handler);
+      const count = this.topicRefCounts.get(topic) ?? 0;
+      this.topicRefCounts.set(topic, count + 1);
+      shouldSendSubscribe ||= count === 0;
     }
 
-    this.send({
-      method: "subscribe",
-      subscription: [subscription],
-    });
+    if (shouldSendSubscribe) {
+      this.send({
+        method: "subscribe",
+        subscription: [subscription],
+      });
+    }
+
+    let unsubscribed = false;
 
     return {
       topics,
       unsubscribe: () => {
+        if (unsubscribed) return Promise.resolve();
+        unsubscribed = true;
         for (const topic of topics) {
           this.router.remove(topic, handler);
+          if (this.releaseTopic(topic)) {
+            this.send({
+              method: "unsubscribe",
+              topic,
+            });
+          }
         }
-        // In MVP, we might not send actual unsubscribe to server if topic is shared
-        // but for completeness:
-        this.send({
-          method: "unsubscribe",
-          subscription: [subscription],
-        });
         return Promise.resolve();
       },
     };
@@ -175,6 +201,17 @@ export class WsClient {
     return payload as OrderResponse;
   }
 
+  private releaseTopic(topic: string): boolean {
+    const count = this.topicRefCounts.get(topic);
+    if (count === undefined) return false;
+    if (count > 1) {
+      this.topicRefCounts.set(topic, count - 1);
+      return false;
+    }
+    this.topicRefCounts.delete(topic);
+    return true;
+  }
+
   private handleClose(): void {
     // Reject all pending posts
     for (const [_id, pending] of this.pendingPosts) {
@@ -182,6 +219,8 @@ export class WsClient {
       pending.reject(new BulkWsError("WebSocket closed while post was pending"));
     }
     this.pendingPosts.clear();
+    this.topicRefCounts.clear();
+    this.router.clear();
     this.ws = null;
   }
 }

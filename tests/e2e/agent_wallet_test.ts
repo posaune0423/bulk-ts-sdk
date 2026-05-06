@@ -38,7 +38,7 @@ async function waitForAgentPresence(
  * 1. Register a new Agent Wallet using the Main Wallet.
  * 2. Verify target-account order signing is blocked when the native signer
  *    cannot sign the target account into the signature.
- * 3. Remove the Agent Wallet using the Main Wallet.
+ * 3. Remove the Agent Wallet in cleanup.
  */
 Deno.test({
   name: "E2E: Agent Wallet Registration",
@@ -52,7 +52,7 @@ Deno.test({
     const mainClient = new BulkClient({
       httpUrl: env.BULK_HTTP_URL,
       wsUrl: env.BULK_WS_URL,
-      privateKey: env.PRIVATE_KEY,
+      privateKey: env.MAIN_WALLET_PRIVATE_KEY,
     });
     const mainAccountPublicKey = mainClient.accountPublicKey;
     assert(mainAccountPublicKey !== undefined);

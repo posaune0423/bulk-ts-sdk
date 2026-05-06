@@ -23,19 +23,23 @@ Deno.test("test config excludes vendored runtime files", async () => {
   assertEquals(config.test?.exclude, ["src/vendor/"]);
 });
 
-Deno.test("test task runs unit and integration coverage directly", async () => {
+Deno.test("test task runs unit and integration tests without coverage output", async () => {
   const config = JSON.parse(await Deno.readTextFile(denoJson)) as DenoConfig;
   const task = config.tasks?.test ?? "";
 
   assert(task.startsWith("deno test "));
   assert(task.includes("tests/unit tests/integration"));
+  assert(!task.includes("--coverage"));
+  assert(!task.includes("deno coverage"));
   assert(!task.includes("scripts/run_unit_integration_tests.ts"));
 });
 
 Deno.test("coverage task generates lcov and html without vendored runtime files", async () => {
   const config = JSON.parse(await Deno.readTextFile(denoJson)) as DenoConfig;
-  const task = config.tasks?.test ?? "";
+  const task = config.tasks?.["test:coverage"] ?? "";
 
+  assert(task.startsWith("deno test "));
+  assert(task.includes("tests/unit tests/integration"));
   assert(task.includes("deno coverage --lcov"));
   assert(task.includes("deno coverage --html"));
   assert(task.includes("[\\\\/]vendor[\\\\/]"));

@@ -1,4 +1,6 @@
 import type { CandleInterval } from "./common.ts";
+import type { AccountData } from "./account.ts";
+import type { BookUpdate, Candle, MarketStats } from "./market.ts";
 import type { SignedTransaction } from "./trade.ts";
 
 /**
@@ -64,6 +66,128 @@ export type WsHandler<T> = (
   message: T,
 ) => void | Promise<void>;
 
+/** Realtime ticker payload routed from `ticker.{symbol}` topics. */
+export type TickerWsMessage = {
+  type: "ticker";
+  topic: `ticker.${string}`;
+  data: {
+    ticker: MarketStats;
+  };
+};
+
+/** Realtime candle payload routed from `candle.{symbol}.{interval}` topics. */
+export type CandleWsMessage = {
+  type: "candle";
+  topic: `candle.${string}.${CandleInterval}`;
+  data: {
+    candles: Candle[];
+  };
+};
+
+/** Public trade print emitted by `trades.{symbol}` topics. */
+export type WsTrade = {
+  s: string;
+  px: number;
+  sz: number;
+  time: number;
+  side: boolean;
+  maker: string;
+  taker: string;
+  maker_fee?: number;
+  taker_fee?: number;
+  reason?: string;
+  reason_code?: number;
+};
+
+/** Realtime trade payload routed from `trades.{symbol}` topics. */
+export type TradesWsMessage = {
+  type: "trades";
+  topic: `trades.${string}`;
+  data: {
+    trades: WsTrade[];
+  };
+};
+
+/** Risk metrics payload routed from `risk.{symbol}` topics. */
+export type RiskWsMessage = {
+  type: "risk";
+  topic: `risk.${string}`;
+  data: {
+    symbol: string;
+    timestamp?: number;
+    regime?: number;
+    leverage?: number[];
+    notionals?: number[];
+    buy?: unknown[][];
+    sell?: unknown[][];
+    corrs?: Array<[string, number]>;
+  };
+};
+
+/** Aggregate frontend market context routed from the `frontendContext` topic. */
+export type FrontendContextWsMessage = {
+  type: "frontendContext";
+  topic: "frontendContext";
+  data: {
+    ctx: Array<{
+      symbol: string;
+      volume?: number;
+      funding?: number;
+      oi?: number;
+      lastPrice?: number;
+      priceChange?: number;
+      priceChangePercent?: number;
+    }>;
+  };
+};
+
+/** L2 book snapshot payload routed from `l2snapshot.{symbol}` topics. */
+export type L2SnapshotWsMessage = {
+  type: "l2Snapshot";
+  topic: `l2snapshot.${string}`;
+  data: {
+    book: BookUpdate;
+  };
+};
+
+/** L2 book delta payload routed from `l2delta.{symbol}` topics. */
+export type L2DeltaWsMessage = {
+  type: "l2Delta";
+  topic: `l2delta.${string}`;
+  data: {
+    book: BookUpdate;
+  };
+};
+
+/** Private account payload routed from `account.{pubkey}` topics. */
+export type AccountWsMessage = {
+  type: "account";
+  topic: `account.${string}`;
+  data: AccountData;
+};
+
+/** Union of supported inbound WebSocket subscription messages. */
+export type WsInboundMessage =
+  | TickerWsMessage
+  | CandleWsMessage
+  | TradesWsMessage
+  | RiskWsMessage
+  | FrontendContextWsMessage
+  | L2SnapshotWsMessage
+  | L2DeltaWsMessage
+  | AccountWsMessage;
+
+/** Inbound message type for a subscription descriptor. */
+export type WsMessageForSubscription<S extends WsSubscription> = S extends { type: "ticker" } ? TickerWsMessage
+  : S extends { type: "candle" } ? CandleWsMessage
+  : S extends { type: "trades" } ? TradesWsMessage
+  : S extends { type: "risk" } ? RiskWsMessage
+  : S extends { type: "frontendContext" } ? FrontendContextWsMessage
+  : S extends { type: "l2Snapshot" } ? L2SnapshotWsMessage
+  : S extends { type: "l2Delta" } ? L2DeltaWsMessage
+  : S extends { type: "account" } ? AccountWsMessage
+  : WsInboundMessage;
+
 /** Stable topic ids plus an async unsubscribe helper returned by subscribe helpers. */
 export type SubscriptionHandle = {
   /** Canonical topic strings used internally for routing. */
@@ -89,8 +213,8 @@ export type WsClientOutbound =
   | {
     /** JSON-RPC method name for unsubscribing from feeds. */
     method: "unsubscribe";
-    /** Subscriptions to tear down (matched by topic semantics server-side). */
-    subscription: WsSubscription[];
+    /** Topic to tear down server-side. */
+    topic: string;
   }
   | {
     /** JSON-RPC method name for submitting signed trading actions. */

@@ -8,16 +8,17 @@ function restingOrderId(order: OrderResponse): string | undefined {
   return first.resting.oid;
 }
 
-const privateKey = requireEnv("PRIVATE_KEY");
+const privateKey = requireEnv("MAIN_WALLET_PRIVATE_KEY");
 const client = createClient({ privateKey });
 const symbol = readSymbol();
 
-if (!client.accountId) {
-  throw new Error("Unable to derive account id from PRIVATE_KEY.");
+const accountPublicKey = client.accountPublicKey;
+if (!accountPublicKey) {
+  throw new Error("Unable to derive account public key from MAIN_WALLET_PRIVATE_KEY.");
 }
 
 console.log("--- Trade Lifecycle Example ---");
-console.log("Account Address:", client.accountId);
+console.log("Account Address:", accountPublicKey);
 
 try {
   console.log(`\nPlacing a limit order for ${symbol}...`);
@@ -41,7 +42,7 @@ try {
   console.log(`Order placed successfully. ID: ${orderId}`);
 
   console.log("\nChecking open orders...");
-  const orders = await client.account.openOrders(client.accountId);
+  const orders = await client.account.openOrders(accountPublicKey);
   const found = orders.find((order) => order.orderId === orderId);
   if (found) {
     console.log(`Found order ${orderId} in open orders.`);

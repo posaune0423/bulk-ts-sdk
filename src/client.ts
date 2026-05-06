@@ -50,9 +50,6 @@ export class BulkClient {
    * Derived from privateKey unless accountPublicKey is explicitly provided.
    */
   readonly accountPublicKey?: string;
-  /** Backward-compatible account identifier alias used by venue integrations. */
-  readonly accountId?: string;
-
   /**
    * Initializes a new BulkClient instance.
    * @param config Optional HTTP/WebSocket URLs, signer keys, timeouts, and validation flags.
@@ -77,6 +74,5 @@ export class BulkClient {
     this.ws = ws;
     this.trade = new TradeClient({ http, ws, signer });
     this.accountPublicKey = config.accountPublicKey ?? signer?.accountPublicKey;
-    this.accountId = this.accountPublicKey;
   }
 }

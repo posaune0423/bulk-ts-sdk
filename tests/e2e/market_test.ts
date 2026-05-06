@@ -6,7 +6,7 @@ const env = getEnv();
 const client = new BulkClient({
   httpUrl: env.BULK_HTTP_URL,
   wsUrl: env.BULK_WS_URL,
-  privateKey: env.PRIVATE_KEY,
+  privateKey: env.MAIN_WALLET_PRIVATE_KEY,
 });
 
 Deno.test("E2E: Market - exchangeInfo", async () => {

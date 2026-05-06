@@ -68,9 +68,10 @@ pnpm add bulk-ts-sdk
 
 ```typescript
 import { BulkClient } from "bulk-ts-sdk";
+import process from "node:process";
 
 const client = new BulkClient({
-  privateKey: "main-wallet-private-key",
+  privateKey: process.env.MAIN_WALLET_PRIVATE_KEY!,
 });
 ```
 
@@ -85,26 +86,32 @@ methods such as `client.trade.placeLimitOrder()`, `client.trade.cancelOrder()`, 
 | `accountPublicKey` | No       | Target account public key. Only needed when signing with an agent wallet for a main account. |
 | `timeoutMs`        | No       | Request timeout in milliseconds.                                                             |
 
-For normal trading, use the main wallet private key as `privateKey`. In that case `client.accountPublicKey` is derived
-from the signer and can be reused for account queries.
+Use one of these environment variable sets:
+
+- Main wallet only: set `MAIN_WALLET_PRIVATE_KEY`.
+- Agent wallet for a main wallet: set both `AGENT_WALLET_PRIVATE_KEY` and `MAIN_WALLET_PUBLIC_KEY`.
+
+For normal trading with the main wallet key, pass `MAIN_WALLET_PRIVATE_KEY` as `privateKey`. In that case
+`client.accountPublicKey` is derived from the signer and can be reused for account queries.
 
 ```typescript
 const client = new BulkClient({
-  privateKey: Deno.env.get("PRIVATE_KEY"),
+  privateKey: process.env.MAIN_WALLET_PRIVATE_KEY!,
 });
 
 const accountPublicKey = client.accountPublicKey;
 if (!accountPublicKey) throw new Error("privateKey is required for account-scoped examples");
 ```
 
-When signing with a registered agent wallet, pass the agent wallet key as `privateKey` and the target main wallet pubkey
-as `accountPublicKey`. Target-account order signing depends on native `bulk-keychain` support for signing that target
-account; unsupported native builds fail before submitting an invalid signature.
+When signing for a main wallet through its registered agent wallet, pass `AGENT_WALLET_PRIVATE_KEY` as `privateKey` and
+the target `MAIN_WALLET_PUBLIC_KEY` as `accountPublicKey`. Target-account order signing depends on native
+`bulk-keychain` support for signing that target account; unsupported native builds fail before submitting an invalid
+signature.
 
 ```typescript
 const client = new BulkClient({
-  privateKey: Deno.env.get("AGENT_WALLET_PRIVATE_KEY"),
-  accountPublicKey: "main-wallet-public-key",
+  privateKey: process.env.AGENT_WALLET_PRIVATE_KEY!,
+  accountPublicKey: process.env.MAIN_WALLET_PUBLIC_KEY!,
 });
 ```
 
@@ -207,19 +214,21 @@ await client.trade.batch([
 ]);
 ```
 
-### Agent Wallet Management
+### Agent Wallet Registration
 
-Register and remove an agent wallet with the main wallet signer:
+Register an agent wallet with the main wallet signer:
 
 ```typescript
-await client.trade.manageAgentWallet({
-  agent: "agent-wallet-public-key",
-  remove: false,
+const agentWalletClient = new BulkClient({
+  privateKey: process.env.AGENT_WALLET_PRIVATE_KEY!,
 });
 
+const agentWalletPublicKey = agentWalletClient.accountPublicKey;
+if (!agentWalletPublicKey) throw new Error("AGENT_WALLET_PRIVATE_KEY is required");
+
 await client.trade.manageAgentWallet({
-  agent: "agent-wallet-public-key",
-  remove: true,
+  agent: agentWalletPublicKey,
+  remove: false,
 });
 ```
 
@@ -277,16 +286,22 @@ E2E tests read `.env` through Deno's `--env-file=.env` support.
 cp .env.example .env
 ```
 
-Required for normal account/trade E2E:
+For normal account/trade E2E with the main wallet key, only this wallet variable is required:
 
 ```bash
-PRIVATE_KEY=main-wallet-private-key
+MAIN_WALLET_PRIVATE_KEY=main-wallet-private-key
 ```
 
-Optional E2E variables:
+For agent-wallet tests or examples targeting the main wallet, set both values:
 
 ```bash
 AGENT_WALLET_PRIVATE_KEY=agent-wallet-private-key
+MAIN_WALLET_PUBLIC_KEY=main-wallet-public-key
+```
+
+Optional test/example variables:
+
+```bash
 MULTISIG_PUBKEY=multisig-account-public-key
 ```
 

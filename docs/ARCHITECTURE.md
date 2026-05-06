@@ -271,7 +271,6 @@ SDK 全体の定数を定義します。 例:
 export const BULK_DEFAULT_HTTP_URL = "https://exchange-api.bulk.trade/api/v1";
 export const BULK_DEFAULT_WS_URL = "wss://exchange-ws1.bulk.trade";
 export const DEFAULT_TIMEOUT_MS = 10_000;
-export const DEFAULT_WS_POST_TIMEOUT_MS = 10_000;
 ```
 
 ## `src/errors.ts`
@@ -561,15 +560,15 @@ export class HttpTransport {
 }
 ```
 
-実装イメージ:
+実装イメージ（`HttpTransportConfig` / `HttpRequestOptions` はモジュール内部の `type` で、`mod.ts` からは公開しない）:
 
 ```ts
-export type HttpTransportConfig = {
+type HttpTransportConfig = {
   baseUrl: string;
   timeoutMs: number;
   headers?: Record<string, string>;
 };
-export type HttpRequestOptions = {
+type HttpRequestOptions = {
   query?: Record<string, string | number | boolean | undefined>;
   signal?: AbortSignal;
   timeoutMs?: number;
@@ -1077,22 +1076,22 @@ unsubscribe:
 ```ts
 {
   method: 'unsubscribe',
-  subscription_id: 123,
+  topic: 'trades.BTC-USD',
 }
 ```
 
-ただし、API response から subscription id を取れない場合に備え、MVP では topic-based local unsubscribe を優先します。
+The API response returns topics, so the SDK removes local handlers by topic and sends the same topic in the server-side
+unsubscribe message.
 
 ```ts
 const sub = await client.ws.trades("BTC-USD", handler);
 await sub.unsubscribe();
 ```
 
-local unsubscribe の責務:
+Local unsubscribe responsibilities:
 
-- local router から handler を削除する
-- server unsubscribe が可能なら unsubscribe message を送る
-- server subscription id が不明なら no-op にする
+- Remove the handler from the local router
+- Send a topic-based unsubscribe message to the server
 
 ## `src/ws/subscriptions.ts`
 
