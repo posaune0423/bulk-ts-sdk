@@ -12,7 +12,7 @@ Deno.test("root env example uses role-specific wallet names", async () => {
   assert(envExample.includes("MAIN_WALLET_PRIVATE_KEY="));
   assert(envExample.includes("AGENT_WALLET_PRIVATE_KEY="));
   assert(envExample.includes("MAIN_WALLET_PUBLIC_KEY="));
-  assert(envExample.includes("AGENT_WALLET_PUBLIC_KEY="));
+  assert(!lines.includes("AGENT_WALLET_PUBLIC_KEY="));
   assert(!lines.includes("PRIVATE_KEY="));
 });
 
@@ -22,6 +22,8 @@ Deno.test("README client examples use ordinary TypeScript process.env names", as
   assert(source.includes("process.env.MAIN_WALLET_PRIVATE_KEY"));
   assert(source.includes("process.env.AGENT_WALLET_PRIVATE_KEY"));
   assert(source.includes("process.env.MAIN_WALLET_PUBLIC_KEY"));
+  assert(source.includes("agentWalletClient.accountPublicKey"));
+  assert(!source.includes("process.env.AGENT_WALLET_PUBLIC_KEY"));
   assert(!source.includes("Deno.env.get"));
 });
 

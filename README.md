@@ -213,8 +213,15 @@ await client.trade.batch([
 Register an agent wallet with the main wallet signer:
 
 ```typescript
+const agentWalletClient = new BulkClient({
+  privateKey: process.env.AGENT_WALLET_PRIVATE_KEY!,
+});
+
+const agentWalletPublicKey = agentWalletClient.accountPublicKey;
+if (!agentWalletPublicKey) throw new Error("AGENT_WALLET_PRIVATE_KEY is required");
+
 await client.trade.manageAgentWallet({
-  agent: process.env.AGENT_WALLET_PUBLIC_KEY!,
+  agent: agentWalletPublicKey,
   remove: false,
 });
 ```
@@ -284,7 +291,6 @@ Optional test/example variables:
 ```bash
 AGENT_WALLET_PRIVATE_KEY=agent-wallet-private-key
 MAIN_WALLET_PUBLIC_KEY=main-wallet-public-key
-AGENT_WALLET_PUBLIC_KEY=agent-wallet-public-key
 MULTISIG_PUBKEY=multisig-account-public-key
 ```
 
