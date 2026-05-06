@@ -106,6 +106,12 @@ const agentWalletClient = new BulkClient({
 });
 ```
 
+Use exactly one wallet setup:
+
+- Main wallet only: set `MAIN_WALLET_PRIVATE_KEY` and pass it as `privateKey`.
+- Agent wallet for a main wallet: set both `AGENT_WALLET_PRIVATE_KEY` and `MAIN_WALLET_PUBLIC_KEY`; pass the agent key
+  as `privateKey` and the main wallet public key as `accountPublicKey`.
+
 `BulkClientConfig` fields:
 
 - `httpUrl`: optional HTTP API base URL. Defaults to production.
@@ -141,13 +147,15 @@ Recommended variable names by context:
 
 - Application code: choose app-specific names, then pass values into `BulkClientConfig`.
 - `examples/simple-use`: `MAIN_WALLET_PRIVATE_KEY`, `BULK_HTTP_URL`, `BULK_WS_URL`, `BULK_SYMBOL`.
-- Repo E2E tests: `MAIN_WALLET_PRIVATE_KEY`, `AGENT_WALLET_PRIVATE_KEY`, `MULTISIG_PUBKEY`, `BULK_HTTP_URL`, `BULK_WS_URL`.
+- Repo E2E tests: `MAIN_WALLET_PRIVATE_KEY`, `AGENT_WALLET_PRIVATE_KEY`, `MAIN_WALLET_PUBLIC_KEY`,
+  `MULTISIG_PUBKEY`, `BULK_HTTP_URL`, `BULK_WS_URL`.
 
 `BULK_HTTP_URL` and `BULK_WS_URL` are optional overrides. If omitted, the client uses the production defaults from
 `src/constants.ts`.
 
-Use the main wallet private key for normal trading. Use an agent wallet private key only with the correct target
-`accountPublicKey`, and keep the main-wallet key and agent-wallet key in separate variables.
+For normal trading, do not require the main wallet public key separately; `client.accountPublicKey` is derived from
+`MAIN_WALLET_PRIVATE_KEY`. For agent-wallet signing, `MAIN_WALLET_PUBLIC_KEY` is required because the signer key belongs
+to the agent wallet while the target account is the main wallet.
 
 Important naming rule:
 
@@ -463,14 +471,16 @@ try {
 
 E2E tests read `.env`.
 
-- `MAIN_WALLET_PRIVATE_KEY`: main wallet private key. Required for standard account/trade E2E.
-- `AGENT_WALLET_PRIVATE_KEY`: agent wallet private key. Only used by agent-wallet E2E.
-- `MAIN_WALLET_PUBLIC_KEY`: main wallet public key. Use with agent-wallet client examples when needed.
+- `MAIN_WALLET_PRIVATE_KEY`: main wallet private key. Required by itself for standard account/trade E2E.
+- `AGENT_WALLET_PRIVATE_KEY`: agent wallet private key. Use with `MAIN_WALLET_PUBLIC_KEY` for agent-wallet E2E.
+- `MAIN_WALLET_PUBLIC_KEY`: main wallet public key. Required with `AGENT_WALLET_PRIVATE_KEY` when an agent wallet
+  targets the main wallet.
 - `MULTISIG_PUBKEY`: optional multisig account public key. Enables multisig proposal E2E.
 - `BULK_HTTP_URL`: optional HTTP API override.
 - `BULK_WS_URL`: optional WebSocket API override.
 
-`MAIN_WALLET_PRIVATE_KEY` and `AGENT_WALLET_PRIVATE_KEY` are intentionally different variables. Do not collapse them.
+`MAIN_WALLET_PRIVATE_KEY` is the simple main-wallet mode. `AGENT_WALLET_PRIVATE_KEY` plus `MAIN_WALLET_PUBLIC_KEY` is
+the agent-wallet mode. Do not collapse the private key variables.
 
 ## Extending the SDK
 

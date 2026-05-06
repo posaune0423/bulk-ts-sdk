@@ -21,10 +21,19 @@ bun run trade
 bun run ws
 ```
 
-Optional environment variables:
+Wallet environment variables:
 
 ```dotenv
 MAIN_WALLET_PRIVATE_KEY=0x...
+```
+
+Set only `MAIN_WALLET_PRIVATE_KEY` when signing directly with the main wallet. If you adapt this example to use an agent
+wallet for a main wallet, use the root `.env.example` pattern: set both `AGENT_WALLET_PRIVATE_KEY` and
+`MAIN_WALLET_PUBLIC_KEY`.
+
+Optional environment variables:
+
+```dotenv
 BULK_HTTP_URL=https://...
 BULK_WS_URL=wss://...
 BULK_SYMBOL=BTC-USD
