@@ -1,4 +1,4 @@
-import { assert, assertEquals } from "@std/assert";
+import { assert } from "@std/assert";
 
 const denoJson = new URL("../../deno.json", import.meta.url);
 const gitignore = new URL("../../.gitignore", import.meta.url);
@@ -13,14 +13,14 @@ type DenoConfig = {
   };
 };
 
-Deno.test("test config excludes vendored runtime files", async () => {
+Deno.test("test config does not exclude non-existent vendored files", async () => {
   const config = JSON.parse(await Deno.readTextFile(denoJson)) as {
     test?: {
       exclude?: unknown;
     };
   };
 
-  assertEquals(config.test?.exclude, ["src/vendor/"]);
+  assert(config.test?.exclude === undefined);
 });
 
 Deno.test("test task runs unit and integration tests without coverage output", async () => {
@@ -34,7 +34,7 @@ Deno.test("test task runs unit and integration tests without coverage output", a
   assert(!task.includes("scripts/run_unit_integration_tests.ts"));
 });
 
-Deno.test("coverage task generates lcov and html without vendored runtime files", async () => {
+Deno.test("coverage task generates lcov and html without vendor exclusion", async () => {
   const config = JSON.parse(await Deno.readTextFile(denoJson)) as DenoConfig;
   const task = config.tasks?.["test:coverage"] ?? "";
 
@@ -42,7 +42,7 @@ Deno.test("coverage task generates lcov and html without vendored runtime files"
   assert(task.includes("tests/unit tests/integration"));
   assert(task.includes("deno coverage --lcov"));
   assert(task.includes("deno coverage --html"));
-  assert(task.includes("[\\\\/]vendor[\\\\/]"));
+  assert(!task.includes("[\\\\/]vendor[\\\\/]"));
   assert(!task.includes("deno fmt docs/coverage/html/index.html"));
 });
 
