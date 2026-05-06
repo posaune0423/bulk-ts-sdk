@@ -1081,18 +1081,18 @@ unsubscribe:
 }
 ```
 
-API response は topics を返すため、SDK は topic 単位で local handler を外し、同じ topic を server unsubscribe
-に送ります。
+The API response returns topics, so the SDK removes local handlers by topic and sends the same topic in the server-side
+unsubscribe message.
 
 ```ts
 const sub = await client.ws.trades("BTC-USD", handler);
 await sub.unsubscribe();
 ```
 
-local unsubscribe の責務:
+Local unsubscribe responsibilities:
 
-- local router から handler を削除する
-- topic-based unsubscribe message を server に送る
+- Remove the handler from the local router
+- Send a topic-based unsubscribe message to the server
 
 ## `src/ws/subscriptions.ts`
 
