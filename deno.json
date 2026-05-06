@@ -10,35 +10,28 @@
       "LICENSE",
       "llm.txt",
       "README.md",
-      "src/**/*.ts",
-      "src/**/*.js",
-      "src/**/*.node"
+      "src/**/*.ts"
     ]
   },
   "tasks": {
     "check": "deno check src/mod.ts",
     "fmt": "deno fmt",
     "lint": "deno lint",
-    "test": "deno test --allow-net --allow-env --allow-read --allow-ffi tests/unit tests/integration",
-    "test:coverage": "deno test --clean --coverage=docs/coverage --coverage-raw-data-only --allow-write=docs/coverage --allow-net --allow-env --allow-read --allow-ffi tests/unit tests/integration && deno coverage --lcov --exclude='test\\.(js|mjs|ts|jsx|tsx)$' --exclude='[\\\\/]vendor[\\\\/]' --output=docs/coverage/lcov.info docs/coverage && deno coverage --html --exclude='test\\.(js|mjs|ts|jsx|tsx)$' --exclude='[\\\\/]vendor[\\\\/]' docs/coverage",
-    "test:integration": "deno test --allow-net --allow-env --allow-read --allow-ffi tests/integration",
-    "test:e2e": "deno test --env-file=.env --allow-net --allow-env --allow-read --allow-ffi tests/e2e",
+    "test": "deno test --allow-net --allow-env --allow-read --allow-ffi --allow-sys tests/unit tests/integration",
+    "test:coverage": "deno test --clean --coverage=docs/coverage --coverage-raw-data-only --allow-write=docs/coverage --allow-net --allow-env --allow-read --allow-ffi --allow-sys tests/unit tests/integration && deno coverage --lcov --exclude='test\\.(js|mjs|ts|jsx|tsx)$' --output=docs/coverage/lcov.info docs/coverage && deno coverage --html --exclude='test\\.(js|mjs|ts|jsx|tsx)$' docs/coverage",
+    "test:integration": "deno test --allow-net --allow-env --allow-read --allow-ffi --allow-sys tests/integration",
+    "test:e2e": "deno test --env-file=.env --allow-net --allow-env --allow-read --allow-ffi --allow-sys tests/e2e",
     "build:npm": "deno run -A scripts/build_npm.ts",
     "generate:types": "deno run --allow-read --allow-write --allow-net scripts/generate_openapi_types.ts",
     "update:docs": "deno run --allow-net --allow-write=docs/references/openapi.yml scripts/fetch_openapi.ts",
     "hook:install": "lefthook install"
-  },
-  "test": {
-    "exclude": [
-      "src/vendor/"
-    ]
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1",
     "@std/testing": "jsr:@std/testing@1",
     "@std/async": "jsr:@std/async@1",
     "valibot": "npm:valibot@^0.42.1",
-    "bulk-keychain": "./src/vendor/bulk-keychain/index.js",
+    "bulk-keychain": "npm:bulk-keychain@^0.1.16",
     "openapi-typescript": "npm:openapi-typescript@^7.4.1"
   },
   "lint": {

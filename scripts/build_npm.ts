@@ -1,5 +1,4 @@
 import { build, emptyDir } from "jsr:@deno/dnt@0.42.3";
-import * as path from "jsr:@std/path@1.0.8";
 
 const version = Deno.args[0]?.replace(/^v/, "");
 
@@ -63,13 +62,12 @@ await build({
     files: [
       "esm",
       "script",
-      "vendor",
       "README.md",
       "LICENSE",
       "llm.txt",
     ],
   },
-  async postBuild(): Promise<void> {
+  postBuild(): void {
     // Copy package-level documentation files.
     Deno.copyFileSync("README.md", "npm/README.md");
     Deno.copyFileSync("llm.txt", "npm/llm.txt");
@@ -79,32 +77,6 @@ await build({
       // Ignore if LICENSE is missing
     }
 
-    // Copy vendor directory into every runtime location generated code imports from.
-    const vendorDir = "./src/vendor";
-    const vendorTargets = ["./npm/vendor", "./npm/esm/vendor", "./npm/script/vendor"];
-    const bulkKeychainEntries: string[] = [];
-
-    for await (const entry of Deno.readDir(path.join(vendorDir, "bulk-keychain"))) {
-      if (entry.isFile) {
-        bulkKeychainEntries.push(entry.name);
-      }
-    }
-
-    async function copyVendorTarget(outVendorDir: string): Promise<void> {
-      await emptyDir(outVendorDir);
-
-      await Promise.all(
-        bulkKeychainEntries.map(async (entryName) => {
-          const src = path.join(vendorDir, "bulk-keychain", entryName);
-          const dest = path.join(outVendorDir, "bulk-keychain", entryName);
-          await Deno.mkdir(path.dirname(dest), { recursive: true });
-          await Deno.copyFile(src, dest);
-        }),
-      );
-    }
-
-    await Promise.all(vendorTargets.map(copyVendorTarget));
-
-    console.log("NPM build complete with vendor assets.");
+    console.log("NPM build complete.");
   },
 });

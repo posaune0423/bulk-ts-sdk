@@ -20,6 +20,7 @@
     "jsr:@std/testing@1": "1.0.18",
     "jsr:@ts-morph/bootstrap@0.27": "0.27.0",
     "jsr:@ts-morph/common@0.27": "0.27.0",
+    "npm:bulk-keychain@~0.1.16": "0.1.16",
     "npm:openapi-typescript@^7.4.1": "7.13.0_typescript@5.9.3",
     "npm:valibot@~0.42.1": "0.42.1_typescript@5.9.3"
   },
@@ -161,6 +162,9 @@
         "balanced-match"
       ]
     },
+    "bulk-keychain@0.1.16": {
+      "integrity": "sha512-p61DYeXX2tTKNrNk5uDresU4TEvP9r67yIpu8KUT0B1fVVwgy5H2h/oeFMrf/y9XyVCYphfqJiX8+2gxeBEoVA=="
+    },
     "change-case@5.4.4": {
       "integrity": "sha512-HRQyTk2/YPEkt9TnUPbOpr64Uw3KOicFWPVBb+xiHvd6eBx/qPr9xqfBFDT8P2vWsvvz4jbEkfDe71W3VyNu2w=="
     },
@@ -275,6 +279,7 @@
       "jsr:@std/assert@1",
       "jsr:@std/async@1",
       "jsr:@std/testing@1",
+      "npm:bulk-keychain@~0.1.16",
       "npm:openapi-typescript@^7.4.1",
       "npm:valibot@~0.42.1"
     ]

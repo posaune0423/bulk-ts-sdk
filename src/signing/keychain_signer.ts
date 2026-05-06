@@ -1,20 +1,25 @@
 import { NativeKeypair, NativeSigner } from "bulk-keychain";
 import { normalizeSignedTransaction } from "./normalize_signed_transaction.ts";
-import type { KeychainOrderInput, KeychainSignInput, SignedTransaction } from "../types/trade.ts";
+import type {
+  KeychainOrderInput,
+  KeychainSignedTransaction,
+  KeychainSignInput,
+  SignedTransaction,
+} from "../types/trade.ts";
 
 interface INativeSigner {
   pubkey: string;
-  sign(input: KeychainOrderInput): SignedTransaction;
-  signGroup(inputs: KeychainOrderInput[]): SignedTransaction;
-  signAll(inputs: KeychainOrderInput[]): SignedTransaction[];
+  sign(input: KeychainOrderInput): SignedTransaction | KeychainSignedTransaction;
+  signGroup(inputs: KeychainOrderInput[]): SignedTransaction | KeychainSignedTransaction;
+  signAll(inputs: KeychainOrderInput[]): (SignedTransaction | KeychainSignedTransaction)[];
   signOrder(
     actions: KeychainOrderInput[],
     nonce: number,
-  ): SignedTransaction;
+  ): SignedTransaction | KeychainSignedTransaction;
 }
 
 type NativeSignerWithAgentWallet = INativeSigner & {
-  signAgentWallet(agent: string, remove: boolean): SignedTransaction;
+  signAgentWallet(agent: string, remove: boolean): SignedTransaction | KeychainSignedTransaction;
 };
 
 function supportsAgentWalletSigning(signer: INativeSigner): signer is NativeSignerWithAgentWallet {
