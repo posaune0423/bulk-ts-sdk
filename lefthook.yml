@@ -5,14 +5,14 @@ pre-commit:
   commands:
     fmt:
       glob: "*.{ts,js,json,md}"
-      run: deno fmt --config deno.json {staged_files} && git add {staged_files}
+      run: deno fmt --config deno.json {staged_files}
+      stage_fixed: true
     lint:
       glob: "*.{ts,js}"
       run: deno lint {staged_files}
-    test:
-      run: deno task test && git add docs/coverage/lcov.info
 
 pre-push:
+  parallel: true
   commands:
     lint:
       run: deno task lint

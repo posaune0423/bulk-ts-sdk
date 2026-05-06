@@ -4,10 +4,11 @@ testは`tests`以下に実装します。
 
 ## Coverage（unit + integration）
 
-`deno task test`（または同等の `deno task test:coverage`）で unit + integration を実行し、`docs/coverage/` を更新する。
-出力先は **`deno.json` の `coverageDirectory`**（デフォルト相当は `docs/coverage`）。**Git に乗せるのは `lcov.info`
-のみ**。 ブラウザ用の `html/` はファイル数が多く生成時刻も入るので **`.gitignore`** する。生の `*.json`
-プロファイルも無視する。
+`deno task test` runs unit + integration tests without generating coverage output. Use `deno task test:coverage` when
+you need to refresh `docs/coverage/`.
+
+Coverage output goes to **`coverageDirectory` in `deno.json`** (`docs/coverage` by default). Commit only
+`docs/coverage/lcov.info`. The browser `html/` report and raw `*.json` profiles are generated locally and gitignored.
 
 ```bash
 tests/
