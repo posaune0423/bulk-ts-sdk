@@ -72,8 +72,8 @@ Available scripts:
 ```bash
 bun run get-market
 bun run market
-BULK_PRIVATE_KEY=... bun run account
-BULK_PRIVATE_KEY=... bun run trade
+MAIN_WALLET_PRIVATE_KEY=... bun run account
+MAIN_WALLET_PRIVATE_KEY=... bun run trade
 bun run ws
 ```
 
@@ -92,16 +92,17 @@ Do not add tests only for examples unless the project policy changes; the exampl
 
 ```ts
 import { BulkClient } from "bulk-ts-sdk";
+import process from "node:process";
 
 const publicClient = new BulkClient();
 
 const mainWalletClient = new BulkClient({
-  privateKey: "BASE58_MAIN_WALLET_PRIVATE_KEY",
+  privateKey: process.env.MAIN_WALLET_PRIVATE_KEY!,
 });
 
 const agentWalletClient = new BulkClient({
-  privateKey: "BASE58_AGENT_WALLET_PRIVATE_KEY",
-  accountPublicKey: "BASE58_MAIN_WALLET_PUBLIC_KEY",
+  privateKey: process.env.AGENT_WALLET_PRIVATE_KEY!,
+  accountPublicKey: process.env.MAIN_WALLET_PUBLIC_KEY!,
 });
 ```
 
@@ -125,23 +126,13 @@ value.
 The SDK core does not read environment variables directly. Consumers should read env values in their own runtime and pass
 them into `new BulkClient(...)`.
 
-Deno example:
-
-```ts
-const client = new BulkClient({
-  privateKey: Deno.env.get("PRIVATE_KEY"),
-  httpUrl: Deno.env.get("BULK_HTTP_URL"),
-  wsUrl: Deno.env.get("BULK_WS_URL"),
-});
-```
-
-Bun or Node.js example:
+Ordinary TypeScript example for Bun or Node.js:
 
 ```ts
 import process from "node:process";
 
 const client = new BulkClient({
-  privateKey: process.env.BULK_PRIVATE_KEY,
+  privateKey: process.env.MAIN_WALLET_PRIVATE_KEY!,
   httpUrl: process.env.BULK_HTTP_URL,
   wsUrl: process.env.BULK_WS_URL,
 });
@@ -150,8 +141,8 @@ const client = new BulkClient({
 Recommended variable names by context:
 
 - Application code: choose app-specific names, then pass values into `BulkClientConfig`.
-- `examples/simple-use`: `BULK_PRIVATE_KEY`, `BULK_HTTP_URL`, `BULK_WS_URL`, `BULK_SYMBOL`.
-- Repo E2E tests: `PRIVATE_KEY`, `AGENT_WALLET_PRIVATE_KEY`, `MULTISIG_PUBKEY`, `BULK_HTTP_URL`, `BULK_WS_URL`.
+- `examples/simple-use`: `MAIN_WALLET_PRIVATE_KEY`, `BULK_HTTP_URL`, `BULK_WS_URL`, `BULK_SYMBOL`.
+- Repo E2E tests: `MAIN_WALLET_PRIVATE_KEY`, `AGENT_WALLET_PRIVATE_KEY`, `MULTISIG_PUBKEY`, `BULK_HTTP_URL`, `BULK_WS_URL`.
 
 `BULK_HTTP_URL` and `BULK_WS_URL` are optional overrides. If omitted, the client uses the production defaults from
 `src/constants.ts`.
@@ -466,13 +457,15 @@ try {
 
 E2E tests read `.env`.
 
-- `PRIVATE_KEY`: main wallet private key. Required for standard account/trade E2E.
+- `MAIN_WALLET_PRIVATE_KEY`: main wallet private key. Required for standard account/trade E2E.
 - `AGENT_WALLET_PRIVATE_KEY`: agent wallet private key. Only used by agent-wallet E2E.
+- `MAIN_WALLET_PUBLIC_KEY`: main wallet public key. Use with agent-wallet client examples when needed.
+- `AGENT_WALLET_PUBLIC_KEY`: agent wallet public key. Use when registering an agent wallet from app code.
 - `MULTISIG_PUBKEY`: optional multisig account public key. Enables multisig proposal E2E.
 - `BULK_HTTP_URL`: optional HTTP API override.
 - `BULK_WS_URL`: optional WebSocket API override.
 
-`PRIVATE_KEY` and `AGENT_WALLET_PRIVATE_KEY` are intentionally different variables. Do not collapse them.
+`MAIN_WALLET_PRIVATE_KEY` and `AGENT_WALLET_PRIVATE_KEY` are intentionally different variables. Do not collapse them.
 
 ## Extending the SDK
 

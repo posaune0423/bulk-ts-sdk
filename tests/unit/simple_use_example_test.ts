@@ -45,20 +45,23 @@ Deno.test("simple-use runtime scripts load .env", async () => {
 
 Deno.test("simple-use env example documents consumed variables", async () => {
   const envExample = await Deno.readTextFile(exampleEnv);
+  const lines = envExample.split(/\r?\n/);
 
-  assert(envExample.includes("PRIVATE_KEY="));
+  assert(envExample.includes("MAIN_WALLET_PRIVATE_KEY="));
+  assert(!lines.includes("PRIVATE_KEY="));
   assert(!envExample.includes("BULK_PRIVATE_KEY="));
   assert(envExample.includes("BULK_HTTP_URL="));
   assert(envExample.includes("BULK_WS_URL="));
   assert(envExample.includes("BULK_SYMBOL="));
 });
 
-Deno.test("simple-use account and trade examples read PRIVATE_KEY", async () => {
+Deno.test("simple-use account and trade examples read MAIN_WALLET_PRIVATE_KEY", async () => {
   const sources = await Promise.all(
     [accountInfoExample, tradeLifecycleExample].map((sourceFile) => Deno.readTextFile(sourceFile)),
   );
   for (const source of sources) {
-    assert(source.includes('requireEnv("PRIVATE_KEY")'));
+    assert(source.includes('requireEnv("MAIN_WALLET_PRIVATE_KEY")'));
+    assert(!source.includes('requireEnv("PRIVATE_KEY")'));
     assert(!source.includes("BULK_PRIVATE_KEY"));
   }
 });

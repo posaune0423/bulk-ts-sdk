@@ -68,9 +68,10 @@ pnpm add bulk-ts-sdk
 
 ```typescript
 import { BulkClient } from "bulk-ts-sdk";
+import process from "node:process";
 
 const client = new BulkClient({
-  privateKey: "main-wallet-private-key",
+  privateKey: process.env.MAIN_WALLET_PRIVATE_KEY!,
 });
 ```
 
@@ -90,7 +91,7 @@ from the signer and can be reused for account queries.
 
 ```typescript
 const client = new BulkClient({
-  privateKey: Deno.env.get("PRIVATE_KEY"),
+  privateKey: process.env.MAIN_WALLET_PRIVATE_KEY!,
 });
 
 const accountPublicKey = client.accountPublicKey;
@@ -103,8 +104,8 @@ account; unsupported native builds fail before submitting an invalid signature.
 
 ```typescript
 const client = new BulkClient({
-  privateKey: Deno.env.get("AGENT_WALLET_PRIVATE_KEY"),
-  accountPublicKey: "main-wallet-public-key",
+  privateKey: process.env.AGENT_WALLET_PRIVATE_KEY!,
+  accountPublicKey: process.env.MAIN_WALLET_PUBLIC_KEY!,
 });
 ```
 
@@ -207,19 +208,14 @@ await client.trade.batch([
 ]);
 ```
 
-### Agent Wallet Management
+### Agent Wallet Registration
 
-Register and remove an agent wallet with the main wallet signer:
+Register an agent wallet with the main wallet signer:
 
 ```typescript
 await client.trade.manageAgentWallet({
-  agent: "agent-wallet-public-key",
+  agent: process.env.AGENT_WALLET_PUBLIC_KEY!,
   remove: false,
-});
-
-await client.trade.manageAgentWallet({
-  agent: "agent-wallet-public-key",
-  remove: true,
 });
 ```
 
@@ -280,13 +276,15 @@ cp .env.example .env
 Required for normal account/trade E2E:
 
 ```bash
-PRIVATE_KEY=main-wallet-private-key
+MAIN_WALLET_PRIVATE_KEY=main-wallet-private-key
 ```
 
-Optional E2E variables:
+Optional test/example variables:
 
 ```bash
 AGENT_WALLET_PRIVATE_KEY=agent-wallet-private-key
+MAIN_WALLET_PUBLIC_KEY=main-wallet-public-key
+AGENT_WALLET_PUBLIC_KEY=agent-wallet-public-key
 MULTISIG_PUBKEY=multisig-account-public-key
 ```
 

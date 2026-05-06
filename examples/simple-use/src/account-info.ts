@@ -1,11 +1,11 @@
 import { createClient, requireEnv } from "./client.ts";
 import process from "node:process";
 
-const privateKey = requireEnv("PRIVATE_KEY");
+const privateKey = requireEnv("MAIN_WALLET_PRIVATE_KEY");
 const client = createClient({ privateKey });
 
 if (!client.accountId) {
-  throw new Error("Unable to derive account id from PRIVATE_KEY.");
+  throw new Error("Unable to derive account id from MAIN_WALLET_PRIVATE_KEY.");
 }
 
 console.log("--- Account Info Example ---");
