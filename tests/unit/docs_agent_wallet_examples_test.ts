@@ -4,6 +4,9 @@ const rootEnvExample = new URL("../../.env.example", import.meta.url);
 const readme = new URL("../../README.md", import.meta.url);
 const llmText = new URL("../../llm.txt", import.meta.url);
 const docsTest = new URL("../../docs/TEST.md", import.meta.url);
+const clientSource = new URL("../../src/client.ts", import.meta.url);
+const accountInfoExample = new URL("../../examples/simple-use/src/account-info.ts", import.meta.url);
+const tradeLifecycleExample = new URL("../../examples/simple-use/src/trade-lifecycle.ts", import.meta.url);
 
 Deno.test("root env example uses role-specific wallet names", async () => {
   const envExample = await Deno.readTextFile(rootEnvExample);
@@ -53,4 +56,24 @@ Deno.test("agent-wallet client config fact is covered by integration tests", asy
     integrationTest.includes('"target-account signing support"'),
     true,
   );
+});
+
+Deno.test("removed account property is not documented or exposed", async () => {
+  const sources = await Promise.all([
+    Deno.readTextFile(clientSource),
+    Deno.readTextFile(llmText),
+    Deno.readTextFile(accountInfoExample),
+    Deno.readTextFile(tradeLifecycleExample),
+  ]);
+  const forbidden = [
+    "account" + "Id",
+    "account " + "id",
+    "account " + "identifier",
+  ];
+
+  for (const source of sources) {
+    for (const pattern of forbidden) {
+      assert(!source.includes(pattern));
+    }
+  }
 });

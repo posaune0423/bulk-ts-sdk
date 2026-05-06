@@ -118,8 +118,7 @@ const agentWalletClient = new BulkClient({
   implements it.
 
 `client.accountPublicKey` is derived from the signer when only `privateKey` is provided. If `accountPublicKey` is passed,
-`client.accountPublicKey` is that target account public key. `client.accountId` is a compatibility alias for the same
-value.
+`client.accountPublicKey` is that target account public key.
 
 ## Environment variables
 

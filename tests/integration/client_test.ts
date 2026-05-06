@@ -684,7 +684,8 @@ Deno.test("Integration: BulkClient - exposes explicit accountPublicKey without s
   });
 
   assertEquals(client.accountPublicKey, TARGET_ACCOUNT_PUBLIC_KEY);
-  assertEquals(client.accountId, TARGET_ACCOUNT_PUBLIC_KEY);
+  const removedAlias = "account" + "Id";
+  assertEquals(removedAlias in client, false);
 });
 
 Deno.test("Integration: BulkClient - rejects target account signing when native keychain cannot sign it", async () => {
