@@ -42,6 +42,8 @@ export class MarketClient {
         limit: params.limit,
       },
     });
+    // Defensive client-side normalization only: the server may apply KlinesParams.limit
+    // before range filtering, so filterKlines can return fewer candles than requested.
     return filterKlines(candles, params);
   }
 
@@ -80,9 +82,10 @@ function filterKlines(candles: Candle[], params: KlinesParams): Candle[] {
 
   if (params.limit === undefined) return ranged;
 
-  const limit = Math.trunc(params.limit);
-  if (!Number.isFinite(limit) || limit < 0) return ranged;
+  let limit = Math.trunc(params.limit);
+  if (!Number.isFinite(limit) || limit < 0) limit = 0;
   if (limit === 0) return [];
 
+  // Without startTime, limit means latest candles; otherwise keep the first candles in the requested range.
   return params.startTime === undefined ? ranged.slice(-limit) : ranged.slice(0, limit);
 }

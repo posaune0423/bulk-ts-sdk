@@ -119,8 +119,10 @@ Deno.test("WsClient - l2 snapshot subscription handler receives documented book 
 
   try {
     const client = new WsClient({ url: "ws://localhost:8080", timeoutMs: 1000 });
+    let invoked = false;
 
     await client.subscribe({ type: "l2Snapshot", symbol: "BTC-USD" }, (message) => {
+      invoked = true;
       const levels = message.data.book.levels;
       if (levels) {
         const topBid = levels[0][0]?.px;
@@ -129,6 +131,21 @@ Deno.test("WsClient - l2 snapshot subscription handler receives documented book 
     });
 
     assertEquals(lastMock?.sent.length, 1);
+    lastMock?.simulateMessage({
+      type: "l2Snapshot",
+      topic: "l2snapshot.BTC-USD",
+      data: {
+        book: {
+          updateType: "snapshot",
+          symbol: "BTC-USD",
+          levels: [[{ px: 100, sz: 1, n: 1 }], [{ px: 101, sz: 1, n: 1 }]],
+          timestamp: 1,
+        },
+      },
+    });
+
+    await delay(10);
+    assertEquals(invoked, true);
   } finally {
     globalThis.WebSocket = originalWebSocket;
   }
@@ -188,19 +205,97 @@ Deno.test("WsClient - keeps shared server subscription until the last local hand
     const client = new WsClient({ url: "ws://localhost:8080", timeoutMs: 1000 });
 
     const first = await client.subscribe({ type: "ticker", symbol: "BTC-USD" }, () => {});
+    assertEquals(lastMock?.sent.length, 1);
+    if (lastMock) {
+      assertEquals(JSON.parse(lastMock.sent[0]), {
+        method: "subscribe",
+        subscription: [{ type: "ticker", symbol: "BTC-USD" }],
+      });
+    }
+
     const second = await client.subscribe({ type: "ticker", symbol: "BTC-USD" }, () => {});
+    assertEquals(lastMock?.sent.length, 1);
 
     await first.unsubscribe();
-    assertEquals(lastMock?.sent.length, 2);
+    assertEquals(lastMock?.sent.length, 1);
 
     await second.unsubscribe();
-    assertEquals(lastMock?.sent.length, 3);
+    assertEquals(lastMock?.sent.length, 2);
     if (lastMock) {
-      assertEquals(JSON.parse(lastMock.sent[2]), {
+      assertEquals(JSON.parse(lastMock.sent[1]), {
         method: "unsubscribe",
         topic: "ticker.BTC-USD",
       });
     }
+  } finally {
+    globalThis.WebSocket = originalWebSocket;
+  }
+});
+
+Deno.test("WsClient - duplicate unsubscribe is a no-op for shared topics", async () => {
+  const originalWebSocket = globalThis.WebSocket;
+  // deno-lint-ignore no-explicit-any
+  let lastMock: any = null;
+  globalThis.WebSocket = class extends MockWebSocket {
+    constructor(url: string) {
+      super(url);
+      lastMock = this;
+    }
+  } as unknown as typeof WebSocket;
+
+  try {
+    const client = new WsClient({ url: "ws://localhost:8080", timeoutMs: 1000 });
+
+    const first = await client.subscribe({ type: "ticker", symbol: "BTC-USD" }, () => {});
+    const second = await client.subscribe({ type: "ticker", symbol: "BTC-USD" }, () => {});
+
+    await first.unsubscribe();
+    await first.unsubscribe();
+    assertEquals(lastMock?.sent.length, 1);
+
+    await second.unsubscribe();
+    assertEquals(lastMock?.sent.length, 2);
+    if (lastMock) {
+      assertEquals(JSON.parse(lastMock.sent[1]), {
+        method: "unsubscribe",
+        topic: "ticker.BTC-USD",
+      });
+    }
+  } finally {
+    globalThis.WebSocket = originalWebSocket;
+  }
+});
+
+Deno.test("WsClient - clears subscription state after socket close", async () => {
+  const originalWebSocket = globalThis.WebSocket;
+  // deno-lint-ignore no-explicit-any
+  let lastMock: any = null;
+  globalThis.WebSocket = class extends MockWebSocket {
+    constructor(url: string) {
+      super(url);
+      lastMock = this;
+    }
+  } as unknown as typeof WebSocket;
+
+  try {
+    const client = new WsClient({ url: "ws://localhost:8080", timeoutMs: 1000 });
+
+    await client.subscribe({ type: "ticker", symbol: "BTC-USD" }, () => {});
+    assertEquals(lastMock?.sent.length, 1);
+
+    await client.close();
+
+    const handle = await client.subscribe({ type: "ticker", symbol: "BTC-USD" }, () => {});
+    assertEquals(lastMock?.sent.length, 1);
+    if (lastMock) {
+      assertEquals(JSON.parse(lastMock.sent[0]), {
+        method: "subscribe",
+        subscription: [{ type: "ticker", symbol: "BTC-USD" }],
+      });
+    }
+
+    await handle.unsubscribe();
+    assertEquals(lastMock?.sent.length, 2);
   } finally {
     globalThis.WebSocket = originalWebSocket;
   }

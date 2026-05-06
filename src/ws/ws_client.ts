@@ -77,19 +77,28 @@ export class WsClient {
     await this.ensureConnected();
 
     const topics = topicOf(subscription);
+    let shouldSendSubscribe = false;
     for (const topic of topics) {
       this.router.add(topic, handler);
-      this.topicRefCounts.set(topic, (this.topicRefCounts.get(topic) ?? 0) + 1);
+      const count = this.topicRefCounts.get(topic) ?? 0;
+      this.topicRefCounts.set(topic, count + 1);
+      shouldSendSubscribe ||= count === 0;
     }
 
-    this.send({
-      method: "subscribe",
-      subscription: [subscription],
-    });
+    if (shouldSendSubscribe) {
+      this.send({
+        method: "subscribe",
+        subscription: [subscription],
+      });
+    }
+
+    let unsubscribed = false;
 
     return {
       topics,
       unsubscribe: () => {
+        if (unsubscribed) return Promise.resolve();
+        unsubscribed = true;
         for (const topic of topics) {
           this.router.remove(topic, handler);
           if (this.releaseTopic(topic)) {
@@ -194,7 +203,7 @@ export class WsClient {
 
   private releaseTopic(topic: string): boolean {
     const count = this.topicRefCounts.get(topic);
-    if (count === undefined) return true;
+    if (count === undefined) return false;
     if (count > 1) {
       this.topicRefCounts.set(topic, count - 1);
       return false;
@@ -210,6 +219,8 @@ export class WsClient {
       pending.reject(new BulkWsError("WebSocket closed while post was pending"));
     }
     this.pendingPosts.clear();
+    this.topicRefCounts.clear();
+    this.router.clear();
     this.ws = null;
   }
 }

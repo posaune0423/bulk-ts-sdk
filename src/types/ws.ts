@@ -161,6 +161,7 @@ export type L2DeltaWsMessage = {
 
 /** Private account payload routed from `account.{pubkey}` topics. */
 export type AccountWsMessage = {
+  type: "account";
   topic: `account.${string}`;
   data: AccountData;
 };
